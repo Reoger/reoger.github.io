@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在参考了众多的参考资料之后，终于搭建搭建起了了intellij-IDEA开发hadoop环境，下面就记录一下开发环境的建立过程，以免日后遗忘。  开发工具和基础环境准备首先，本次采用的开发工具选用的是intellij-IDEA，在进行本次开发之前需要将intellij-IDEA下载并安装好，并配置好java的JDK。下面是我本次配置开发环境之前的基础环境，本次采用的是hadoop 2.6.0的版">
+<meta property="og:type" content="article">
+<meta property="og:title" content="intellij IDEA 配置hadoop开发环境">
+<meta property="og:url" content="http://reoger.tk/2017/10/23/intellij-IDEA-%E9%85%8D%E7%BD%AEhadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="reoger的记录">
+<meta property="og:description" content="在参考了众多的参考资料之后，终于搭建搭建起了了intellij-IDEA开发hadoop环境，下面就记录一下开发环境的建立过程，以免日后遗忘。  开发工具和基础环境准备首先，本次采用的开发工具选用的是intellij-IDEA，在进行本次开发之前需要将intellij-IDEA下载并安装好，并配置好java的JDK。下面是我本次配置开发环境之前的基础环境，本次采用的是hadoop 2.6.0的版">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E5%88%9B%E5%BB%BA%E5%AE%8C%E6%88%90.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E5%A4%8D%E5%88%B6%E4%BB%A3%E7%A0%81%E5%AE%8C%E6%88%90.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E9%80%89%E6%8B%A9modules.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E6%B7%BB%E5%8A%A0jar.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/jar%E5%AF%BC%E5%85%A5%E5%AE%8C%E6%88%90.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E9%80%89%E6%8B%A9Artifacts.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84jar.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E5%88%9B%E5%BB%BAjar%E5%AE%8C%E6%88%90.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E9%80%89%E6%8B%A9edit%20Configuratiobns.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/applicatuon%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/program%20agrumets%E5%8F%82%E6%95%B0%E5%80%BC.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E9%85%8D%E7%BD%AE%E5%AE%8C%E6%88%90.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C~.jpg">
+<meta property="article:published_time" content="2017-10-23T07:10:25.000Z">
+<meta property="article:modified_time" content="2017-10-23T08:46:48.000Z">
+<meta property="article:author" content="reoger">
+<meta property="article:tag" content="后端开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ovec6nnof.bkt.clouddn.com/%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE.jpg">
+
+<link rel="canonical" href="http://reoger.tk/2017/10/23/intellij-IDEA-%E9%85%8D%E7%BD%AEhadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>intellij IDEA 配置hadoop开发环境 | reoger的记录</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">reoger的记录</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">--以后的你会感激现在那么努力的自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2017/10/23/intellij-IDEA-%E9%85%8D%E7%BD%AEhadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          intellij IDEA 配置hadoop开发环境
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2017-10-23 15:10:25 / 修改时间：16:46:48" itemprop="dateCreated datePublished" datetime="2017-10-23T15:10:25+08:00">2017-10-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>在参考了众多的参考资料之后，终于搭建搭建起了了intellij-IDEA开发hadoop环境，下面就记录一下开发环境的建立过程，以免日后遗忘。</p>
+</blockquote>
+<h1 id="开发工具和基础环境准备"><a href="#开发工具和基础环境准备" class="headerlink" title="开发工具和基础环境准备"></a>开发工具和基础环境准备</h1><p>首先，本次采用的开发工具选用的是intellij-IDEA，在进行本次开发之前需要将intellij-IDEA下载并安装好，并配置好java的JDK。下面是我本次配置开发环境之前的基础环境，本次采用的是hadoop 2.6.0的版本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">IntelliJ IDEA 2017.2.4</span><br><span class="line">Build #IC-172.4155.36, built on September 12, 2017</span><br><span class="line">JRE: 1.8.0_152-release-915-b11 amd64</span><br><span class="line">JVM: OpenJDK 64-Bit Server VM by JetBrains s.r.o</span><br><span class="line">Windows 10 10.0</span><br></pre></td></tr></table></figure>
+<p>在下载好hadoop之后，我们便可以开始本次环境的配置了。</p>
+<h1 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h1><p>这一步非常的简单，我们用IDEA创建一下普通的java项目即可。</p>
+<p><img src="http://ovec6nnof.bkt.clouddn.com/%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE.jpg" alt=""><br>创建项目完成之后是这个样子的。<br><img src="http://ovec6nnof.bkt.clouddn.com/%E5%88%9B%E5%BB%BA%E5%AE%8C%E6%88%90.jpg" alt=""></p>
+<h1 id="添加示例代码"><a href="#添加示例代码" class="headerlink" title="添加示例代码"></a>添加示例代码</h1><p>我们先不管三七二十一，在我们的项目中，先copy下面三个类，用来检测环境是否搭建好。<br>第一个类<code>WordCountMapper</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.hadoop.io.IntWritable;</span><br><span class="line">import org.apache.hadoop.io.LongWritable;</span><br><span class="line">import org.apache.hadoop.io.Text;</span><br><span class="line">import org.apache.hadoop.mapreduce.Mapper;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.util.StringTokenizer;</span><br><span class="line"></span><br><span class="line">public class WordCountMapper  extends Mapper&lt;LongWritable,Text,Text,IntWritable&gt; &#123;</span><br><span class="line">    private final static IntWritable one &#x3D; new IntWritable(1);</span><br><span class="line">    private Text word &#x3D; new Text();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException &#123;</span><br><span class="line">        StringTokenizer itr &#x3D; new StringTokenizer(value.toString());</span><br><span class="line">        while (itr.hasMoreTokens())&#123;</span><br><span class="line">            word.set(itr.nextToken());</span><br><span class="line">            context.write(word,one);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二个类:<code>WordCountReducer</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import org.apache.hadoop.io.IntWritable;</span><br><span class="line"></span><br><span class="line">import org.apache.hadoop.io.Text;</span><br><span class="line">import org.apache.hadoop.mapreduce.Reducer;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public class WordCountReducer extends Reducer&lt;Text,IntWritable,Text,IntWritable&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private IntWritable result &#x3D; new IntWritable();</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void reduce(Text key, Iterable&lt;IntWritable&gt; values, Context context) throws IOException, InterruptedException &#123;</span><br><span class="line">        int sum &#x3D; 0;</span><br><span class="line">        for(IntWritable val:values)&#123;</span><br><span class="line">            sum +&#x3D; val.get();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        result.set(sum);</span><br><span class="line">        context.write(key,result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三个测试类：<code>test</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.hadoop.conf.Configuration;</span><br><span class="line">import org.apache.hadoop.fs.Path;</span><br><span class="line">import org.apache.hadoop.io.IntWritable;</span><br><span class="line">import org.apache.hadoop.io.Text;</span><br><span class="line">import org.apache.hadoop.mapreduce.Job;</span><br><span class="line">import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span><br><span class="line">import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span><br><span class="line">import org.apache.log4j.chainsaw.Main;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line"></span><br><span class="line">public class test &#123;</span><br><span class="line">    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;</span><br><span class="line">        &#x2F;&#x2F; write your code here</span><br><span class="line"></span><br><span class="line">        Configuration configuration &#x3D; new Configuration();</span><br><span class="line"></span><br><span class="line">        if(args.length!&#x3D;2)&#123;</span><br><span class="line">            System.err.println(&quot;Usage:wordcount &lt;input&gt;&lt;output&gt;&quot;);</span><br><span class="line">            System.exit(2);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Job job &#x3D; new Job(configuration,&quot;word count&quot;);</span><br><span class="line"></span><br><span class="line">        job.setJarByClass(Main.class);</span><br><span class="line">        job.setMapperClass(WordCountMapper.class);</span><br><span class="line">        job.setReducerClass(WordCountReducer.class);</span><br><span class="line">        job.setOutputKeyClass(Text.class);</span><br><span class="line">        job.setOutputValueClass(IntWritable.class);</span><br><span class="line">        FileInputFormat.addInputPath(job,new Path(args[0]));</span><br><span class="line">        FileOutputFormat.setOutputPath(job,new Path(args[1]));</span><br><span class="line"></span><br><span class="line">        System.exit(job.waitForCompletion(true)?0:1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把代码copy完成之后，项目结构应该是这样子的：<br><img src="http://ovec6nnof.bkt.clouddn.com/%E5%A4%8D%E5%88%B6%E4%BB%A3%E7%A0%81%E5%AE%8C%E6%88%90.jpg" alt=""></p>
+<p>可以看到，ide提示我们代码还有错，这是因为我们环境还没有搭建完成，所以报错，我们接下来继续下一步。</p>
+<h1 id="导入hadoop相关的jar包"><a href="#导入hadoop相关的jar包" class="headerlink" title="导入hadoop相关的jar包"></a>导入hadoop相关的jar包</h1><p>我们首先需要知道我们要导入的jar包的具体位置： <code>\hadoop-2.6.0\share\hadoop</code>，即在hadoop根目录下的share文件夹中的hadoop文件夹中。<br>然后在IDEA中打开project Structure选项，快捷键<code>ctrl+alt+shift+S</code>。选择modules，如图：<br><img src="http://ovec6nnof.bkt.clouddn.com/%E9%80%89%E6%8B%A9modules.jpg" alt=""></p>
+<p>选择右边的加号-&gt; jars 如图：</br><br><img src="http://ovec6nnof.bkt.clouddn.com/%E6%B7%BB%E5%8A%A0jar.jpg" alt=""></p>
+<p>选择hadoop的jar，具体位置我们前面已经说过了，将hadoop文件夹中所有的文件都选中，按住shift即可多选：<br><img src="" alt=""><br>jar导入完成之后，应该是这个样子的：<br><img src="http://ovec6nnof.bkt.clouddn.com/jar%E5%AF%BC%E5%85%A5%E5%AE%8C%E6%88%90.jpg" alt=""></p>
+<p>然后在Project Settings中选择Artifacts，如图：<br><img src="http://ovec6nnof.bkt.clouddn.com/%E9%80%89%E6%8B%A9Artifacts.jpg" alt=""><br>选择加号-&gt;JAR -&gt; Emptry创建一个空的jar。选择完成后如图：</p>
+<p><img src="http://ovec6nnof.bkt.clouddn.com/%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84jar.jpg" alt=""><br>我们将其取名为<code>hadoop</code>,并选择output Layout下面的加号-&gt;Module Output，并勾选include in prokecy builde,完成后如图所示：</p>
+<p><img src="http://ovec6nnof.bkt.clouddn.com/%E5%88%9B%E5%BB%BAjar%E5%AE%8C%E6%88%90.jpg" alt=""></p>
+<p>完成上面的操作后，发现我们前面copy的代码已经不在报错了，说明jar包已经成功导入到我们的项目中来了。最后我们需要配置我们的运行环境。</p>
+<h1 id="配置运行环境"><a href="#配置运行环境" class="headerlink" title="配置运行环境"></a>配置运行环境</h1><p>首先选择edit Configurtions,如图；<br><img src="http://ovec6nnof.bkt.clouddn.com/%E9%80%89%E6%8B%A9edit%20Configuratiobns.jpg" alt=""><br>新建application，具体做法，点击右上角的加号-&gt;选择application。新建界面如图所示：</p>
+<p><img src="http://ovec6nnof.bkt.clouddn.com/applicatuon%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE.jpg" alt=""><br>我们需要填的只有三处，首先我们可以为他取个名字，在Name那么输入自定义的名义，然后再Main class那里填写：<code>org.apache.hadoop.util.RunJar</code>，选择progream arguments右边的展开按钮，填写此项的值，在这里需要填写三个参数，第一个就是我们前面创建jar的具体位置，我们可以在前面常见的artifacts中查看，示例<code>D:\intellijIDEA\hadoopTest\out\artifacts\hadoop\hadoop.jar</code>；第二个参数是我们要运行类的名字（需要加上包名）示例<code>com.hut.Test</code>;第三个是输入文件的位置,示例<code>input/</code>；第四个是输入文件的名字示例``output/；<br>参考配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D:\intellijIDEA\hadoopTest\out\artifacts\hadoop\hadoop.jar</span><br><span class="line">com.hut.Test</span><br><span class="line">input&#x2F;</span><br><span class="line">output&#x2F;</span><br></pre></td></tr></table></figure>
+<p><img src="http://ovec6nnof.bkt.clouddn.com/program%20agrumets%E5%8F%82%E6%95%B0%E5%80%BC.jpg" alt=""></p>
+<p>这里需要根据自己项目的实际情况来进行配置，仅供参考。<br><img src="http://ovec6nnof.bkt.clouddn.com/%E9%85%8D%E7%BD%AE%E5%AE%8C%E6%88%90.jpg" alt=""></p>
+<h1 id="运行检测"><a href="#运行检测" class="headerlink" title="运行检测"></a>运行检测</h1><p>根据我们前面的配置，我们需要在项目的根目录下新建一个input文件夹。我们可以在这个文件夹中添加一个txt的文件，并随意的写入一些数据。<br>然后点击运行，成功运行后，会发现我们项目根目录下新添加了一个output文件夹，在<code>part-r-0000</code>文件中，就记录了我们在input文件夹中文件单词出现的次数。如图：<br><img src="http://ovec6nnof.bkt.clouddn.com/%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C~.jpg" alt=""><br>值得注意的是，每次成功运行，都需要将output文件夹删除后才能继续下一次的运行。</p>
+<p>到此，我们的环境已经配置好了，接下来就可以开开心的学习hadoop的api使用了。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="http://blog.csdn.net/u010171031/article/details/53024516" target="_blank" rel="noopener">Hadoop Intellij IDEA本地开发环境搭建</a></li>
+<li><a href="http://blog.csdn.net/duhe2665991640/article/details/60468966" target="_blank" rel="noopener">intellij idea本地开发调试hadoop的方法</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" rel="tag"># 后端开发</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/10/19/%E8%B5%84%E6%BA%90%E7%BD%91%E7%AB%99%E6%95%B4%E7%90%86/" rel="prev" title="资源网站整理">
+      <i class="fa fa-chevron-left"></i> 资源网站整理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/10/24/hdfs%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="next" title="hdfs基本操作">
+      hdfs基本操作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开发工具和基础环境准备"><span class="nav-number">1.</span> <span class="nav-text">开发工具和基础环境准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建项目"><span class="nav-number">2.</span> <span class="nav-text">创建项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加示例代码"><span class="nav-number">3.</span> <span class="nav-text">添加示例代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#导入hadoop相关的jar包"><span class="nav-number">4.</span> <span class="nav-text">导入hadoop相关的jar包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置运行环境"><span class="nav-number">5.</span> <span class="nav-text">配置运行环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行检测"><span class="nav-number">6.</span> <span class="nav-text">运行检测</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-number">7.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">reoger</p>
+  <div class="site-description" itemprop="description">reoger</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">reoger</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

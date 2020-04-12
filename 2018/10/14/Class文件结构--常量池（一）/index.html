@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Class文件结构–常量池（一） 转载自https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;d8492e748c57  字节码查看工具：WinHex  前言 Java虚拟机实现语言无关性的基石就是Class文件 这篇文章讲Class格式文件的的魔数、版本号和常量池。主要内容是常量池。  Class类文件的结构全局规范 1.任何一个Class文件都对应着唯一一个类或接口的定义信息，但反过来说，类或接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Class文件结构--常量池（一）">
+<meta property="og:url" content="http://reoger.tk/2018/10/14/Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84--%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="reoger的记录">
+<meta property="og:description" content="Class文件结构–常量池（一） 转载自https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;d8492e748c57  字节码查看工具：WinHex  前言 Java虚拟机实现语言无关性的基石就是Class文件 这篇文章讲Class格式文件的的魔数、版本号和常量池。主要内容是常量池。  Class类文件的结构全局规范 1.任何一个Class文件都对应着唯一一个类或接口的定义信息，但反过来说，类或接">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-30ce955fde8883d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/830/format/webp">
+<meta property="og:image" content="https://https/upload-images.jianshu.io/upload_images/3458176-8fce946bab563076.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/972/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-183170e077348dd9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/847/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-4113215a9048a30f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/284/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-da04f13d9345d534.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/633/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-1708ec53425bf43f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/385/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-cc110223178a4215.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/977/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-8b9bb010f69e4a93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/701/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-878fa839b1e28cf3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/694/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-22b038defbeda453.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/655/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-18d7609da23c0b93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/851/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-1a800d5b071be1b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/623/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-b27b29fd146c1371.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/638/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-9dedb81d1b044555.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/646/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-31580b94471eec94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/641/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-942c562db653d825.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/649/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-6d21f61844e69dc4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/851/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3458176-adab40db73749fe0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/709/format/webp">
+<meta property="article:published_time" content="2018-10-14T06:56:55.000Z">
+<meta property="article:modified_time" content="2018-10-14T08:22:46.000Z">
+<meta property="article:author" content="reoger">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/3458176-30ce955fde8883d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/830/format/webp">
+
+<link rel="canonical" href="http://reoger.tk/2018/10/14/Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84--%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Class文件结构--常量池（一） | reoger的记录</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">reoger的记录</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">--以后的你会感激现在那么努力的自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/10/14/Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84--%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Class文件结构--常量池（一）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2018-10-14 14:56:55 / 修改时间：16:22:46" itemprop="dateCreated datePublished" datetime="2018-10-14T14:56:55+08:00">2018-10-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%AC%E8%BD%BD/" itemprop="url" rel="index"><span itemprop="name">转载</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Class文件结构–常量池（一）"><a href="#Class文件结构–常量池（一）" class="headerlink" title="Class文件结构–常量池（一）"></a>Class文件结构–常量池（一）</h1><hr>
+<p>转载自<a href="https://www.jianshu.com/p/d8492e748c57" target="_blank" rel="noopener">https://www.jianshu.com/p/d8492e748c57</a></p>
+<ul>
+<li>字节码查看工具：WinHex</li>
+</ul>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ul>
+<li>Java虚拟机实现语言无关性的基石就是Class文件<br><img src="https://upload-images.jianshu.io/upload_images/3458176-30ce955fde8883d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/830/format/webp" alt="Java虚拟机提供的语言无关性"></li>
+<li>这篇文章讲Class格式文件的的魔数、版本号和常量池。主要内容是常量池。</li>
+</ul>
+<h1 id="Class类文件的结构"><a href="#Class类文件的结构" class="headerlink" title="Class类文件的结构"></a>Class类文件的结构</h1><h2 id="全局规范"><a href="#全局规范" class="headerlink" title="全局规范"></a>全局规范</h2><ul>
+<li><p><strong>1.任何一个Class文件都对应着唯一一个类或接口的定义信息，但反过来说，类或接口并不一定都得定义在文件里（譬如类或接口也可以通过类加载器直接生成）。本章中，只是通俗地将任意一个有效的类或接口所应当满足的格式称为“Class文件格式”，实际上它并不一定以磁盘文件的形式存在。“Class文件”应当是一串二进制的字节流，无论以何种形式存在。</strong></p>
+</li>
+<li><p>2.Class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在Class文件之中，当遇到需要占用8位字节以上空间的数据项时，则会按照<strong>高位在前（Big-Endian）</strong>的方式分割成若干个8位字节进行存储。无符号数据类型最大占8个字节。</p>
+</li>
+<li><p>3.Class文件中存储数据的类型：无符号数和表。</p>
+</li>
+<li><p><strong>无符号数（基本数据类型）</strong>：以u1、u2、u4、u8来分别代表1个字节、2个字节、4个字节和8个字节的无符号数，无符号数可以用来描述数字、索引引用、数量值或者按照UTF-8编码构成字符串值。</p>
+</li>
+<li><p><strong>表（复合数据类型）</strong>：是由多个无符号数或者其他表作为数据项构成的复合数据类型，所有表都习惯性地“_info”结尾。表用于描述有层次关系的复合结构的数据。表是一个统称，就好比把ArrayList、LinkedList、Set都是称为集合(Collection)，但是每个集合的内部结构都是不同的，Class中有很多不同的表。如下图中cp_info类型,是表类型，但是它是一个固定结构的类型吗？不是，它好比Collection集合下的List集合，只是一类集合的统称，实际上cp_info表是14种具体表类型的统称，constant_pool_count-1指出了有多少个cp_info表，那到底是哪些具体的表，就需要具体看了。</p>
+</li>
+<li><p>4.整个Class文件本质上就是一张表，下表就是Class文件格式。Class中所有内容都在这些类型中定义了。</p>
+<ul>
+<li><p><strong>注：表中的数据项，无论是顺序还是数量，甚至于数据存储的字节序（Byte Ordering,Class文件中字节序为Big-Endian）这样的细节，都是被严格限定的，哪个字节代表什么含义，长度是多少，先后顺序如何，都不允许改变。</strong>  </p>
+<p><img src="https:https://upload-images.jianshu.io/upload_images/3458176-8fce946bab563076.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/972/format/webp" alt=""></p>
+<p>Class文件格式</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-183170e077348dd9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/847/format/webp" alt=""></p>
+<p>class文件结构</p>
+</li>
+</ul>
+</li>
+<li><p>5.无论是无符号数还是表，当需要描述同一类型但数量不定的多个数据时，经常会使用一个前置的容量计数器加若干个连续的数据项的形式，这时称这一系列连续的某一类型的数据为某一类型的集合。</p>
+</li>
+<li><p><strong>如上表的描述常量池数据使用了一个constant_pool_count、多个constant_pool,其中constant_pool是表类型并且数量为constant_pool_count值减去1，把一个constant_pool_count和多个constant_pool数据项称为常量池集合</strong></p>
+</li>
+<li><p>从Class文件格式中可以看出有：常量池集合、接口索引集合、字段表集合、方法表集合、属性表集合。</p>
+</li>
+<li><p>6.具体的Class文件案例，以下讲解会通过这个TestClass类的<code>TestClass.class</code>文件来分析。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">package com.zlcook.clazz;</span><br><span class="line"></span><br><span class="line">public class TestClass&#123;</span><br><span class="line">  private int m;</span><br><span class="line">  public int inc()&#123;</span><br><span class="line">   return m+1;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="1-魔数与Class文件的版本"><a href="#1-魔数与Class文件的版本" class="headerlink" title="1. 魔数与Class文件的版本"></a>1. 魔数与Class文件的版本</h2><ul>
+<li>由上表得Class文件的前三个数据类型存储了魔数（magic)、次版本号(minor_version)、主版本号(major_version)的值，数据类型分别为u4、u2、u2。共占8个字节。</li>
+<li>魔数：0xCAFEBABE （16进制），值固定，唯一作用是确定这个文件是否为一个能被虚拟机接受的Class文件。</li>
+<li>Class文件版本号：次版本号组成u2+主版本号u2。共占4个字节。</li>
+<li><strong>高版本的JDK能向下兼容以前的版本的Class文件，但不能运行高版本的Class文件。</strong></li>
+<li>JDK1.1的版本号为45.0-45.65535（10进制），之后每个大版本发布主版本号加1，如：JDK1.2：46.0~46.65535。</li>
+<li>例如：Class文件中紧接着魔数的4个字节的16进制为： ox00000034，那么它代表的十进制版本号为：次版本号为ox0000=0，主版本号为：ox0034 = 52。所以ox00000034的版本号为52.0，对应的JDK版本为JDK1.8</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-4113215a9048a30f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/284/format/webp" alt=""></p>
+<p><code>TestClass.class</code>文件的前8个字节</p>
+<h2 id="2-常量池"><a href="#2-常量池" class="headerlink" title="2. 常量池"></a>2. 常量池</h2><ul>
+<li>先了解常量池中需要存放哪些内容，再讨论用什么类来存放这些内容。</li>
+</ul>
+<h3 id="2-1-常量池中存放的内容"><a href="#2-1-常量池中存放的内容" class="headerlink" title="2.1 常量池中存放的内容"></a>2.1 常量池中存放的内容</h3><ul>
+<li><p>Class文件中包含常量池，那么我就需要知道常量池会包含哪些内容，接下来才是关心class格式文件用什么类型来存放这些内容。</p>
+</li>
+<li><p><strong>字面量（Literal）</strong></p>
+</li>
+<li><p>字面量比较接近于Java语言层面的常量概念，如文本字符串、声明为final的常量值等。</p>
+</li>
+<li><p><strong>符号引用（Symbolic References）</strong></p>
+</li>
+<li><p>符号引用则属于编译原理方面的概念，包括了下面三类常量：<br>类和接口的全限定名（Fully Qualified Name）<br>字段的名称和描述符（Descriptor）<br>方法的名称和描述符</p>
+</li>
+<li><p><strong>其它：</strong>常量池中<strong>主要</strong>内容是上面2项，说明还有其它内容，这部分内容，在下面我们看到用来描述常量池内容的14种常量项的介绍时就发现标志为15、16、18的常量项类型是用来支持动态语言调用的（jdk1.7时才加入的）。</p>
+</li>
+<li><p>常量池：可以理解为Class文件之中的资源仓库，它是Class文件结构中与其他项目关联最多的数据类型（后面的很多数据类型都会指向此处），也是占用Class文件空间最大的数据项目之一。</p>
+</li>
+</ul>
+<h3 id="2-2-常量池中为什么要包含这些内容"><a href="#2-2-常量池中为什么要包含这些内容" class="headerlink" title="2.2 常量池中为什么要包含这些内容"></a>2.2 常量池中为什么要包含这些内容</h3><ul>
+<li>Java代码在进行Javac编译的时候，并不像C和C++那样有“连接”这一步骤，而是在虚拟机加载Class文件的时候进行动态连接。也就是说，在Class文件中不会保存各个方法、字段的最终内存布局信息，因此这些字段、方法的符号引用不经过运行期转换的话无法得到真正的内存入口地址，也就无法直接被虚拟机使用。当虚拟机运行时，需要从常量池获得对应的符号引用，再在类创建时或运行时解析、翻译到具体的内存地址之中。关于类的创建和动态连接的内容，在虚拟机类加载过程时再进行详细讲解。</li>
+</ul>
+<h3 id="2-3-Class文件中如何描述常量池中内容"><a href="#2-3-Class文件中如何描述常量池中内容" class="headerlink" title="2.3 Class文件中如何描述常量池中内容"></a>2.3 Class文件中如何描述常量池中内容</h3><ul>
+<li><p>知道Class文件的常量池包含的内容后，我们下面就来看看class格式文件使用了哪些类型数据来存放常量池的内容。</p>
+</li>
+<li><p>由Class文件格式可得紧接着主版本号的是常量池入口。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>名称</th>
+<th>数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>u2（无符号数）</td>
+<td>constant_pool_count</td>
+<td>1</td>
+</tr>
+<tr>
+<td>cp_info（表）</td>
+<td>constant_pool</td>
+<td>constant_pool_count-1</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>占用的字节数：2+(constant_pool_count-1)个具体表所占字节。</p>
+</li>
+<li><p>由上表可见，Class文件使用了一个前置的容量计数器（constant_pool_count）加若干个连续的数据项（constant_pool）的形式来描述常量池内容。我们把这一系列连续常量池数据称为常量池集合。</p>
+</li>
+<li><p>先给看一下TestClass.class文件全局的内容，下面就来分析其中常量池中的内容，其它内容后面的文章在分析。从图片也可以看出常量池内容占据了class文件的很大一部分，当然TestClass类中代码比较少就更显得常量池内容的多了。</p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-da04f13d9345d534.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/633/format/webp" alt="TestClass.class文件的16进制内容"></p>
+<h4 id="2-3-1-constant-pool-count"><a href="#2-3-1-constant-pool-count" class="headerlink" title="2.3.1 constant_pool_count"></a>2.3.1 constant_pool_count</h4><ul>
+<li><p>常量池容量计数值（u2类型）：<strong>从1开始</strong>，表示常量池中有多少项常量。即constant_pool_count=1表示常量池中有0个常量项。</p>
+</li>
+<li><p>设计者将第0项常量空出来是有特殊考虑的，这样做的目的在于满足后面某些指向常量池的索引值的数据在特定情况下需要表达“不引用任何一个常量池项目”的含义，这种情况就可以把索引值置为0来表示。Class文件结构中只有常量池的容量计数是从1开始，对于其他集合类型，包括接口索引集合、字段表集合、方法表集合等的容量计数都与一般习惯相同，是从0开始的。</p>
+</li>
+<li><p>TestClass.class文件中constant_pool_count的十进制值为19，表示常量池中有18项常量，索引范围1-18。</p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-1708ec53425bf43f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/385/format/webp" alt=""></p>
+<p>TestClass.class文件中constant_pool_count的十进制值为19</p>
+<h4 id="2-3-2-constant-pool"><a href="#2-3-2-constant-pool" class="headerlink" title="2.3.2 constant_pool"></a>2.3.2 constant_pool</h4><ul>
+<li>constant_pool_count表明了后面有多少个常量项。</li>
+</ul>
+<h5 id="14种常量项结构"><a href="#14种常量项结构" class="headerlink" title="14种常量项结构"></a>14种常量项结构</h5><ul>
+<li>常量池中每一项常量都是一个表，JDK1.7之后共有14种不同的表结构数据。一个常量池中的每个常量项都逃不脱这14种结构。根据下图每个类型的描述我们也可以知道每个类型是用来描述常量池中哪些内容（主要是字面量、符号引用）的。比如：CONSTANT_Integer_info是用来描述常量池中字面量信息的，而且只是整型字面量信息。而标志为15、16、18的常量项类型是用来支持动态语言调用的（jdk1.7时才加入的）。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-cc110223178a4215.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/977/format/webp" alt="常量池中的14种项目类型"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-8b9bb010f69e4a93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/701/format/webp" alt="常量池中的14种常量项的结构总表"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-878fa839b1e28cf3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/694/format/webp" alt="常量池中的14种常量项的结构总表（续）"></p>
+<ul>
+<li><p>这14种表（或者常量项结构）的共同点是：表开始的第一位是一个u1类型的标志位（tag），代表当前这个常量项使用的是哪种表结构，即哪种常量类型。</p>
+</li>
+<li><p>这14种常量项结构还有一个特点是，其中13表占用得字节固定，只有CONSTANT_Utf8_info占用字节不固定，其大小由length决定。为什么呢？因为从常量池存放的内容可知，其存放的是字面量和符号引用，最终这些内容都会是一个字符串，这些字符串的大小是在编写程序时才确定，比如你定义一个类，类名可以取长取短，所以在没编译前，无法确定大小不固定，编译后，通过utf-8编码，就可以知道其长度。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>表</th>
+<th>占用字节</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CONSTANT_Class_info</td>
+<td>3</td>
+</tr>
+<tr>
+<td>CONSTANT_Integer_info</td>
+<td>5</td>
+</tr>
+<tr>
+<td>CONSTANT_Fieldref_info</td>
+<td>5</td>
+</tr>
+<tr>
+<td>CONSTANT_Methodref_info</td>
+<td>5</td>
+</tr>
+<tr>
+<td>CONSTANT_Utf8_info</td>
+<td>不固定，取决于length大小</td>
+</tr>
+</tbody></table>
+<h2 id="2-4-查找testClass-class文件的第一个常量项内容"><a href="#2-4-查找testClass-class文件的第一个常量项内容" class="headerlink" title="2.4 查找testClass.class文件的第一个常量项内容"></a>2.4 查找testClass.class文件的第一个常量项内容</h2><ul>
+<li>由上面constant_pool_count得到值为19，因为从1开始计数，所以说明后面有18个常量项，由于每个常量项的表结构都不同但是第一位相同，所以读到第一位就可以确定表结构了。下面我们就来查看第一个常量项包含得内容，至于其它17个常量项内容类似，最后还会介绍java提供得一个工具命令javap来帮我们分析class文件字节码内容。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-22b038defbeda453.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/655/format/webp" alt="第一个表的tag为10"></p>
+<ul>
+<li>由上图可知常量池中第一项常量标志的16进制值是0x0A=10,查表发现这个常量属于CONSTANT_Methodref_info类型，此类型表示类中方法的符号引用。查看该类型的结构如下：</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-18d7609da23c0b93.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/851/format/webp" alt="CONSTANT\_Methodref\_info类型结构"></p>
+<ul>
+<li>CONSTANT_Methodref_info型常量的第二个数据项为index，类型是u2，index存储的是一个索引值，从class文件中查得该值为oX0004=4，即它指向常量池中第4个常量；第三个数据项也是索引其值为0X000F=15，指向常量池种第15个常量。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-1a800d5b071be1b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/623/format/webp" alt=""></p>
+<p>Paste_Image.png</p>
+<ul>
+<li>到此为止，第一个常量项是CONSTANT_Methodref_info型常量项，该类型常量项用来表示类中方法的符号引用，其内容为tag=10,index1=4,index2=15，因为其表示的是类中方法的符号引用，所以index中存放的不是一个具体得内容，而是一个索引位置，所以说其具体内容存放在另一个常量项中。下面我们就来看看其索引指向的常量项（即第4个常量项）的内容到底是什么？</li>
+<li>找第4个常量项之前需要知道第4个常量项的开始位置，所以需要知道前3个常量项所占字节数。那好就看第2个常量项，由于第一个常量项共占了5个字节，则紧接着的字节就为第二个常量项的tag，如下图可得其值为0X09=9，说明第2个常量项得项目类型为CONSTANT_Fieldref_info。查表得其该类型得字节长度固定占5个字节。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-b27b29fd146c1371.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/638/format/webp" alt=""></p>
+<p>第二个常量项</p>
+<ul>
+<li>依次类推查的第3,4个常量项为CONSTANT_Class_info型。如下图：</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-9dedb81d1b044555.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/646/format/webp" alt="前4个常量项"></p>
+<ul>
+<li>下面就看第四个常量项CONSTANT_Class_info的内容0X070012。 CONSTANT_Class_info存放的是指向类或接口的符号引用。</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-31580b94471eec94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/641/format/webp" alt="CONSTANT\_Class\_info型常量项"></p>
+<p>根据CONSTANT_Class_info项常量项的结构可知其index数据项又是一个索引项，指向全限定名常量项索引，index数据项的值为0X12=18，表示指向第18个常量项，根据constant_pool_count的值为19可得，常量池中一共有18个常量项，巧了正好在最后一个，但是要知道18个常量项必须知道前17个常量项所占字节，这里就不一一找了，最后找到第18个常量项CONSTANT_Utf8_info在class文件中包含的内容如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-942c562db653d825.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/649/format/webp" alt="第18个常量项"></p>
+<ul>
+<li><img src="https://upload-images.jianshu.io/upload_images/3458176-6d21f61844e69dc4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/851/format/webp" alt="CONSTANT\_Utf8\_info型表的结构"></li>
+</ul>
+<ul>
+<li><p>根据tag等于1得第18项是CONSTANT_Utf8_info型，该类型存储UTF-8编码的字符串，在TestClass.class文件种该常量项种个数据项的内容如下：</p>
+<ul>
+<li>length(u2):表示UTF-8编码的字符串占用的字节数，值为0x0010=16.</li>
+<li>bytes(u1):表示长度为length的UTF-8编码的字符串.</li>
+<li>因为length=16，所以 length后面紧跟的长度为16个字节的连续数据是一个使用<strong>UTF-8缩略编码</strong>表示的字符串。后面紧跟的第一个字节为0x6A=106，那该编码代表的字符为j，我们发现106其实就是字符j对应的<a href="https://link.jianshu.com?t=http://baike.baidu.com/link?url=yWgaMCeHhkhUQfJByEHL7PwMq1jWtYH8sGqB063JSCSy4Si2bWfVPzVMClgYqGyhW8tpLBd6qKWYLISuGI1024oRv9HEUOV_XaIi4QeCE2GTKQHAVU8DcVtr6Gu2UFDZhImE37QR1-FVFHKkg66k3a" target="_blank" rel="noopener">ASCII码</a>。后面16个字节代表的字符就是: java/lang/Object</li>
+</ul>
+</li>
+</ul>
+<p>到此为止，我们得到了第一个常量项CONSTANT_Methodref_info的第二个数据项index指向的内容为CONSTANT_Class_info常量项，CONSTANT_Class_info常量的第二个数据项index指向CONSTANT_Utf8_info常量项，CONSTANT_Utf8_info常量项的内容为 java/lang/Object 。<br>当然CONSTANT_Methodref_info常量项还有第三个数据项index，其存放的也是一个其他常量的索引。</p>
+<ul>
+<li>根据上面的找法我们就可以找出常量池中包含的内容：字面量和符号引用。</li>
+</ul>
+<h2 id="2-5-采用javap命令分析class文件"><a href="#2-5-采用javap命令分析class文件" class="headerlink" title="2.5 采用javap命令分析class文件"></a>2.5 采用javap命令分析class文件</h2><ul>
+<li><p>根据上面的找法我们就可以找出常量池中包含的内容：字面量和符号引用。java考虑到这种找法太麻烦了，所以提供了一个命令javap来帮助我们分析class文件的内容。</p>
+</li>
+<li><p>javap分析class文件用法：javap -verbose class文件名</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">$ javap -verbose TestClass.class</span><br><span class="line">Classfile &#x2F;E:&#x2F;studytry&#x2F;com&#x2F;zlcook&#x2F;clazz&#x2F;TestClass.class</span><br><span class="line">  Last modified 2017-4-7; size 292 bytes</span><br><span class="line">  MD5 checksum 486567c6d4d7432fc359230fed9c92c7</span><br><span class="line">  Compiled from &quot;TestClass.java&quot;</span><br><span class="line">public class com.zlcook.clazz.TestClass</span><br><span class="line">  SourceFile: &quot;TestClass.java&quot;</span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: 52</span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER</span><br><span class="line">Constant pool:</span><br><span class="line">   #1 &#x3D; Methodref          #4.#15         &#x2F;&#x2F;  java&#x2F;lang&#x2F;Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #2 &#x3D; Fieldref           #3.#16         &#x2F;&#x2F;  com&#x2F;zlcook&#x2F;clazz&#x2F;TestClass.m:I</span><br><span class="line">   #3 &#x3D; Class              #17            &#x2F;&#x2F;  com&#x2F;zlcook&#x2F;clazz&#x2F;TestClass</span><br><span class="line">   #4 &#x3D; Class              #18            &#x2F;&#x2F;  java&#x2F;lang&#x2F;Object</span><br><span class="line">   #5 &#x3D; Utf8               m</span><br><span class="line">   #6 &#x3D; Utf8               I</span><br><span class="line">   #7 &#x3D; Utf8               &lt;init&gt;</span><br><span class="line">   #8 &#x3D; Utf8               ()V</span><br><span class="line">   #9 &#x3D; Utf8               Code</span><br><span class="line">  #10 &#x3D; Utf8               LineNumberTable</span><br><span class="line">  #11 &#x3D; Utf8               inc</span><br><span class="line">  #12 &#x3D; Utf8               ()I</span><br><span class="line">  #13 &#x3D; Utf8               SourceFile</span><br><span class="line">  #14 &#x3D; Utf8               TestClass.java</span><br><span class="line">  #15 &#x3D; NameAndType        #7:#8          &#x2F;&#x2F;  &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  #16 &#x3D; NameAndType        #5:#6          &#x2F;&#x2F;  m:I</span><br><span class="line">  #17 &#x3D; Utf8               com&#x2F;zlcook&#x2F;clazz&#x2F;TestClass</span><br><span class="line">  #18 &#x3D; Utf8               java&#x2F;lang&#x2F;Object</span><br><span class="line">&#123;</span><br><span class="line">  public com.zlcook.clazz.TestClass();</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack&#x3D;1, locals&#x3D;1, args_size&#x3D;1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  &#x2F;&#x2F; Method java&#x2F;lang&#x2F;Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 2: 0</span><br><span class="line"></span><br><span class="line">  public int inc();</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack&#x3D;2, locals&#x3D;1, args_size&#x3D;1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: getfield      #2                  &#x2F;&#x2F; Field m:I</span><br><span class="line">         4: iconst_1</span><br><span class="line">         5: iadd</span><br><span class="line">         6: ireturn</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 6: 0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>上面通过javap命令得到的结果，该结果显示的很友好，由过上面的理论我们可以很清楚的看到常量池一共18项：其中第一项如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#1 &#x3D; Methodref          #4.#15       &#x2F;&#x2F;  java&#x2F;lang&#x2F;Object.&quot;&lt;init&gt;&quot;:()V</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>和我们通过手动方式查看第一个常量项CONSTANT_Methodref_info对比一下就知道javap显示的内容是多么友好了。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>第一个常量项</th>
+<th>第几个</th>
+<th>tag</th>
+<th>index</th>
+<th>index</th>
+<th>最终代表的内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>class中16进制值</td>
+<td>0X0A</td>
+<td>0X004</td>
+<td>0X000F</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>转换成10进制值</td>
+<td>10</td>
+<td>4</td>
+<td>15</td>
+<td>查完4和15才知道</td>
+<td></td>
+</tr>
+<tr>
+<td>javap分析显示的友好值</td>
+<td>#1</td>
+<td>Methodref</td>
+<td>#4</td>
+<td>#15</td>
+<td>java/lang/Object.”&lt;init&gt;”:()V</td>
+</tr>
+</tbody></table>
+<h2 id="2-6-class文件中包含的内容"><a href="#2-6-class文件中包含的内容" class="headerlink" title="2.6 class文件中包含的内容"></a>2.6 class文件中包含的内容</h2><ul>
+<li><p>下面我们来看一下class文件中常量池的内容和java源码中的内容。</p>
+</li>
+<li><p>TestClass.java代码内容</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">package com.zlcook.clazz;</span><br><span class="line"></span><br><span class="line">public class TestClass&#123;</span><br><span class="line">  private int m;</span><br><span class="line">  public int inc()&#123;</span><br><span class="line">   return m+1;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>TestClass.class中常量池内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Constant pool:</span><br><span class="line">   #1 &#x3D; Methodref          #4.#15         &#x2F;&#x2F;  java&#x2F;lang&#x2F;Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #2 &#x3D; Fieldref           #3.#16         &#x2F;&#x2F;  com&#x2F;zlcook&#x2F;clazz&#x2F;TestClass.m:I</span><br><span class="line">   #3 &#x3D; Class              #17            &#x2F;&#x2F;  com&#x2F;zlcook&#x2F;clazz&#x2F;TestClass</span><br><span class="line">   #4 &#x3D; Class              #18            &#x2F;&#x2F;  java&#x2F;lang&#x2F;Object</span><br><span class="line">   #5 &#x3D; Utf8               m</span><br><span class="line">   #6 &#x3D; Utf8               I</span><br><span class="line">   #7 &#x3D; Utf8               &lt;init&gt;</span><br><span class="line">   #8 &#x3D; Utf8               ()V</span><br><span class="line">   #9 &#x3D; Utf8               Code</span><br><span class="line">  #10 &#x3D; Utf8               LineNumberTable</span><br><span class="line">  #11 &#x3D; Utf8               inc</span><br><span class="line">  #12 &#x3D; Utf8               ()I</span><br><span class="line">  #13 &#x3D; Utf8               SourceFile</span><br><span class="line">  #14 &#x3D; Utf8               TestClass.java</span><br><span class="line">  #15 &#x3D; NameAndType        #7:#8          &#x2F;&#x2F;  &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  #16 &#x3D; NameAndType        #5:#6          &#x2F;&#x2F;  m:I</span><br><span class="line">  #17 &#x3D; Utf8               com&#x2F;zlcook&#x2F;clazz&#x2F;TestClass</span><br><span class="line">  #18 &#x3D; Utf8               java&#x2F;lang&#x2F;Object</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再复习一下常量池中主要存放字面量：如文本字符串、声明为final的常量值等。和符号引用：类和接口的全限定名、字段的名称和描述符、方法的名称和描述符。</p>
+</li>
+<li><p>所以出现com/zlcook/clazz/TestClass、java/lang/Object、m、inc都是应该的，那么I、V、<init>、LineNumberTable都是什么？那肯定是字段描述符或者是方法描述符了。这部分是编译时自动生成的，它们会被class文件中其它部分（字段表field_info、方法表method_info、属性表attribute_info）引用到，它们会用来描述一些不方便使用“固定字节”进行表达的内容。譬如描述方法的返回值是什么？有几个参数？每个参数的类型是什么？因为Java中的“类”是无穷无尽的，无法通过简单的无符号字节来描述一个方法用到了什么类，因此在描述方法的这些信息时，需要引用常量表中的符号引用进行表达。</p>
+</li>
+</ul>
+<h2 id="3-哪些字面量会进入常量池中"><a href="#3-哪些字面量会进入常量池中" class="headerlink" title="3. 哪些字面量会进入常量池中"></a>3. 哪些字面量会进入常量池中</h2><ul>
+<li>我们知道class文件存放字面量：如文本字符串、声明为final的常量值等。这里的“等”就挺烦人。</li>
+<li>下面我们来看看哪些字面量会进入常量池。（jdk1.8.0环境）</li>
+</ul>
+<p><strong>8种基本类型：</strong></p>
+<p>测试案例：</p>
+<ul>
+<li>final类型 FinalTest.java代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class FinalTest&#123;</span><br><span class="line"></span><br><span class="line">   private final int int_num &#x3D;12;</span><br><span class="line">   private final char char_num &#x3D; &#39;a&#39;;</span><br><span class="line">   private final short short_num &#x3D;30;</span><br><span class="line">   private final float float_num &#x3D; 45.3f;</span><br><span class="line">   private final double double_num &#x3D;39.8;</span><br><span class="line">   private final byte byte_num &#x3D;121;</span><br><span class="line">   private final long long_num &#x3D; 2323L;</span><br><span class="line">   private final boolean boolean_flage &#x3D; true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>非final类型 test.java代码<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class test&#123;</span><br><span class="line"></span><br><span class="line">   private int int_num &#x3D;12;</span><br><span class="line">   private char char_num &#x3D; &#39;a&#39;;</span><br><span class="line">   private short short_num &#x3D;30;</span><br><span class="line">   private float float_num &#x3D; 45.3f;</span><br><span class="line">   private double double_num &#x3D;39.8;</span><br><span class="line">   private byte byte_num &#x3D;121;</span><br><span class="line">   private long long_num &#x3D; 2323L;</span><br><span class="line">   private long long_delay_num ;</span><br><span class="line">   private boolean boolean_flage &#x3D; true;</span><br><span class="line"></span><br><span class="line">   public void init()&#123;</span><br><span class="line">     this.long_delay_num &#x3D; 5555L;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>上面代码测试结果：</p>
+<ul>
+<li>final类型的8种基本类型的值会进入常量池。</li>
+<li>非final类型的8种基本类型的值double、float、long的值会进入常量池，包括long_delay_num的值。</li>
+</ul>
+<p><strong>String类型</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">*   StringTest.java代码：</span><br><span class="line"></span><br><span class="line">    public class StringTest&#123;</span><br><span class="line">    </span><br><span class="line">          private String str1 &#x3D; &quot;zl&quot;+&quot;cook&quot;;</span><br><span class="line">          private String str2 &#x3D; str1+&quot;hello&quot;;</span><br><span class="line">          private String str3 &#x3D; new String(&quot;zlcook here?&quot;);</span><br><span class="line">          private String str4 &#x3D; &quot;everybody &quot;+ new String(&quot;here?&quot;);</span><br><span class="line">    </span><br><span class="line">          private final String fin1 &#x3D; &quot;boy&quot;;</span><br><span class="line">          private final String fin2 &#x3D; fin1+ &quot;is boy&quot;;</span><br><span class="line">          private final String fin3 &#x3D; str1+ &quot;is boy&quot;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>StringTest.class的常量池种包含内容：</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/3458176-adab40db73749fe0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/709/format/webp" alt="常量池中包含的字符串类型字面量"></p>
+<p>所有测试数据github： <a href="https://link.jianshu.com?t=https://github.com/zlcook/JVM/tree/master/constant" target="_blank" rel="noopener">测试数据</a></p>
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><ul>
+<li>这一节主要讲了Class文件魔数、版本号和常量池，比较详细介绍了常量池包含的内容以及用到的14种常量项结构。记住本节讲的常量池是class文件中的常量池，要记住还有运行时常量池，每个class文件中的常量池内容在类加载侯会进入方法区的运行时常量池中存放。当然运行时常量池的内容不仅包含这些还包含运行期加入的常量，常见的就是String类的intern()方法。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/10/13/%E4%BF%AE%E6%94%B9ubuntu%E4%B8%8B%E7%9A%84dns/" rel="prev" title="修改ubuntu下的dns">
+      <i class="fa fa-chevron-left"></i> 修改ubuntu下的dns
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/10/31/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E7%AC%ACk%E4%B8%AA%E7%BB%93%E7%82%B9/" rel="next" title="二叉搜索树的第k个结点">
+      二叉搜索树的第k个结点 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Class文件结构–常量池（一）"><span class="nav-number">1.</span> <span class="nav-text">Class文件结构–常量池（一）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Class类文件的结构"><span class="nav-number">3.</span> <span class="nav-text">Class类文件的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#全局规范"><span class="nav-number">3.1.</span> <span class="nav-text">全局规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-魔数与Class文件的版本"><span class="nav-number">3.2.</span> <span class="nav-text">1. 魔数与Class文件的版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-常量池"><span class="nav-number">3.3.</span> <span class="nav-text">2. 常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-常量池中存放的内容"><span class="nav-number">3.3.1.</span> <span class="nav-text">2.1 常量池中存放的内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-常量池中为什么要包含这些内容"><span class="nav-number">3.3.2.</span> <span class="nav-text">2.2 常量池中为什么要包含这些内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Class文件中如何描述常量池中内容"><span class="nav-number">3.3.3.</span> <span class="nav-text">2.3 Class文件中如何描述常量池中内容</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-constant-pool-count"><span class="nav-number">3.3.3.1.</span> <span class="nav-text">2.3.1 constant_pool_count</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-constant-pool"><span class="nav-number">3.3.3.2.</span> <span class="nav-text">2.3.2 constant_pool</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#14种常量项结构"><span class="nav-number">3.3.3.2.1.</span> <span class="nav-text">14种常量项结构</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-查找testClass-class文件的第一个常量项内容"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 查找testClass.class文件的第一个常量项内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-采用javap命令分析class文件"><span class="nav-number">3.5.</span> <span class="nav-text">2.5 采用javap命令分析class文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-class文件中包含的内容"><span class="nav-number">3.6.</span> <span class="nav-text">2.6 class文件中包含的内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-哪些字面量会进入常量池中"><span class="nav-number">3.7.</span> <span class="nav-text">3. 哪些字面量会进入常量池中</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束"><span class="nav-number">4.</span> <span class="nav-text">结束</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">reoger</p>
+  <div class="site-description" itemprop="description">reoger</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">reoger</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

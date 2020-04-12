@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Elasticsearch 是什么Elasticsearch是一个基于Apache Lucene(TM)的开源搜索引擎。无论在开源还是专有领域，Lucene可以被认为是迄今为止最先进、性能最好的、功能最全的搜索引擎库。但是，Lucene只是一个库。想要使用它，你必须使用Java来作为开发语言并将其直接集成到你的应用中，更糟糕的是，Lucene非常复杂，你需要深入了解检索的相关知识来理解它是如何工作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elasticsearch入门">
+<meta property="og:url" content="http://reoger.tk/2017/09/27/elasticsearch%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="reoger的记录">
+<meta property="og:description" content="Elasticsearch 是什么Elasticsearch是一个基于Apache Lucene(TM)的开源搜索引擎。无论在开源还是专有领域，Lucene可以被认为是迄今为止最先进、性能最好的、功能最全的搜索引擎库。但是，Lucene只是一个库。想要使用它，你必须使用Java来作为开发语言并将其直接集成到你的应用中，更糟糕的是，Lucene非常复杂，你需要深入了解检索的相关知识来理解它是如何工作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/2017-09-28_133458.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E6%8C%87%E5%AE%9A%E6%96%87%E6%A1%A3ID%E6%8F%92%E5%85%A5.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E4%B8%8D%E6%8C%87%E5%AE%9AID%E6%8F%92%E5%85%A5.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E9%AA%8C%E8%AF%81%E6%8F%92%E5%85%A5%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F.jpg">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/%E4%BF%AE%E6%94%B9%E6%96%87%E6%A1%A3.jpg">
+<meta property="article:published_time" content="2017-09-27T12:48:46.000Z">
+<meta property="article:modified_time" content="2017-10-14T11:49:42.000Z">
+<meta property="article:author" content="reoger">
+<meta property="article:tag" content="分布式搜索">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ovec6nnof.bkt.clouddn.com/2017-09-28_133458.jpg">
+
+<link rel="canonical" href="http://reoger.tk/2017/09/27/elasticsearch%E5%85%A5%E9%97%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>elasticsearch入门 | reoger的记录</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">reoger的记录</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">--以后的你会感激现在那么努力的自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2017/09/27/elasticsearch%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          elasticsearch入门
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-27 20:48:46" itemprop="dateCreated datePublished" datetime="2017-09-27T20:48:46+08:00">2017-09-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2017-10-14 19:49:42" itemprop="dateModified" datetime="2017-10-14T19:49:42+08:00">2017-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">后端学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Elasticsearch-是什么"><a href="#Elasticsearch-是什么" class="headerlink" title="Elasticsearch 是什么"></a>Elasticsearch 是什么</h1><p>Elasticsearch是一个基于<a href="https://lucene.apache.org/core/" target="_blank" rel="noopener">Apache Lucene(TM)</a>的开源搜索引擎。无论在开源还是专有领域，Lucene可以被认为是迄今为止最先进、性能最好的、功能最全的搜索引擎库。<br>但是，Lucene只是一个库。想要使用它，你必须使用Java来作为开发语言并将其直接集成到你的应用中，更糟糕的是，Lucene非常复杂，你需要深入了解检索的相关知识来理解它是如何工作的。<br>Elasticsearch也使用Java开发并使用Lucene作为其核心来实现所有索引和搜索的功能，但是它的目的是通过简单的RESTful API来隐藏Lucene的复杂性，从而让全文搜索变得简单。<br>不过，Elasticsearch不仅仅是Lucene和全文搜索，我们还能这样去描述它：<br>分布式的实时文件存储，每个字段都被索引并可被搜索<br>分布式的实时分析搜索引擎<br>可以扩展到上百台服务器，处理PB级结构化或非结构化数据<br>而且，所有的这些功能被集成到一个服务里面，你的应用可以通过简单的RESTful API、各种语言的客户端甚至命令行与之交互。<br>上手Elasticsearch非常容易。它提供了许多合理的缺省值，并对初学者隐藏了复杂的搜索引擎理论。它开箱即用（安装即可使用），只需很少的学习既可在生产环境中使用。<br>Elasticsearch在Apache 2 license下许可使用，可以免费下载、使用和修改。<br>随着你对Elasticsearch的理解加深，你可以根据不同的问题领域定制Elasticsearch的高级特性，这一切都是可配置的，并且配置非常灵活。</p>
+<h1 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h1><p>因为本人电脑是win10的系统，所以针对elasticsearch所有的操作与环境都是在win10环境下完成，至于其他系统环境，这里不予讨论。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装什么的最简单了，首先肯定要将elasticsearch下载到本地，要下载请戳<a href="https://www.elastic.co/downloads/elasticsearch" target="_blank" rel="noopener">这里</a>，下载完成后，直接解析即可开始我们的探究之旅。关于版本，这里需要做一点说明的是，elasticsearch总共有三个大版本，即1XX、2XX和5XX三个，我们这里使用的是最新的版本<code>5.6.1</code>进行学习<br>解压完成后，我们进入<code>bin</code>目录下，点击<code>elasticsearch.bat</code>即可运行。在成功运行后，我们通过浏览器访问<a href="http://localhost:9200/" target="_blank" rel="noopener">http://localhost:9200/</a>得到json格式的数据，即说明我们的elasicsearch成功安装并运行了。如果你在这里失败了，可能因素很多，有可能是你电脑里的java环境问题（没有java环境、java版本低于8等等），也有可能是你的电脑内存啥的太小了（一般不会出现在自己的电脑上，不过我将他部署在腾讯云上时跑不起来就是因为内存太小了）。失败的解决方案就不多介绍了，我们继续往下走。</p>
+<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><p>通过前面我们的测试安装，我们发现elasticsearch给我们返回的是json格式的数据，并不是很直观，这里我们通过安装一个叫做<code>elasticsearch-head-master</code>的插件，使得我们能更加直观的看到elasticsearch给我们返回的数据。<br>这个插件的github地址在<a href="https://github.com/zt1115798334/elasticsearch-head-master" target="_blank" rel="noopener">这里</a><br>，我们可以通过他的github地址来学习如何安装和使用。</p>
+<ol>
+<li>首先肯定是将这个插件下载下来，在github下载资料对你来说应该是很简单了，这里就不赘述了，例如我们可以这样下载：<code>git clone git://github.com/mobz/elasticsearch-head.git</code></li>
+<li>进入下载并解压好的源代码的目录。</li>
+<li>输入 <code>npm install</code>，安装必要的资源。</li>
+<li>通过<code>npm run start</code>来启动插件</li>
+<li>在浏览器中打开<a href="http://localhost:9100/" target="_blank" rel="noopener">http://localhost:9100/</a>来测试是否正常打开。<br>能正常打开之后，这里时候我们发现elasticsearch和我们head并没有联系到一起，这里因为这两个都运行在独立的进程中，他们之间的访问存在跨域问题，这里时候我们需要进行一个简单的配置才能将这个插件真正运行起来。首先我们需要在<code>elasticsearch</code>目录下，找到<code>config</code>目录，然后再<code>config</code>中找到<code>elasticsearch.yml</code>文件，在这里文件的最后，添加下面的两行代码：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http.cors.enabled: true</span><br><span class="line">http.cors.allow-origin: &quot;*&quot;</span><br></pre></td></tr></table></figure>
+保存，退出后，将elasticsearch和head-master都重启后，重新访问<a href="http://localhost:9100/" target="_blank" rel="noopener">http://localhost:9100/</a>就会发现，此时我们的集群已经链接。这里时候我们就可以继续探索了。</li>
+</ol>
+<h2 id="分布式安装"><a href="#分布式安装" class="headerlink" title="分布式安装"></a>分布式安装</h2><p>上面的我们的安装属于单利安装，elasticsearch也支持分布式安装。下面介绍一下分布式安装。首先，我们制定一个msater，即为集群的指挥官。还是在之前的节点配置文件下，修改<code>elasticsearch.yml</code>文件中的内容，主要就是在末尾添加如下的配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cluster.name: reoger    # 指定集群的名字</span><br><span class="line">node.name: msater       # 对master取名</span><br><span class="line">node.master: true       #指定他为master</span><br><span class="line">network.host: 127.0.0.1 # 绑定ip</span><br></pre></td></tr></table></figure>
+<p>修改上面的配置重启后，我们再次访问<a href="http://localhost:9100/" target="_blank" rel="noopener">http://localhost:9100/</a>就可以发现集群的名字已经修改为我们配置的名字。<br>然后，我们再来添加其他的集群。步骤也很简单，我们将之前下载好的<code>elasticsearch</code>复制一份，然后修改其中的<code>elasticsearch.yml</code>文件，添加如下的配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cluster.name: reoger                            # 指定集群名气，需要和master指定的一致</span><br><span class="line">node.name: slave1                               # 指定服务节点的名字</span><br><span class="line"></span><br><span class="line">network.host: 127.0.0.1                         # 指定本地ip</span><br><span class="line">http.port: 8200                                 # 指定端口号</span><br><span class="line"></span><br><span class="line">discovery.zen.ping.unicast.hosts: [&quot;127.0.0.1&quot;] # 发现msater的</span><br></pre></td></tr></table></figure>
+<p>然后通过<code>./bin/elasticsearch</code>启动后，通过浏览<a href="http://localhost:9100/" target="_blank" rel="noopener">http://localhost:9100/</a>，就会发现我们已经添加了两个集群了。如图：<br><img src="http://ovec6nnof.bkt.clouddn.com/2017-09-28_133458.jpg" alt="分布式安装效果图"></p>
+<h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><p>在创建索引之前，很有必要对elasticsearch中的基本概念进行一个简单的了解。<br>一句话理解就是：Elasticsearch集群可以包含多个<strong>索引</strong>(indices)（数据库），每一个索引可以包含多个<strong>类型</strong>(types)（表），每一个类型包含多个<strong>文档</strong>(documents)（行），然后每个文档包含多个<strong>字段</strong>(Fields)（列）。</p>
+<p>下面我们就来创建索引：<br><strong>结构化创建</strong><br>方法一、通过head-master创建<br>为了使创建索引比较直观，我们可以直接通过head-master插件来完成，具体我们可以访问<a href="http://localhost:9100/" target="_blank" rel="noopener">http://localhost:9100/</a>,查看我们集群的状况，然后选择索引 -&gt; 新建索引，如图所示：</p>
+<p>稍等片刻之后就会提示我们索引创建成功，然后在集群概览中就可以看到我们之前添加的索引。<br>然后选择复合查询，在查询创建我们的索引。json示例代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;novel&quot;: &#123;</span><br><span class="line">    &quot;properties&quot;: &#123;</span><br><span class="line">      &quot;title&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;text&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如图：<br><img src="http://ovec6nnof.bkt.clouddn.com/%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95.jpg" alt="利用head-master常见索引"> </p>
+<p>验证我们是否添加成功，可以在``概览 -&gt; 信息 -&gt; 索引信息 。<br>如图：<br><img src="http://ovec6nnof.bkt.clouddn.com/%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA.jpg" alt="效果展示"><br>我们可以明显的看出来，我们已经在mapppings中添加了novel这么一个索引。</p>
+<p>当然，通过head-master编写不是很直观，我们可以通过更加方便的工具postMan来实现上述功能。<br>示例操作：<br>我们需要通过<code>put</code>请求<code>127.0.0.1:9200/people</code>其中的people是我们要创建的索引，然后通过我们上传的json文件对创建的索引进行说明。<br>例如上传的的json代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;settings&quot;:&#123;</span><br><span class="line">		&quot;number_of_shards&quot;:3,</span><br><span class="line">		&quot;number_of_replicas&quot;:1</span><br><span class="line">	&#125;,</span><br><span class="line">	&quot;mappings&quot;:&#123;</span><br><span class="line">		&quot;man&quot;:&#123;</span><br><span class="line">			&quot;properties&quot;:&#123;</span><br><span class="line">				&quot;name&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;text&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;country&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;age&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;integer&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;data&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;date&quot;,</span><br><span class="line">					&quot;format&quot;: &quot;yyyy-MM-dd HH:mm:ss||yyy-MM-dd||epoch_millis&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		&quot;woman&quot;:&#123;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>表示的是常见的people<br>验证方法和之前的一样。</p>
+<p><strong>非结构化创建</strong></p>
+<h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><h3 id="指定文档ID插入"><a href="#指定文档ID插入" class="headerlink" title="指定文档ID插入"></a>指定文档ID插入</h3><p>我们这里仅用postman做示例：<br><img src="http://ovec6nnof.bkt.clouddn.com/%E6%8C%87%E5%AE%9A%E6%96%87%E6%A1%A3ID%E6%8F%92%E5%85%A5.jpg" alt="指定文档ID插入"></p>
+<h3 id="不指定文档ID插入"><a href="#不指定文档ID插入" class="headerlink" title="不指定文档ID插入"></a>不指定文档ID插入</h3><p><img src="http://ovec6nnof.bkt.clouddn.com/%E4%B8%8D%E6%8C%87%E5%AE%9AID%E6%8F%92%E5%85%A5.jpg" alt="不指定文档插入"><br>可以看到，指定文档ID插入我们需要使用put请求方式，并且需要指定文档ID。而不指定文档ID插入则使用post请求方式，并且不需要知道哪个文档ID。</p>
+<p>验证是否添加成功，在数据浏览中就可以看到我们插入的数据：<br><img src="http://ovec6nnof.bkt.clouddn.com/%E9%AA%8C%E8%AF%81%E6%8F%92%E5%85%A5%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F.jpg" alt="验证文档是否添加成功"></p>
+<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><p>修改数据很简单，</p>
+<h3 id="直接修改文档"><a href="#直接修改文档" class="headerlink" title="直接修改文档"></a>直接修改文档</h3><p><img src="http://ovec6nnof.bkt.clouddn.com/%E4%BF%AE%E6%94%B9%E6%96%87%E6%A1%A3.jpg" alt="直接修改文档"></p>
+<h3 id="脚本修改文档"><a href="#脚本修改文档" class="headerlink" title="脚本修改文档"></a>脚本修改文档</h3><p>保持要访问的地址和方式不变，将上传的json格式修改为下面的内容，即修改为script的关键字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;script&quot;:&#123;</span><br><span class="line">		&quot;lang&quot;:&quot;painless&quot;,</span><br><span class="line">		&quot;inline&quot;:&quot;ctx._source.age+&#x3D;10&quot;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者我们也可以这么写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;script&quot;:&#123;</span><br><span class="line">		&quot;lang&quot;:&quot;painless&quot;,</span><br><span class="line">		&quot;inline&quot;:&quot;ctx._source.age&#x3D;params.age&quot;,</span><br><span class="line">		&quot;params&quot;:&#123;</span><br><span class="line">			&quot;age&quot;:100</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><h3 id="删除文档"><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h3><p>删除文档很简单，只需要简单的通过DELETE方式访问制定ID文档即可删除。<br>例如我们想删除man索引中文档ID为1的文档，我们通过DELETE方式访问即可。<br><code>127.0.0.1:9200/people/man/1</code></p>
+<h3 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h3><p>删除索引非常危险，因为删除索引后，索引里面所有的内容都将被删除！！！如果我们确定我们需要删除的话，可以通过head-master来实现。<br>具体可以选择相应的索引 -&gt; 动作 -&gt; 删除索引 -&gt; 输入删除 -&gt; 成功删除。</p>
+<p>或者我们直接通过delete进行访问，例如想要删除people这个索引，我们只需要通过delete方式访问<code>127.0.0.1:9200/people/</code>即可删除。</p>
+<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><h3 id="简单查询"><a href="#简单查询" class="headerlink" title="简单查询"></a>简单查询</h3><p>直接通过文档进行查询，请求方式：GET<br>例如我想查询在people索引中，类型为man，文档ID为1的文档信息的话，直接访问：<br><code>127.0.0.1:9200/people/man/1</code>即可。</p>
+<h3 id="条件查询"><a href="#条件查询" class="headerlink" title="条件查询"></a>条件查询</h3><p>大多数情况下，简单查询不能满足我们的需求，这个时候我们就可以通过条件查询来满足我们复杂的需求。<br>如果我们需要查询people索引下所有的文档，可以通过<strong>post方法</strong>访问<code>127.0.0.1:9200/people/_search</code>，并将body的内容设置为如下的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;query&quot;:&#123;</span><br><span class="line">		&quot;match_all&quot;:&#123;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，大多数情况我们是需要按条件查询，下面是按条件查询的示例json请求格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;query&quot;:&#123;                         &#x2F;&#x2F;注意 这里是query关键字</span><br><span class="line">		&quot;match&quot;:&#123;                     &#x2F;&#x2F;要查询的的条件</span><br><span class="line">			&quot;country&quot;:&quot;Test&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	&quot;sort&quot;:[                            &#x2F;&#x2F;查询结果后的排序</span><br><span class="line">		&#123;&quot;date&quot;: &#123;&quot;order&quot;:&quot;desc&quot;&#125;&#125;      &#x2F;&#x2F; 倒叙排序</span><br><span class="line">		]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="聚合查询"><a href="#聚合查询" class="headerlink" title="聚合查询"></a>聚合查询</h3><p>聚合查询，简单来说就是将要查询的数据组合到一起，进而汇总来自多行的信息。<br>例如，我想查询people中，年龄相同的聚合信息，查询的方式仍然是post，访问的地址仍然是<code>127.0.0.1:9200/people/_search</code>，不同的发送的json数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;aggs&quot;:&#123;					&#x2F;&#x2F;关键字</span><br><span class="line">		&quot;group_by_word_age&quot;:&#123;  	&#x2F;&#x2F;自定义聚合的名字</span><br><span class="line">			&quot;terms&quot;:&#123;			&#x2F;&#x2F;关键字</span><br><span class="line">				&quot;field&quot;: &quot;age&quot;	&#x2F;&#x2F;聚合的字段名称</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		&quot;group_by_data&quot;:&#123;		&#x2F;&#x2F;自定义聚合的名字</span><br><span class="line">			&quot;terms&quot;:&#123;			&#x2F;&#x2F;关键字</span><br><span class="line">				&quot;field&quot;: &quot;date&quot; &#x2F;&#x2F;聚合字段的名称</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我这里返回的信息为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">....,</span><br><span class="line">    &quot;aggregations&quot;: &#123;</span><br><span class="line">        &quot;group_by_data&quot;: &#123;</span><br><span class="line">            &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">            &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">            &quot;buckets&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;key&quot;: 923443200000,</span><br><span class="line">                    &quot;key_as_string&quot;: &quot;1999-04-07T00:00:00.000Z&quot;,</span><br><span class="line">                    &quot;doc_count&quot;: 2</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;key&quot;: -1916697600000,</span><br><span class="line">                    &quot;key_as_string&quot;: &quot;1909-04-07T00:00:00.000Z&quot;,</span><br><span class="line">                    &quot;doc_count&quot;: 1</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;group_by_word_age&quot;: &#123;</span><br><span class="line">            &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">            &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">            &quot;buckets&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;key&quot;: 28,</span><br><span class="line">                    &quot;doc_count&quot;: 3</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，我们不但可以通过<code>terms</code>查询字段的聚合信息，还可以通过<code>status</code>、<code>min</code>、<code>max</code>等关键字查询字段的状态信息。</p>
+<p>最后，补充一点就是，如果想通过ip地址访问的话，需要修改<code>elasticsearch.yml</code>文件中的<code>network.host:</code>为我们指定的Ip字段。<br>暂时先写这么吧<del>~</del></p>
+<hr>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://es.xiaoleilu.com/" target="_blank" rel="noopener">Elasticsearch权威指南（中文版）</a></li>
+<li><a href="https://www.elastic.co/cn/" target="_blank" rel="noopener">elasticsearch官方网站</a></li>
+<li><a href="http://www.imooc.com/video/15762" target="_blank" rel="noopener">慕课网上的教学视频</a></li>
+<li><a href="http://www.sojson.com/tag_elasticsearch_3.html" target="_blank" rel="noopener">soJson博客</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E6%90%9C%E7%B4%A2/" rel="tag"># 分布式搜索</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/09/06/java%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="prev" title="java知识点">
+      <i class="fa fa-chevron-left"></i> java知识点
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/10/12/%E4%BD%BF%E7%94%A8retrofit%E6%9F%A5%E8%AF%A2elasticsearch/" rel="next" title="android端对elasticsearch进行增、删、改、查">
+      android端对elasticsearch进行增、删、改、查 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Elasticsearch-是什么"><span class="nav-number">1.</span> <span class="nav-text">Elasticsearch 是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开始使用"><span class="nav-number">2.</span> <span class="nav-text">开始使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装插件"><span class="nav-number">2.2.</span> <span class="nav-text">安装插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式安装"><span class="nav-number">2.3.</span> <span class="nav-text">分布式安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建索引"><span class="nav-number">2.4.</span> <span class="nav-text">创建索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入数据"><span class="nav-number">2.5.</span> <span class="nav-text">插入数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#指定文档ID插入"><span class="nav-number">2.5.1.</span> <span class="nav-text">指定文档ID插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不指定文档ID插入"><span class="nav-number">2.5.2.</span> <span class="nav-text">不指定文档ID插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改数据"><span class="nav-number">2.6.</span> <span class="nav-text">修改数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接修改文档"><span class="nav-number">2.6.1.</span> <span class="nav-text">直接修改文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本修改文档"><span class="nav-number">2.6.2.</span> <span class="nav-text">脚本修改文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">2.6.3.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除文档"><span class="nav-number">2.6.4.</span> <span class="nav-text">删除文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除索引"><span class="nav-number">2.6.5.</span> <span class="nav-text">删除索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询"><span class="nav-number">2.7.</span> <span class="nav-text">查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单查询"><span class="nav-number">2.7.1.</span> <span class="nav-text">简单查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件查询"><span class="nav-number">2.7.2.</span> <span class="nav-text">条件查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合查询"><span class="nav-number">2.7.3.</span> <span class="nav-text">聚合查询</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">reoger</p>
+  <div class="site-description" itemprop="description">reoger</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">reoger</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
