@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="WebView缓存原理分析和应用发表于 2017-05-13 | 分类于 技术 | 一、背景现在的App开发，或多或少都会用到Hybrid模式，到了WebView这边，经常会加载一些js文件（例如和WebView用来Native通信的bridge.js），而这些js文件不会经常发生变化，所以我们希望js在WebView里面加载一次之后，如果js没有发生变化，下次就不用再发起网络请求去加载，从而减少">
@@ -31,9 +31,9 @@
 <meta property="og:image" content="https://ww2.sinaimg.cn/large/006tNc79ly1ffjvztg93zj30jg0a247x.jpg">
 <meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNc79ly1ffjw46ygoqj30jg06443v.jpg">
 <meta property="article:published_time" content="2018-08-22T06:44:55.000Z">
-<meta property="article:modified_time" content="2018-08-22T12:47:30.000Z">
+<meta property="article:modified_time" content="2020-04-12T15:06:09.281Z">
 <meta property="article:author" content="reoger">
-<meta property="article:tag" content="android">
+<meta property="article:tag" content="android,webView">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://ww4.sinaimg.cn/large/006tNc79ly1ffjvarjyijj30jg05k0yr.jpg">
 
@@ -178,10 +178,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2018-08-22 14:44:55 / 修改时间：20:47:30" itemprop="dateCreated datePublished" datetime="2018-08-22T14:44:55+08:00">2018-08-22</time>
+              <time title="创建时间：2018-08-22 14:44:55" itemprop="dateCreated datePublished" datetime="2018-08-22T14:44:55+08:00">2018-08-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:06:09" itemprop="dateModified" datetime="2020-04-12T23:06:09+08:00">2020-04-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -310,7 +316,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/android/" rel="tag"># android</a>
+              <a href="/tags/android-webView/" rel="tag"># android,webView</a>
           </div>
 
         
@@ -398,16 +404,16 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -440,7 +446,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">reoger</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
         

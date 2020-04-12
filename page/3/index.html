@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="reoger">
@@ -148,100 +148,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/07/java%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/08/07/java%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" class="post-title-link" itemprop="url">java中的动态代理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-08-07 16:44:55" itemprop="dateCreated datePublished" datetime="2018-08-07T16:44:55+08:00">2018-08-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-08-08 20:36:42" itemprop="dateModified" datetime="2018-08-08T20:36:42+08:00">2018-08-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">android基础</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h1><p>什么是代理模式？代理模式给某一个对象提供一个代理对象，并由代理对象控制对原对象的引用。通俗的来讲代理模式就是我们生活中常见的中介。<br>下面以一个简单的例子来说明代理模式。<br>小明有两件事要做，用代码表示为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface IDoSomething &#123;</span><br><span class="line">    String[] doShopping(int money);</span><br><span class="line">    Object doOtherThing(String thing);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然，小明要做这些事情，他也知道怎么去做，购物和做其他事情的实现如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class DoSomethingImpl implements IDoSomething &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String[] doShopping(int money) &#123;</span><br><span class="line">        System.out.println(&quot;买买买！！&quot;);</span><br><span class="line">        System.out.println(String.format(&quot;花费%d $&quot;,money));</span><br><span class="line">        return new String[]&#123;&quot;零食&quot;,&quot;游戏机&quot;,&quot;mac&quot;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object doOtherThing(String thing) &#123;</span><br><span class="line">        System.out.println(&quot; Other Thing -&gt;&quot;+thing);</span><br><span class="line"></span><br><span class="line">        return thing+&quot; is done&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>虽然，小明有这两件事要做，他也知道怎么去做，但是他现在就是不想自己去做。那怎么办？<br>找人帮他做呗，也就是找个<code>代理</code>，代理的简单实现如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class ProxyDoSomething implements IDoSomething&#123;</span><br><span class="line">    private IDoSomething base;</span><br><span class="line"></span><br><span class="line">    public ProxyDoSomething(IDoSomething base) &#123;</span><br><span class="line">        this.base &#x3D; base;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String[] doShopping(int money) &#123;</span><br><span class="line">        &#x2F;&#x2F;先扣点手续费</span><br><span class="line">        int realMoney &#x3D; (int) (money*0.1);</span><br><span class="line">        String [] object &#x3D; base.doShopping(realMoney);</span><br><span class="line">        if (object !&#x3D; null &amp;&amp; object.length &gt; 1)&#123;</span><br><span class="line">            object[0]&#x3D; &quot;把这个换成拼多多的货&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        return object;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object doOtherThing(String thing) &#123;</span><br><span class="line">        String str &#x3D; thing+&quot; 这件事是代理出面做的&quot;;</span><br><span class="line">        String res &#x3D; (String) base.doOtherThing(str);</span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>找人做代理，难免要点手续费，然后可能还会动点手脚。当然，最终事情还是帮我们做好了，接下来我们看不要小明亲自出面，怎么来实现的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String args[])&#123;</span><br><span class="line">        IDoSomething iDoSomething &#x3D; new DoSomethingImpl();</span><br><span class="line">        ProxyDoSomething proxyDoSomething &#x3D; new ProxyDoSomething(iDoSomething);</span><br><span class="line">        System.out.print(proxyDoSomething.doOtherThing(&quot; clean house&quot;).toString());</span><br><span class="line">        System.out.println(Arrays.toString(proxyDoSomething.doShopping(1000)));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，本来是小明要做的事情，最终代理给了<code>ProxyDoSomething</code>去完成，当然，代价也比较惨重。<br>最终打印的结果为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> Other Thing -&gt; clean house 这件事是代理出面做的</span><br><span class="line"> clean house 这件事是代理出面做的 is done买买买！！</span><br><span class="line">花费100 $</span><br><span class="line">[把这个换成拼多多的货, 游戏机, mac]</span><br></pre></td></tr></table></figure>
-
-<h1 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h1><p>通过前一个例子理解了什么是代理，那么什么是动态代理呢？<br>通俗的理解就是，这个代理的对象可以代理很多事情，不会局限于静态代理一对一的关系，动态代理可以实现一 对多。类似于一个万能的代理，既能给代理购物，也能给别人代理做家务等等。<br>废话不多说，先上代理的核心代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.InvocationHandler;</span><br><span class="line">import java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 动态代理实现的核心，很多事情就是在这里进行实现的。</span><br><span class="line"> * 首先，我们需要拿到需要代理的对象</span><br><span class="line"> * 然后，需要判断对应的方法</span><br><span class="line"> * 最后，通过反射进行调用</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class DoSomethingHandler implements InvocationHandler &#123;</span><br><span class="line">    private IDoSomething doSomething;</span><br><span class="line"></span><br><span class="line">    public DoSomethingHandler(IDoSomething doSomething) &#123;</span><br><span class="line">        this.doSomething &#x3D; doSomething;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</span><br><span class="line">        if (&quot;doShopping&quot;.equals(method.getName()))&#123;</span><br><span class="line">            int money &#x3D; (int) ((int) args[0]*0.8);</span><br><span class="line">            doSomething.doShopping(money);</span><br><span class="line">            String[] things &#x3D; (String[]) method.invoke(doSomething, money);</span><br><span class="line">            if (things !&#x3D; null &amp;&amp; things.length &gt; 1)&#123;</span><br><span class="line">                things[0] &#x3D; &quot;这个我要掉包，换个来自拼多多的好货&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            return things;</span><br><span class="line">        &#125;else if(&quot;doOtherThing&quot;.equals(method.getName()))&#123;</span><br><span class="line">            String str &#x3D; args[0] +&quot; by DosomeThingHadler&quot;;</span><br><span class="line">            Object o &#x3D; method.invoke(doSomething,str);</span><br><span class="line">            return o+&quot; 来自 DosomeThingHadler 的问候&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>简单的介绍在代码里进行介绍了，这里就不多介绍了。我们来看调用的方法。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(&quot;开始啦啦啦啦~ &quot;);</span><br><span class="line">      IDoSomething people &#x3D; new DoSomethingImpl();</span><br><span class="line">      &#x2F;&#x2F;不使用代理，自己来</span><br><span class="line">      System.out.println(Arrays.toString(people.doShopping(1000)));</span><br><span class="line">      &#x2F;&#x2F;动态代理</span><br><span class="line">      people &#x3D; (IDoSomething) Proxy.newProxyInstance(IDoSomething.class.getClassLoader(),people.getClass().getInterfaces()</span><br><span class="line">              ,new DoSomethingHandler(people));</span><br><span class="line">      System.out.println(Arrays.toString(people.doShopping(1000)));</span><br><span class="line">      System.out.print(people.doOtherThing(&quot; clean house&quot;));</span><br></pre></td></tr></table></figure>
-<p>通过<code>Proxy.newProxyInstance</code>创建出动态代理实例，然后进行调用即可。<br>上例运行的结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">开始啦啦啦啦~ </span><br><span class="line">买买买！！</span><br><span class="line">花费1000 $</span><br><span class="line">[零食, 游戏机, mac]</span><br><span class="line"></span><br><span class="line">买买买！！</span><br><span class="line">花费800 $</span><br><span class="line">买买买！！</span><br><span class="line">花费800 $</span><br><span class="line">[这个我要掉包，换个来自拼多多的好货, 游戏机, mac]</span><br><span class="line"> Other Thing -&gt; clean house by DosomeThingHadler</span><br><span class="line"> clean house by DosomeThingHadler is done 来自 DosomeThingHadler 的问候</span><br></pre></td></tr></table></figure>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>动态代理的实现主要是基于<code>Proxy.newProxyInstance</code>创建出我们需要的代理对象，而创建这个对象又依赖于一个<code>InvocationHandler</code>，通过他来实现我们要代理的事情。</p>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
-<li><a href="http://weishu.me/2016/01/28/understand-plugin-framework-proxy-hook/" target="_blank" rel="noopener">http://weishu.me/2016/01/28/understand-plugin-framework-proxy-hook/</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/04/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E6%98%BE%E7%A4%BA%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87%E5%B9%B6%E6%B7%BB%E5%8A%A0%E8%BE%B9%E6%A1%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -265,17 +171,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2018-08-04 16:44:55 / 修改时间：21:18:10" itemprop="dateCreated datePublished" datetime="2018-08-04T16:44:55+08:00">2018-08-04</time>
+              <time title="创建时间：2018-08-04 16:44:55" itemprop="dateCreated datePublished" datetime="2018-08-04T16:44:55+08:00">2018-08-04</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:11:36" itemprop="dateModified" datetime="2020-04-12T23:11:36+08:00">2020-04-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">android基础</span></a>
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
                 </span>
             </span>
 
@@ -368,7 +280,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-08-04 21:32:02" itemprop="dateModified" datetime="2018-08-04T21:32:02+08:00">2018-08-04</time>
+                <time title="修改时间：2020-04-12 23:11:41" itemprop="dateModified" datetime="2020-04-12T23:11:41+08:00">2020-04-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -376,7 +288,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">android基础</span></a>
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
                 </span>
             </span>
 
@@ -471,10 +383,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2018-07-30 15:44:55 / 修改时间：15:03:36" itemprop="dateCreated datePublished" datetime="2018-07-30T15:44:55+08:00">2018-07-30</time>
+              <time title="创建时间：2018-07-30 15:44:55" itemprop="dateCreated datePublished" datetime="2018-07-30T15:44:55+08:00">2018-07-30</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:07:40" itemprop="dateModified" datetime="2020-04-12T23:07:40+08:00">2020-04-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -685,7 +603,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-07-30 15:05:22" itemprop="dateModified" datetime="2018-07-30T15:05:22+08:00">2018-07-30</time>
+                <time title="修改时间：2020-04-12 23:11:11" itemprop="dateModified" datetime="2020-04-12T23:11:11+08:00">2020-04-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -693,7 +611,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">android基础</span></a>
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
                 </span>
             </span>
 
@@ -810,7 +728,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-07-30 15:05:24" itemprop="dateModified" datetime="2018-07-30T15:05:24+08:00">2018-07-30</time>
+                <time title="修改时间：2020-04-12 23:05:09" itemprop="dateModified" datetime="2020-04-12T23:05:09+08:00">2020-04-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -818,7 +736,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">android基础</span></a>
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
                 </span>
             </span>
 
@@ -905,7 +823,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-07-20 21:01:10" itemprop="dateModified" datetime="2018-07-20T21:01:10+08:00">2018-07-20</time>
+                <time title="修改时间：2020-04-12 23:14:03" itemprop="dateModified" datetime="2020-04-12T23:14:03+08:00">2020-04-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -913,7 +831,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
                 </span>
             </span>
 
@@ -996,7 +914,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-07-20 20:59:10" itemprop="dateModified" datetime="2018-07-20T20:59:10+08:00">2018-07-20</time>
+                <time title="修改时间：2020-04-12 23:14:09" itemprop="dateModified" datetime="2020-04-12T23:14:09+08:00">2020-04-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1004,7 +922,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
                 </span>
             </span>
 
@@ -1083,7 +1001,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-07-20 20:59:32" itemprop="dateModified" datetime="2018-07-20T20:59:32+08:00">2018-07-20</time>
+                <time title="修改时间：2020-04-12 23:11:02" itemprop="dateModified" datetime="2020-04-12T23:11:02+08:00">2020-04-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1091,7 +1009,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
                 </span>
             </span>
 
@@ -1169,7 +1087,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-11-14 23:58:30" itemprop="dateModified" datetime="2018-11-14T23:58:30+08:00">2018-11-14</time>
+                <time title="修改时间：2020-04-12 23:07:58" itemprop="dateModified" datetime="2020-04-12T23:07:58+08:00">2020-04-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1177,7 +1095,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
                 </span>
             </span>
 
@@ -1210,6 +1128,90 @@
 <p>Language: <strong>Java</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] intersect(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2) &#123;</span><br><span class="line">      <span class="keyword">if</span>(nums1.length ==<span class="number">0</span> || nums2.length == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">0</span>];</span><br><span class="line">        Arrays.sort(nums1);</span><br><span class="line">        Arrays.sort(nums2);</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>,j=<span class="number">0</span>;</span><br><span class="line">        List res = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">        <span class="keyword">while</span>(i&lt;nums1.length &amp;&amp; j&lt;nums2.length)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums1[i]==nums2[j])&#123;</span><br><span class="line">                res.add(nums1[i]);</span><br><span class="line">                i++;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums1[i]&gt;nums2[j])&#123;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums1[i]&lt;nums2[j])&#123;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> a[] = <span class="keyword">new</span> <span class="keyword">int</span>[res.size()];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;res.size();k++)&#123;</span><br><span class="line">            a[k] = (<span class="keyword">int</span>) res.get(k);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/11/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/11/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/" class="post-title-link" itemprop="url">只出现一次的数字</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-11 10:55:48" itemprop="dateCreated datePublished" datetime="2018-07-11T10:55:48+08:00">2018-07-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:13:50" itemprop="dateModified" datetime="2020-04-12T23:13:50+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="只出现一次的数字"><a href="#只出现一次的数字" class="headerlink" title="只出现一次的数字"></a>只出现一次的数字</h1><p>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。<br>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。</p>
+<p><strong>说明：</strong></p>
+<p>你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？</p>
+<p><strong>示例 1:</strong></p>
+<p>输入: [2,2,1]<br>输出: 1</p>
+<p><strong>示例 2:</strong></p>
+<p>输入: [4,1,2,1,2]<br>输出: 4</p>
+<h1 id="常规解法"><a href="#常规解法" class="headerlink" title="常规解法"></a>常规解法</h1><p>先排序，排完序在前后两个数字间进行比较，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int singleNumber(int[] nums) &#123;</span><br><span class="line">          Arrays.sort(nums);</span><br><span class="line">        for(int i&#x3D;0;i&lt;nums.length-1;i++)&#123;</span><br><span class="line">            if(nums[i]!&#x3D;nums[i+1])&#123;</span><br><span class="line">                return nums[i];</span><br><span class="line">            &#125;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        return nums[nums.length-1];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="高级解法"><a href="#高级解法" class="headerlink" title="高级解法"></a>高级解法</h1><p>利用^,异或，相同为1，不同为0。利用临时变量一直异或，最终得到的一定是与众不同的的那个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int singleNumber(int[] nums) &#123;</span><br><span class="line">        int k&#x3D;0;</span><br><span class="line">        for(int i &#x3D;0 ;i&lt;nums.length;i++)&#123;</span><br><span class="line">            k^&#x3D;nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        return k;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -1293,16 +1295,16 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -1335,7 +1337,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">reoger</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
         

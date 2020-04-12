@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="LinkedHashMap实现LRUCache LinkedHashMap实现原理简单介绍一下LinkedHasMap的实现原理，针对JDK 8.0，在不同的版本上其实现可能有所区别。 原理概括LinkedHasMap就是基于HashMap，通过维护一个双向链表，达到在使用HashMap存储的情况下，记录其顺序。linkedHashMap结构图的示意图如图所示： 水平所限，本篇不会把所有的实现都呈">
@@ -29,9 +29,9 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://images2015.cnblogs.com/blog/249993/201612/249993-20161215143120620-1544337380.png">
 <meta property="article:published_time" content="2018-11-12T15:14:55.000Z">
-<meta property="article:modified_time" content="2018-11-12T15:55:38.000Z">
+<meta property="article:modified_time" content="2020-04-12T15:03:09.003Z">
 <meta property="article:author" content="reoger">
-<meta property="article:tag" content="java基础">
+<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://images2015.cnblogs.com/blog/249993/201612/249993-20161215143120620-1544337380.png">
 
@@ -176,17 +176,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2018-11-12 23:14:55 / 修改时间：23:55:38" itemprop="dateCreated datePublished" datetime="2018-11-12T23:14:55+08:00">2018-11-12</time>
+              <time title="创建时间：2018-11-12 23:14:55" itemprop="dateCreated datePublished" datetime="2018-11-12T23:14:55+08:00">2018-11-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:03:09" itemprop="dateModified" datetime="2020-04-12T23:03:09+08:00">2020-04-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">java基础</span></a>
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
                 </span>
             </span>
 
@@ -232,7 +238,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/java%E5%9F%BA%E7%A1%80/" rel="tag"># java基础</a>
+              <a href="/tags/java/" rel="tag"># java</a>
           </div>
 
         
@@ -245,8 +251,8 @@
       <i class="fa fa-chevron-left"></i> 虚拟机类加载阶段
     </a></div>
       <div class="post-nav-item">
-    <a href="/2018/11/12/%E9%9A%8F%E4%BE%BF/" rel="next" title="随便">
-      随便 <i class="fa fa-chevron-right"></i>
+    <a href="/2018/11/12/%E9%9A%8F%E4%BE%BF/" rel="next" title="方式论">
+      方式论 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -320,16 +326,16 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -362,7 +368,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">reoger</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
         

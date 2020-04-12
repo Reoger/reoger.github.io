@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="glide是一个快速，高效的开源媒体管理和Android的图像加载框架，将媒体解码，内存，磁盘缓存和资源池封装成一个简单易于使用的接口。  相对于同为图片加载的ImageLoader、Picasso来说，他支持的图片格式更加齐全（包括video、GIF、SVG等），支持缩略请求，内存管理也更加优秀。所以现在对其源码进行一个比较简单的分析。 源码导入本次源码解析均基于3.7.0的版本。在build">
@@ -29,8 +29,9 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/19-11-17.jpg">
 <meta property="article:published_time" content="2017-08-19T10:50:00.000Z">
-<meta property="article:modified_time" content="2017-09-07T13:17:32.000Z">
+<meta property="article:modified_time" content="2020-04-12T14:57:22.548Z">
 <meta property="article:author" content="reoger">
+<meta property="article:tag" content="source,glide">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://ovec6nnof.bkt.clouddn.com/19-11-17.jpg">
 
@@ -183,7 +184,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2017-09-07 21:17:32" itemprop="dateModified" datetime="2017-09-07T21:17:32+08:00">2017-09-07</time>
+                <time title="修改时间：2020-04-12 22:57:22" itemprop="dateModified" datetime="2020-04-12T22:57:22+08:00">2020-04-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -296,6 +297,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/source-glide/" rel="tag"># source,glide</a>
+          </div>
 
         
 
@@ -303,8 +307,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2017/08/19/new/" rel="prev" title="new">
-      <i class="fa fa-chevron-left"></i> new
+    <a href="/2017/08/19/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
     </a></div>
       <div class="post-nav-item">
     <a href="/2017/08/28/android%E9%9D%A2%E8%AF%95%E5%87%86%E5%A4%87/" rel="next" title="android面试准备">
@@ -382,16 +386,16 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -424,7 +428,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">reoger</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
         
