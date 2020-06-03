@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="reoger">
@@ -146,6 +146,11 @@
     <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
 
   </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
   </ul>
 </nav>
 
@@ -173,7 +178,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/10/android%E4%B8%ADSupport%20Annotation%20Lobrary%20%E6%B3%A8%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/11/algorithm/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%20II/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -187,7 +192,181 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/10/android%E4%B8%ADSupport%20Annotation%20Lobrary%20%E6%B3%A8%E8%A7%A3/" class="post-title-link" itemprop="url">android中Support Annotation Lobrary 注解</a>
+            <a href="/2018/07/11/algorithm/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%20II/" class="post-title-link" itemprop="url">两个数组的交集 II(</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-11 10:55:48" itemprop="dateCreated datePublished" datetime="2018-07-11T10:55:48+08:00">2018-07-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:07:58" itemprop="dateModified" datetime="2020-04-12T23:07:58+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="350-两个数组的交集-II-Intersection-of-Two-Arrays-II"><a href="#350-两个数组的交集-II-Intersection-of-Two-Arrays-II" class="headerlink" title="350. 两个数组的交集 II(Intersection of Two Arrays II)"></a><a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/description/" target="_blank" rel="noopener">350. 两个数组的交集 II(Intersection of Two Arrays II)</a></h3><p>题目难度： <strong>简单</strong></p>
+<p>给定两个数组，写一个方法来计算它们的交集。</p>
+<p><strong>例如:</strong><br>给定<em>nums1</em> = <code>[1, 2, 2, 1]</code>, <em>nums2</em> = <code>[2, 2]</code>, 返回 <code>[2, 2]</code>.</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li>输出结果中每个元素出现的次数，应与元素在两个数组中出现的次数一致。</li>
+<li>我们可以不考虑输出结果的顺序。</li>
+</ul>
+<p><strong><strong>跟进:</strong></strong></p>
+<ul>
+<li>如果给定的数组已经排好序呢？你将如何优化你的算法？</li>
+<li>如果 _nums1 _的大小比 _nums2 _小很多，哪种方法更优？</li>
+<li>如果_nums2_的元素存储在磁盘上，内存是有限的，你不能一次加载所有的元素到内存中，你该怎么办？</li>
+</ul>
+<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><p><strong>解题思路:</strong><br>先将两个数组排好序，我们需要维护两个指针，指针i用于指向nums1，指针j指向nums2。当<code>nums1[i] &gt; nums2[j]</code>时，j++,当<code>nums1[i] &lt; nums2[j]</code>，i++。我们需要寻找的情况就是有多少对nums1[i] == nums2[j]的情况，记录下来即可，记得把指针i和j往前移一位。</p>
+<p>Language: <strong>Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] intersect(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2) &#123;</span><br><span class="line">      <span class="keyword">if</span>(nums1.length ==<span class="number">0</span> || nums2.length == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">0</span>];</span><br><span class="line">        Arrays.sort(nums1);</span><br><span class="line">        Arrays.sort(nums2);</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>,j=<span class="number">0</span>;</span><br><span class="line">        List res = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">        <span class="keyword">while</span>(i&lt;nums1.length &amp;&amp; j&lt;nums2.length)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums1[i]==nums2[j])&#123;</span><br><span class="line">                res.add(nums1[i]);</span><br><span class="line">                i++;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums1[i]&gt;nums2[j])&#123;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums1[i]&lt;nums2[j])&#123;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> a[] = <span class="keyword">new</span> <span class="keyword">int</span>[res.size()];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;res.size();k++)&#123;</span><br><span class="line">            a[k] = (<span class="keyword">int</span>) res.get(k);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/11/algorithm/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/11/algorithm/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/" class="post-title-link" itemprop="url">只出现一次的数字</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-11 10:55:48" itemprop="dateCreated datePublished" datetime="2018-07-11T10:55:48+08:00">2018-07-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:13:50" itemprop="dateModified" datetime="2020-04-12T23:13:50+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="只出现一次的数字"><a href="#只出现一次的数字" class="headerlink" title="只出现一次的数字"></a>只出现一次的数字</h1><p>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。<br>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。</p>
+<p><strong>说明：</strong></p>
+<p>你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？</p>
+<p><strong>示例 1:</strong></p>
+<p>输入: [2,2,1]<br>输出: 1</p>
+<p><strong>示例 2:</strong></p>
+<p>输入: [4,1,2,1,2]<br>输出: 4</p>
+<h1 id="常规解法"><a href="#常规解法" class="headerlink" title="常规解法"></a>常规解法</h1><p>先排序，排完序在前后两个数字间进行比较，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int singleNumber(int[] nums) &#123;</span><br><span class="line">          Arrays.sort(nums);</span><br><span class="line">        for(int i&#x3D;0;i&lt;nums.length-1;i++)&#123;</span><br><span class="line">            if(nums[i]!&#x3D;nums[i+1])&#123;</span><br><span class="line">                return nums[i];</span><br><span class="line">            &#125;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        return nums[nums.length-1];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="高级解法"><a href="#高级解法" class="headerlink" title="高级解法"></a>高级解法</h1><p>利用^,异或，相同为1，不同为0。利用临时变量一直异或，最终得到的一定是与众不同的的那个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int singleNumber(int[] nums) &#123;</span><br><span class="line">        int k&#x3D;0;</span><br><span class="line">        for(int i &#x3D;0 ;i&lt;nums.length;i++)&#123;</span><br><span class="line">            k^&#x3D;nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        return k;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/10/android/android%E4%B8%ADSupport%20Annotation%20Lobrary%20%E6%B3%A8%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/10/android/android%E4%B8%ADSupport%20Annotation%20Lobrary%20%E6%B3%A8%E8%A7%A3/" class="post-title-link" itemprop="url">android中Support Annotation Lobrary 注解</a>
         </h2>
 
         <div class="post-meta">
@@ -387,7 +566,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/09/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA-II-%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/09/algorithm/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA-II-%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -401,7 +580,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/09/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA-II-%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">买卖股票的最佳时机 II 题解</a>
+            <a href="/2018/07/09/algorithm/%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA-II-%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">买卖股票的最佳时机 II 题解</a>
         </h2>
 
         <div class="post-meta">
@@ -472,7 +651,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/09/LayoutParams%E4%BD%BF%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/09/android/LayoutParams%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -486,7 +665,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/09/LayoutParams%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">LayoutParams 使用</a>
+            <a href="/2018/07/09/android/LayoutParams%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">LayoutParams 使用</a>
         </h2>
 
         <div class="post-meta">
@@ -564,7 +743,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/07/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/07/algorithm/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -578,7 +757,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/07/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/" class="post-title-link" itemprop="url">两个数组的交集 II(</a>
+            <a href="/2018/07/07/algorithm/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/" class="post-title-link" itemprop="url">两个数组的交集 II(</a>
         </h2>
 
         <div class="post-meta">
@@ -664,7 +843,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/04/13/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/04/13/android/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -678,7 +857,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/04/13/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/" class="post-title-link" itemprop="url">判断当前view是否显示</a>
+            <a href="/2018/04/13/android/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/" class="post-title-link" itemprop="url">判断当前view是否显示</a>
         </h2>
 
         <div class="post-meta">
@@ -750,7 +929,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/03/17/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/03/17/android/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -764,7 +943,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/03/17/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">android中的类加载</a>
+            <a href="/2018/03/17/android/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">android中的类加载</a>
         </h2>
 
         <div class="post-meta">
@@ -849,7 +1028,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/18/AOP-%E7%BC%96%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -863,7 +1042,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/01/18/AOP-%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">AOP 编程</a>
+            <a href="/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">AOP 编程</a>
         </h2>
 
         <div class="post-meta">
@@ -963,7 +1142,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/17/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/17/algorithm/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -977,7 +1156,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/01/17/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/" class="post-title-link" itemprop="url">android-开发技巧表</a>
+            <a href="/2018/01/17/algorithm/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/" class="post-title-link" itemprop="url">android-开发技巧表</a>
         </h2>
 
         <div class="post-meta">
@@ -1366,256 +1545,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/15/git-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/01/15/git-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">git 学习记录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-01-15 19:50:52" itemprop="dateCreated datePublished" datetime="2018-01-15T19:50:52+08:00">2018-01-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:52:56" itemprop="dateModified" datetime="2020-04-12T22:52:56+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>git作为老牌的版本控制工具，功能和作用就不用说了。今天就记录一下，今天的学习成功吧。</p>
-<p><img src="http://ovec6nnof.bkt.clouddn.com/git.png" alt="常见git命令"></p>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
-<li><p><a href="http://www.imooc.com/article/14193" target="_blank" rel="noopener">git常见命令</a></p>
-</li>
-<li><p><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="noopener">Git教程-廖雪峰</a></p>
-</li>
-<li><p><a href="https://www.cnblogs.com/wanqieddy/archive/2012/08/21/2649428.html" target="_blank" rel="noopener">git stash 和 git cherry-pick</a></p>
-</li>
-<li><p><a href="http://blog.csdn.net/chenansic/article/details/44122107" target="_blank" rel="noopener">git rebase 使用详解</a></p>
-</li>
-<li><p><a href="http://finalshares.cn/attachment/1509/thread/95_80_cbcb426e1ba4faf.jpg" target="_blank" rel="noopener">git命令大全</a></p>
-</li>
-<li><p><a href="http://www.yiibai.com/git/" target="_blank" rel="noopener">Git教程</a></p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/12/gradle%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/01/12/gradle%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">gradle基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-01-12 14:50:13" itemprop="dateCreated datePublished" datetime="2018-01-12T14:50:13+08:00">2018-01-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:57:37" itemprop="dateModified" datetime="2020-04-12T22:57:37+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><em>Gradle 是一个能通过插件形式自定义构建逻辑的优秀构建工具。</em></p>
-<p>以下的一些特性让我们选择了 Gradle：</p>
-<ul>
-<li>使用领域专用语言（DSL）来描述和控制构建逻辑</li>
-<li>构建文件基于 Groovy，并允许通过 DSL 来声明元素、使用代码操作 DSL 元素这样的混<br>合方式来自定义构建逻辑</li>
-<li>内置了 Maven 和 Ivy 来进行依赖管理</li>
-<li>相当灵活。允许使用最好的实现，但是不会强制实现的形式</li>
-<li>插件可以提供它们的 DSL 和 API 来定义构建文件</li>
-<li>优秀的 API 工具与 IDE 集成</li>
-</ul>
-<p>这里主要记录几个比较常用，重要的点。</p>
-<h1 id="android-Task"><a href="#android-Task" class="headerlink" title="android Task"></a>android Task</h1><ul>
-<li><code>assemble</code> 组合项目所有输出，他可以细分成<code>assemableDebug</code>和<code>assembleRelease</code>。</li>
-<li><code>check</code> 执行所有检查，他拥有 <code>lint</code> 依赖</li>
-<li><code>connectedCheck</code> 在一个连接的设备或者模拟器上执行检查，他们可以在所有连接的设备上并行执行检查,他拥有<code>connectedAndroidTest</code>依赖</li>
-<li><code>deviceCheck</code> 通过APIs连接远程设备来执行检查，主要用于CI（持续集成）服务上。</li>
-<li><code>build</code> 执行<code>assemle</code>和<code>check</code>的所有工作</li>
-<li><code>clean</code> 清空项目的输出。</li>
-<li><code>installDebug</code> 安装测试版的apk</li>
-<li><code>installRelease</code> 安装发布版的apk</li>
-<li><code>uninstall</code> 卸载安装，他包含三个动作<code>uninstallDebug</code>卸载测试版本， <code>uninstallRelease</code>卸载发行版本和<code>uninstallDebugAndroidTest</code>卸载android测试。</li>
-</ul>
-<h1 id="gradle-添加依赖"><a href="#gradle-添加依赖" class="headerlink" title="gradle 添加依赖"></a>gradle 添加依赖</h1><p>gradle的依赖主要分成本地包依赖和远程包依赖。<br>依赖的关键字主要包括：</p>
-<ol>
-<li><code>compile</code> 源代码(src/main/java)编译时的依赖</li>
-<li><code>runtime</code> 源代码(src/main/java)执行时的依赖</li>
-<li><code>testCompile</code> 测试代码(src/main/test)编译时的依赖</li>
-<li><code>testRuntime</code> 测试代码(src/main/test)执行时的依赖</li>
-<li><code>archives</code> 项目打包时的依赖</li>
-<li><code>provided</code> 只编译，并不将jar包导入到apk中。</li>
-</ol>
-<p>依赖格式:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    compile group: &#39;org.hibernate&#39;, name: &#39;hibernate-core&#39;, version: &#39;3.6.7.Final&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中的group表示组织，name表示要依赖的库，vesion表示版本。<br>我们可以简写成</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    compile &#39;org.hibernate:hibernate-core:3.6.7.Final&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然，不单只有对jar包的依赖，还可以有对文件的依赖，对项目的依赖，他们的写法依次如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    compile fileTree(dir: &#39;libs&#39;, include: [&#39;*.jar&#39;]) &#x2F;&#x2F;将本地lib目录下所有的jar包进行依赖</span><br><span class="line">    compile files(&#39;libs&#x2F;picasso-2.4.0.jar&#39;)</span><br><span class="line">    compile project(&#39;:libraries:lib1&#39;)  &#x2F;&#x2F;对项目lib1添加依赖</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>##本地依赖<br>上面讲到的就是本地依赖的方式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">compile fileTree(dir: &#39;libs&#39;, include: [&#39;*.jar&#39;])</span><br><span class="line">&#125;</span><br><span class="line">android &#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="外部依赖"><a href="#外部依赖" class="headerlink" title="外部依赖"></a>外部依赖</h2><p>首先需要添加远程仓库，android中至少添加一个远程仓库，例如使用开放的maven仓库。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">repositories&#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后，就对添加具体依赖。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies&#123;</span><br><span class="line">    compile group: &#39;commons-collections&#39;,name: &#39;commons-collections&#39;, version: &#39;3.2&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="混淆"><a href="#混淆" class="headerlink" title="混淆"></a>混淆</h1><p>启动混淆非常简单，只需要在<code>build.gradle</code>中启动即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">buildTypes &#123;</span><br><span class="line">    release &#123;</span><br><span class="line">        minifyEnabled true</span><br><span class="line">        proguardFiles getDefaultProguardFile(&#39;proguard-android.txt&#39;), &#39;proguard-rules.pro&#39;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中的<code>minfyEnabled</code>默认是false，即不混淆，因为启动混淆编译速度会比较慢。<br>与混淆相关的还有一个<code>shrinkResources</code>属性，可以通过将其设置为<code>true</code>，设置资不打包没用的资源。</p>
-<p>混淆通用规则：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#指定压缩级别</span><br><span class="line">-optimizationpasses 5</span><br><span class="line"></span><br><span class="line">#不跳过非公共的库的类成员</span><br><span class="line">-dontskipnonpubliclibraryclassmembers</span><br><span class="line"></span><br><span class="line">#混淆时采用的算法</span><br><span class="line">-optimizations !code&#x2F;simplification&#x2F;arithmetic,!field&#x2F;*,!class&#x2F;merging&#x2F;*</span><br><span class="line"></span><br><span class="line">#把混淆类中的方法名也混淆了</span><br><span class="line">-useuniqueclassmembernames</span><br><span class="line"></span><br><span class="line">#优化时允许访问并修改有修饰符的类和类的成员 </span><br><span class="line">-allowaccessmodification</span><br><span class="line"></span><br><span class="line">#将文件来源重命名为“SourceFile”字符串</span><br><span class="line">-renamesourcefileattribute SourceFile</span><br><span class="line">#保留行号</span><br><span class="line">-keepattributes SourceFile,LineNumberTable</span><br><span class="line"></span><br><span class="line">#保持所有实现 Serializable 接口的类成员</span><br><span class="line">-keepclassmembers class * implements java.io.Serializable &#123;</span><br><span class="line">    static final long serialVersionUID;</span><br><span class="line">    private static final java.io.ObjectStreamField[] serialPersistentFields;</span><br><span class="line">    private void writeObject(java.io.ObjectOutputStream);</span><br><span class="line">    private void readObject(java.io.ObjectInputStream);</span><br><span class="line">    java.lang.Object writeReplace();</span><br><span class="line">    java.lang.Object readResolve();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#Fragment不需要在AndroidManifest.xml中注册，需要额外保护下</span><br><span class="line">-keep public class * extends android.support.v4.app.Fragment</span><br><span class="line">-keep public class * extends android.app.Fragment</span><br><span class="line"></span><br><span class="line"># 保持测试相关的代码</span><br><span class="line">-dontnote junit.framework.**</span><br><span class="line">-dontnote junit.runner.**</span><br><span class="line">-dontwarn android.test.**</span><br><span class="line">-dontwarn android.support.test.**</span><br><span class="line">-dontwarn org.junit.**</span><br></pre></td></tr></table></figure>
-
-<p>补充的混淆规则：</p>
-<ol>
-<li><p>第三方库混淆规则。这个比较常见，直接接入官方说明文档。</p>
-</li>
-<li><p>model实体类，典型在转化json的时候，必须保证model不被混淆，因此需加入–keep public class</p>
-</li>
-<li><p>JNI中调用的类以及方法不可被混淆</p>
-</li>
-<li><p>WebView中JavaScript调用的接口不混淆</p>
-</li>
-<li><p>AndroidMainfest、四大组件以及Application的子类不混淆</p>
-</li>
-<li><p>Parcelable的子类和Creator静态成员变量不混淆，否则会产生Android.os.BadParcelableException异常</p>
-</li>
-<li><p>Layout布局使用的View构造函数、android:onClick等。</p>
-</li>
-</ol>
-<h1 id="apk打包流程"><a href="#apk打包流程" class="headerlink" title="apk打包流程"></a>apk打包流程</h1><p><img src="https://upload-images.jianshu.io/upload_images/1441907-8a2c24bbb71c2cbf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/536" alt="打包流程"></p>
-<ol>
-<li>aapt打包res资源文件，生成R文件。</li>
-<li>处理aidl,生成java文件</li>
-<li>编译java 生成class文件</li>
-<li>通过dex命令，将class文件生成dex文件</li>
-<li>apkbuilder阶段，将资源、dex、so合并成apk</li>
-<li>对apk进行签名</li>
-<li>zipalign阶段,将签名后的apk进行对齐</li>
-</ol>
-<h1 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h1><ul>
-<li><p><a href="https://www.gitbook.com/book/chaosleong/gradle-for-android" target="_blank" rel="noopener">Gradle Android Plugin 中文手册</a></p>
-</li>
-<li><p><a href="https://dongchuan.gitbooks.io/gradle-user-guide-/" target="_blank" rel="noopener">Gradle User Guide 中文版</a></p>
-</li>
-<li><p><a href="https://developer.android.com/studio/releases/gradle-plugin.html" target="_blank" rel="noopener">Android Plugin for Gradle Release Notes</a></p>
-</li>
-<li><p><a href="https://www.jianshu.com/p/7c288a17cda8" target="_blank" rel="noopener">Android 打包过程</a></p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1685,7 +1614,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1694,7 +1623,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -1735,7 +1664,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">reoger</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -1761,7 +1690,7 @@
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>

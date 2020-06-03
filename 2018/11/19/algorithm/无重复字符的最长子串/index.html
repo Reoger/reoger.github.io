@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="无重复字符的最长子串 文章转载自https:&#x2F;&#x2F;leetcode-cn.com&#x2F;articles&#x2F;longest-substring-without-repeating-characters&#x2F; 给定一个字符串，请你找出其中不含有重复字符的 *最长子串 *的长度。 示例 1: 输入: “abcabcbb”输出: 3解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无重复字符的最长子串">
+<meta property="og:url" content="http://reoger.tk/2018/11/19/algorithm/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/index.html">
+<meta property="og:site_name" content="reoger的记录">
+<meta property="og:description" content="无重复字符的最长子串 文章转载自https:&#x2F;&#x2F;leetcode-cn.com&#x2F;articles&#x2F;longest-substring-without-repeating-characters&#x2F; 给定一个字符串，请你找出其中不含有重复字符的 *最长子串 *的长度。 示例 1: 输入: “abcabcbb”输出: 3解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-11-19T15:16:48.000Z">
+<meta property="article:modified_time" content="2020-04-12T15:14:06.350Z">
+<meta property="article:author" content="reoger">
+<meta property="article:tag" content="leetcode">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://reoger.tk/2018/11/19/algorithm/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>无重复字符的最长子串 | reoger的记录</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">reoger的记录</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">--以后的你会感激现在那么努力的自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/11/19/algorithm/%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          无重复字符的最长子串
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-19 23:16:48" itemprop="dateCreated datePublished" datetime="2018-11-19T23:16:48+08:00">2018-11-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:14:06" itemprop="dateModified" datetime="2020-04-12T23:14:06+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="无重复字符的最长子串"><a href="#无重复字符的最长子串" class="headerlink" title="无重复字符的最长子串"></a>无重复字符的最长子串</h1><hr>
+<p>文章转载自<a href="https://leetcode-cn.com/articles/longest-substring-without-repeating-characters/" target="_blank" rel="noopener">https://leetcode-cn.com/articles/longest-substring-without-repeating-characters/</a></p>
+<p>给定一个字符串，请你找出其中不含有重复字符的 *<em>最长子串 *</em>的长度。</p>
+<p><strong>示例 1:</strong></p>
+<p><strong>输入:</strong> “abcabcbb”<br><strong>输出:</strong> 3<br><strong>解释:</strong> 因为无重复字符的最长子串是 <code>&quot;abc&quot;，所以其</code>长度为 3。</p>
+<p><strong>示例 2:</strong></p>
+<p><strong>输入:</strong> “bbbbb”<br><strong>输出:</strong> 1<br><strong>解释:</strong> 因为无重复字符的最长子串是 <code>&quot;b&quot;</code>，所以其长度为 1。</p>
+<p><strong>示例 3:</strong></p>
+<p><strong>输入:</strong> “pwwkew”<br><strong>输出:</strong> 3<br><strong>解释:</strong> 因为无重复字符的最长子串是 <code>&quot;wke&quot;</code>，所以其长度为 3。<br>     请注意，你的答案必须是 <strong>子串</strong> 的长度，<code>&quot;pwke&quot;</code> 是一个_子序列，_不是子串。</p>
+<ul>
+<li><a href="#_1">解决方案</a><ul>
+<li><a href="#_2">方法一：暴力法</a></li>
+<li><a href="#_3">方法二：滑动窗口</a></li>
+<li><a href="#_4">方法三：优化的滑动窗口</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><hr>
+<h4 id="方法一：暴力法"><a href="#方法一：暴力法" class="headerlink" title="方法一：暴力法"></a>方法一：暴力法</h4><p><strong>思路</strong></p>
+<p>逐个检查所有的子字符串，看它是否不含有重复的字符。</p>
+<p><strong>算法</strong></p>
+<p>假设我们有一个函数 <code>boolean allUnique(String substring)</code> ，如果子字符串中的字符都是唯一的，它会返回true，否则会返回false。 我们可以遍历给定字符串 <code>s</code> 的所有可能的子字符串并调用函数 <code>allUnique</code>。 如果事实证明返回值为true，那么我们将会更新无重复字符子串的最大长度的答案。</p>
+<p>现在让我们填补缺少的部分：</p>
+<ol>
+<li><p>为了枚举给定字符串的所有子字符串，我们需要枚举它们开始和结束的索引。假设开始和结束的索引分别为 iii 和 jjj。那么我们有 0≤i&lt;j≤n0 \leq i \lt j \leq n0≤i&lt;j≤n （这里的结束索引 jjj 是按惯例排除的）。因此，使用 iii 从0到 n−1n - 1n−1 以及 jjj 从 i+1i+1i+1 到 nnn 这两个嵌套的循环，我们可以枚举出 <code>s</code> 的所有子字符串。</p>
+</li>
+<li><p>要检查一个字符串是否有重复字符，我们可以使用集合。我们遍历字符串中的所有字符，并将它们逐个放入 <code>set</code> 中。在放置一个字符之前，我们检查该集合是否已经包含它。如果包含，我们会返回 <code>false</code>。循环结束后，我们返回 <code>true</code>。</p>
+</li>
+</ol>
+<p><strong>复杂度分析</strong></p>
+<ul>
+<li><p>时间复杂度：O(n3)O(n^3)O(n3) 。</p>
+<p>要验证索引范围在 [i,j)[i, j)[i,j) 内的字符是否都是唯一的，我们需要检查该范围中的所有字符。 因此，它将花费 O(j−i)O(j - i)O(j−i) 的时间。</p>
+<p>对于给定的 <code>i</code>，对于所有 j∈[i+1,n]j \in [i+1, n]j∈[i+1,n] 所耗费的时间总和为：</p>
+<p>∑i+1nO(j−i) \sum_{i+1}^{n}O(j - i) i+1∑n​O(j−i)</p>
+<p>因此，执行所有步骤耗去的时间总和为：</p>
+<p>O(∑i=0n−1(∑j=i+1n(j−i)))=O(∑i=0n−1(1+n−i)(n−i)2)=O(n3) O\left(\sum_{i = 0}^{n - 1}\left(\sum_{j = i + 1}^{n}(j - i)\right)\right) = O\left(\sum_{i = 0}^{n - 1}\frac{(1 + n - i)(n - i)}{2}\right) = O(n^3) O(i=0∑n−1​(j=i+1∑n​(j−i)))=O(i=0∑n−1​2(1+n−i)(n−i)​)=O(n3)</p>
+</li>
+<li><p>空间复杂度：O(min(n,m))O(min(n, m))O(min(n,m))，我们需要 O(k)O(k)O(k) 的空间来检查子字符串中是否有重复字符，其中 kkk 表示 <code>Set</code> 的大小。而 Set 的大小取决于字符串 nnn 的大小以及字符集/字母 mmm 的大小。  </p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length();</span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt;= n; j++)</span><br><span class="line">                <span class="keyword">if</span> (allUnique(s, i, j)) ans = Math.max(ans, j - i);</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">allUnique</span><span class="params">(String s, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">        Set&lt;Character&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; end; i++) &#123;</span><br><span class="line">            Character ch = s.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (set.contains(ch)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            set.add(ch);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法二：滑动窗口"><a href="#方法二：滑动窗口" class="headerlink" title="方法二：滑动窗口"></a>方法二：滑动窗口</h4><p><strong>算法</strong></p>
+<p>暴力法非常简单。但它太慢了。那么我们该如何优化它呢？</p>
+<p>在暴力法中，我们会反复检查一个子字符串是否含有有重复的字符，但这是没有必要的。如果从索引 iii 到 j−1j - 1j−1 之间的子字符串 sijs_{ij}sij​ 已经被检查为没有重复字符。我们只需要检查 s[j]s[j]s[j] 对应的字符是否已经存在于子字符串 sijs_{ij}sij​ 中。</p>
+<p>要检查一个字符是否已经在子字符串中，我们可以检查整个子字符串，这将产生一个复杂度为 O(n2)O(n^2)O(n2) 的算法，但我们可以做得更好。</p>
+<p>通过使用 HashSet 作为滑动窗口，我们可以用 O(1)O(1)O(1) 的时间来完成对字符是否在当前的子字符串中的检查。</p>
+<p>滑动窗口是数组/字符串问题中常用的抽象概念。 窗口通常是在数组/字符串中由开始和结束索引定义的一系列元素的集合，即 [i,j)[i, j)[i,j)（左闭，右开）。而滑动窗口是可以将两个边界向某一方向“滑动”的窗口。例如，我们将 [i,j)[i, j)[i,j) 向右滑动 111 个元素，则它将变为 [i+1,j+1)[i+1, j+1)[i+1,j+1)（左闭，右开）。</p>
+<p>回到我们的问题，我们使用 HashSet 将字符存储在当前窗口 [i,j)[i, j)[i,j)（最初 j=ij = ij=i）中。 然后我们向右侧滑动索引 jjj，如果它不在 HashSet 中，我们会继续滑动 jjj。直到 s[j] 已经存在于 HashSet 中。此时，我们找到的没有重复字符的最长子字符串将会以索引 iii 开头。如果我们对所有的 iii 这样做，就可以得到答案。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length();</span><br><span class="line">        Set&lt;Character&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>, i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; n &amp;&amp; j &lt; n) &#123;</span><br><span class="line">            <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">            <span class="keyword">if</span> (!set.contains(s.charAt(j)))&#123;</span><br><span class="line">                set.add(s.charAt(j++));</span><br><span class="line">                ans = Math.max(ans, j - i);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                set.remove(s.charAt(i++));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>复杂度分析</strong></p>
+<ul>
+<li><p>时间复杂度：O(2n)=O(n)O(2n) = O(n)O(2n)=O(n)，在最糟糕的情况下，每个字符将被 iii 和 jjj 访问两次。</p>
+</li>
+<li><p>空间复杂度：O(min(m,n))O(min(m, n))O(min(m,n))，与之前的方法相同。滑动窗口法需要 O(k)O(k)O(k) 的空间，其中 kkk 表示 <code>Set</code> 的大小。而Set的大小取决于字符串 nnn 的大小以及字符集/字母 mmm 的大小。  </p>
+</li>
+</ul>
+<hr>
+<h4 id="方法三：优化的滑动窗口"><a href="#方法三：优化的滑动窗口" class="headerlink" title="方法三：优化的滑动窗口"></a>方法三：优化的滑动窗口</h4><p>上述的方法最多需要执行 2n 个步骤。事实上，它可以被进一步优化为仅需要 n 个步骤。我们可以定义字符到索引的映射，而不是使用集合来判断一个字符是否存在。 当我们找到重复的字符时，我们可以立即跳过该窗口。</p>
+<p>也就是说，如果 s[j]s[j]s[j] 在 [i,j)[i, j)[i,j) 范围内有与 j′j&#x27;j′ 重复的字符，我们不需要逐渐增加 iii 。 我们可以直接跳过 [i，j′][i，j&#x27;][i，j′] 范围内的所有元素，并将 iii 变为 j′+1j&#x27; + 1j′+1。</p>
+<p><strong>Java（使用 HashMap）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length(), ans = <span class="number">0</span>;</span><br><span class="line">        Map&lt;Character, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;(); <span class="comment">// current index of character</span></span><br><span class="line">        <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(s.charAt(j))) &#123;</span><br><span class="line">                i = Math.max(map.get(s.charAt(j)), i);</span><br><span class="line">            &#125;</span><br><span class="line">            ans = Math.max(ans, j - i + <span class="number">1</span>);</span><br><span class="line">            map.put(s.charAt(j), j + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Java（假设字符集为 ASCII 128）</strong></p>
+<p>以前的我们都没有对字符串 <code>s</code> 所使用的字符集进行假设。</p>
+<p>当我们知道该字符集比较小的时侯，我们可以用一个整数数组作为直接访问表来替换 <code>Map</code>。</p>
+<p>常用的表如下所示：</p>
+<ul>
+<li><code>int [26]</code> 用于字母 ‘a’ - ‘z’或 ‘A’ - ‘Z’</li>
+<li><code>int [128]</code> 用于ASCII码</li>
+<li><code>int [256]</code> 用于扩展ASCII码</li>
+</ul>
+<p><strong>复杂度分析</strong></p>
+<ul>
+<li><p>时间复杂度：O(n)O(n)O(n)，索引 jjj 将会迭代 nnn 次。</p>
+</li>
+<li><p>空间复杂度（HashMap）：O(min(m,n))O(min(m, n))O(min(m,n))，与之前的方法相同。</p>
+</li>
+<li><p>空间复杂度（Table）：O(m)O(m)O(m)，mmm 是字符集的大小。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length(), ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] index = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">128</span>]; <span class="comment">// current index of character</span></span><br><span class="line">        <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            i = Math.max(index[s.charAt(j)], i);</span><br><span class="line">            ans = Math.max(ans, j - i + <span class="number">1</span>);</span><br><span class="line">            index[s.charAt(j)] = j + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/11/14/algorithm/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/" rel="prev" title="两个数组的交集">
+      <i class="fa fa-chevron-left"></i> 两个数组的交集
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/11/21/algorithm/Z%20%E5%AD%97%E5%BD%A2%E5%8F%98%E6%8D%A2/" rel="next" title="Z 字形变换">
+      Z 字形变换 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#无重复字符的最长子串"><span class="nav-number">1.</span> <span class="nav-text">无重复字符的最长子串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">1.1.</span> <span class="nav-text">解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法一：暴力法"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">方法一：暴力法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法二：滑动窗口"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">方法二：滑动窗口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法三：优化的滑动窗口"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">方法三：优化的滑动窗口</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">reoger</p>
+  <div class="site-description" itemprop="description">reoger</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/reoger" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;reoger" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:reoger112@gmail.com" title="E-Mail → mailto:reoger112@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">reoger</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

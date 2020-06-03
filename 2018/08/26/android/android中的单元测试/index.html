@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="单元测试在日常的开发过程中，为了保证代码的质量和减少代码出错的机率，我们常常会通过单元测试来验证我们的代码。本篇博客就是用来记录单元测试的用法，以免遗忘。 junit 工具类在android中编写单元测试的时候，用的最多的还是junit 4吧，在新版的android studio中，会默认添加依赖，如果是老项目，可能需要module在build.gradle中添加如下的依赖。 1testImple">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android中的测试">
+<meta property="og:url" content="http://reoger.tk/2018/08/26/android/android%E4%B8%AD%E7%9A%84%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="reoger的记录">
+<meta property="og:description" content="单元测试在日常的开发过程中，为了保证代码的质量和减少代码出错的机率，我们常常会通过单元测试来验证我们的代码。本篇博客就是用来记录单元测试的用法，以免遗忘。 junit 工具类在android中编写单元测试的时候，用的最多的还是junit 4吧，在新版的android studio中，会默认添加依赖，如果是老项目，可能需要module在build.gradle中添加如下的依赖。 1testImple">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/2018-08-27_200102.png">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/2018-08-27_200631.png">
+<meta property="og:image" content="http://ovec6nnof.bkt.clouddn.com/2018-08-27_205446.png">
+<meta property="article:published_time" content="2018-08-26T08:13:55.000Z">
+<meta property="article:modified_time" content="2020-04-12T14:55:09.430Z">
+<meta property="article:author" content="reoger">
+<meta property="article:tag" content="android,junit">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ovec6nnof.bkt.clouddn.com/2018-08-27_200102.png">
+
+<link rel="canonical" href="http://reoger.tk/2018/08/26/android/android%E4%B8%AD%E7%9A%84%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>android中的测试 | reoger的记录</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">reoger的记录</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">--以后的你会感激现在那么努力的自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/26/android/android%E4%B8%AD%E7%9A%84%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          android中的测试
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-26 16:13:55" itemprop="dateCreated datePublished" datetime="2018-08-26T16:13:55+08:00">2018-08-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 22:55:09" itemprop="dateModified" datetime="2020-04-12T22:55:09+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h1><p>在日常的开发过程中，为了保证代码的质量和减少代码出错的机率，我们常常会通过单元测试来验证我们的代码。<br>本篇博客就是用来记录单元测试的用法，以免遗忘。</p>
+<h1 id="junit-工具类"><a href="#junit-工具类" class="headerlink" title="junit 工具类"></a>junit 工具类</h1><p>在android中编写单元测试的时候，用的最多的还是<code>junit 4</code>吧，在新版的android studio中，会默认添加依赖，如果是老项目，可能需要module在<code>build.gradle</code>中添加如下的依赖。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">testImplementation &#39;junit:junit:4.12&#39;</span><br></pre></td></tr></table></figure>
+<p>好了，环境准备完毕，然后就可以开始进行单元测试了。首先我们还是编写一个需要测试的类，简单起见就编写一个<code>a+b</code>的实现吧，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Utils &#123;</span><br><span class="line"></span><br><span class="line">    public int add(Integer a, Integer b) throws ParseException&#123;</span><br><span class="line">        if (a &#x3D;&#x3D; null || b&#x3D;&#x3D; null)&#123;</span><br><span class="line">            throw new  ParseException(&quot;param is null&quot;,0);</span><br><span class="line">        &#125;</span><br><span class="line">        return a + b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，就可以编写单元测试了，在window环境下，直接按<code>ctrl+shift+T</code>即可快速创建一个单元测试。如图：<br><img src="http://ovec6nnof.bkt.clouddn.com/2018-08-27_200102.png" alt="图1"></p>
+<p>其中的注解我们稍后介绍，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import org.junit.Test;</span><br><span class="line">import static org.junit.Assert.assertEquals;</span><br><span class="line"></span><br><span class="line">public class UtilsTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testAdd() throws Exception &#123;</span><br><span class="line">        Utils test &#x3D; new Utils();</span><br><span class="line">        assertEquals(3,test.add(1,3));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例如我们可以编写一个这样的测试类，使用<code>@Test</code>标识这是一个测试，利用<code>assertEquals</code>来进行判断结果是否符合预期。<br><img src="http://ovec6nnof.bkt.clouddn.com/2018-08-27_200631.png" alt="图2"><br>很明显，这个测试并没有通过，因为1+3的结果明显不是3，但这是我们的预期的结果就错了，所以就需要更改预期为4，运行后发现测试通过。<br>下面简单介绍其他的注解和方法的使用。</p>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><table>
+<thead>
+<tr>
+<th>注解名</th>
+<th>注解含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@Test</td>
+<td>表示此方法为测试方法</td>
+</tr>
+<tr>
+<td>@Before</td>
+<td>在每个测试方法前执行，可做初始化操作</td>
+</tr>
+<tr>
+<td>@After</td>
+<td>在每个测试方法后执行，可做释放资源操作</td>
+</tr>
+<tr>
+<td>@Ignore</td>
+<td>忽略的测试方法</td>
+</tr>
+<tr>
+<td>@BeforeClass</td>
+<td>在类中所有方法前运行。此注解修饰的方法必须是static void</td>
+</tr>
+<tr>
+<td>@AfterClass</td>
+<td>在类中最后运行。此注解修饰的方法必须是static void</td>
+</tr>
+<tr>
+<td>@RunWith</td>
+<td>指定该测试类使用某个运行器</td>
+</tr>
+<tr>
+<td>@Parameters</td>
+<td>指定测试类的测试数据集合</td>
+</tr>
+<tr>
+<td>@Rule</td>
+<td>重新制定测试类中方法的行为</td>
+</tr>
+<tr>
+<td>@FixMethodOrder</td>
+<td>指定测试类中方法的执行顺序</td>
+</tr>
+</tbody></table>
+<p>在测试流程中，上述注解的方法执行的顺序为：<strong>@BeforeClass –&gt; @Before –&gt; @Test –&gt; @After –&gt; @AfterClass</strong><br>主语其他的非流程类的测试注解，<strong>@RunWith、@Parameters、@Rule、@FixMethodOrder</strong>，稍后会进一步介绍其用法。</p>
+<h3 id="使用-Parameters配置多组测试数据"><a href="#使用-Parameters配置多组测试数据" class="headerlink" title="使用@Parameters配置多组测试数据"></a>使用<code>@Parameters</code>配置多组测试数据</h3><p>在需要进行多组数据进行测试的时候，我们可能会这么写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assertArrayEquals(new int[]&#123;3,5,9&#125;,new int[]&#123;test.add(1,2),test.add(2,3),test.add(4,5)&#125;);</span><br></pre></td></tr></table></figure>
+<p>是的，上述方式可以实现测试多组数据，我们甚至可以将他们分开一条一条的测试，以便于我们快速找到测试不通过的地方。但是有一种更优雅的方式，我们可以这么写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(Parameterized.class)</span><br><span class="line">public class UtilsTest &#123;</span><br><span class="line">    public Point point;</span><br><span class="line"></span><br><span class="line">    public UtilsTest(Point point) &#123;</span><br><span class="line">       this.point &#x3D; point;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testAdd() throws Exception &#123;</span><br><span class="line">        Utils test &#x3D; new Utils();</span><br><span class="line">        assertEquals(point.x+point.y,test.add(point.x,point.y));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Parameterized.Parameters</span><br><span class="line">    public static Collection params()&#123;</span><br><span class="line">        return Arrays.asList(new Point(1,2),new Point(3,4),new Point(5,6));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，我们在<code>UtilsTest</code>，添加了注解<code>@RunWith(Parameterized.class)</code>，用于表示次测试类的参数是可变的，然后添加了一个有参的构造方法<code>public UtilsTest(Point point)</code>，用于接受可变的参数，最后使用<code>@Parameterized.Parameters</code> 来构造参数列表，如此我们的测试类就可以实现一次运行多个测试样例了。结果如下所示：<br><img src="http://ovec6nnof.bkt.clouddn.com/2018-08-27_205446.png" alt="图3"></p>
+<h3 id="测试抛出异常"><a href="#测试抛出异常" class="headerlink" title="测试抛出异常"></a>测试抛出异常</h3><p>当我们需要测试传入异常参数时，是否会如预想的一样抛出异常，这个时候我们就可以使用到<code>@test</code>注解中的<code>expected</code>属性，例如，我们还是测试上面的a+b,测试代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Test(expected &#x3D; ParseException.class)</span><br><span class="line">public void testAdd() throws Exception &#123;</span><br><span class="line">    Utils test &#x3D; new Utils();</span><br><span class="line">    assertEquals(5,test.add(null,5));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在测试类中，我们传入了<code>null</code>到<code>add</code>方法中，我们预想这种肯定会出现异常，所以我们在<code>Test</code>注解中添加了<code>expected</code>来捕获<code>ParseException</code>异常，如果捕获到这个异常，此时通过，如果没有捕获到这个异常，则这个测试方法会主动抛出<code>ParseException</code>异常，并说名测试不通过。</p>
+<h3 id="Assert类的主要用法"><a href="#Assert类的主要用法" class="headerlink" title="Assert类的主要用法"></a>Assert类的主要用法</h3><table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>方法描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>assertEquals</td>
+<td>断言传入的预期值与实际值是相等的</td>
+</tr>
+<tr>
+<td>assertNotEquals</td>
+<td>断言传入的预期值与实际值是不相等的</td>
+</tr>
+<tr>
+<td>assertArrayEquals</td>
+<td>断言传入的预期数组与实际数组是相等的</td>
+</tr>
+<tr>
+<td>assertNull</td>
+<td>断言传入的对象是为空</td>
+</tr>
+<tr>
+<td>assertNotNull</td>
+<td>断言传入的对象是不为空</td>
+</tr>
+<tr>
+<td>assertTrue</td>
+<td>断言条件为真</td>
+</tr>
+<tr>
+<td>assertFalse</td>
+<td>断言条件为假</td>
+</tr>
+<tr>
+<td>assertSame</td>
+<td>断言两个对象引用同一个对象，相当于“==”</td>
+</tr>
+<tr>
+<td>assertNotSame</td>
+<td>断言两个对象引用不同的对象，相当于“!=”</td>
+</tr>
+<tr>
+<td>assertThat</td>
+<td>断言实际值是否满足指定的条件</td>
+</tr>
+</tbody></table>
+<h2 id="匹配器"><a href="#匹配器" class="headerlink" title="匹配器"></a>匹配器</h2><table>
+<thead>
+<tr>
+<th>匹配器</th>
+<th>说明</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>is</td>
+<td>断言参数等于后面给出的匹配表达式</td>
+<td>assertThat(5, is (5));</td>
+</tr>
+<tr>
+<td>not</td>
+<td>断言参数不等于后面给出的匹配表达式</td>
+<td>assertThat(5, not(6));</td>
+</tr>
+<tr>
+<td>equalTo</td>
+<td>断言参数相等</td>
+<td>assertThat(30, equalTo(30));</td>
+</tr>
+<tr>
+<td>equalToIgnoringCase</td>
+<td>断言字符串相等忽略大小写</td>
+<td>assertThat(“Ab”, equalToIgnoringCase(“ab”));</td>
+</tr>
+<tr>
+<td>containsString</td>
+<td>断言字符串包含某字符串</td>
+<td>assertThat(“abc”, containsString(“bc”));</td>
+</tr>
+<tr>
+<td>startsWith</td>
+<td>断言字符串以某字符串开始</td>
+<td>assertThat(“abc”, startsWith(“a”));</td>
+</tr>
+<tr>
+<td>endsWith</td>
+<td>断言字符串以某字符串结束</td>
+<td>assertThat(“abc”, endsWith(“c”));</td>
+</tr>
+<tr>
+<td>nullValue</td>
+<td>断言参数的值为null</td>
+<td>assertThat(null, nullValue());</td>
+</tr>
+<tr>
+<td>notNullValue</td>
+<td>断言参数的值不为null</td>
+<td>assertThat(“abc”, notNullValue());</td>
+</tr>
+<tr>
+<td>greaterThan</td>
+<td>断言参数大于</td>
+<td>assertThat(4, greaterThan(3));</td>
+</tr>
+<tr>
+<td>lessThan</td>
+<td>断言参数小于</td>
+<td>assertThat(4, lessThan(6));</td>
+</tr>
+<tr>
+<td>greaterThanOrEqualTo</td>
+<td>断言参数大于等于</td>
+<td>assertThat(4, greaterThanOrEqualTo(3));</td>
+</tr>
+<tr>
+<td>lessThanOrEqualTo</td>
+<td>断言参数小于等于</td>
+<td>assertThat(4, lessThanOrEqualTo(6));</td>
+</tr>
+<tr>
+<td>closeTo</td>
+<td>断言浮点型数在某一范围内</td>
+<td>assertThat(4.0, closeTo(2.6, 4.3));</td>
+</tr>
+<tr>
+<td>allOf</td>
+<td>断言符合所有条件，相当于&amp;&amp;</td>
+<td>assertThat(4,allOf(greaterThan(3), lessThan(6)));</td>
+</tr>
+<tr>
+<td>anyOf</td>
+<td>断言符合某一条件，相当于或</td>
+<td>assertThat(4,anyOf(greaterThan(9), lessThan(6)));</td>
+</tr>
+<tr>
+<td>hasKey</td>
+<td>断言Map集合含有此键</td>
+<td>assertThat(map, hasKey(“key”));</td>
+</tr>
+<tr>
+<td>hasValue</td>
+<td>断言Map集合含有此值</td>
+<td>assertThat(map, hasValue(value));</td>
+</tr>
+<tr>
+<td>hasItem</td>
+<td>断言迭代对象含有此元素</td>
+<td>assertThat(list, hasItem(element));</td>
+</tr>
+</tbody></table>
+<h1 id="UI测试"><a href="#UI测试" class="headerlink" title="UI测试"></a>UI测试</h1><p>上述的单元测试虽然功能很强大，但是局限性也很大，比如不能测试UI相关的，不能测试与<code>Context</code>相关的方法。我们可以利用Ui测试来进行这方面的测试。<br>关于ui测试，请参考这篇<a href="https://juejin.im/post/5b66de2c6fb9a04fbd1b4725" target="_blank" rel="noopener">博客</a>，实在写的太好了。<br>关于android studio中的Ui测试，可以参考<a href="https://developer.android.com/studio/test/espresso-test-recorder" target="_blank" rel="noopener">官方文档</a>。<br>这里仅记录一下使用心得：</p>
+<h2 id="espresso必要的依赖"><a href="#espresso必要的依赖" class="headerlink" title="espresso必要的依赖"></a>espresso必要的依赖</h2><p>在<code>module</code>中的<code>build.gradle</code>中添加下面三条依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">androidTestImplementation &#39;com.android.support.test:runner:1.0.2&#39;</span><br><span class="line">androidTestImplementation &#39;com.android.support.test:rules:1.0.2&#39;</span><br><span class="line">androidTestImplementation &#39;com.android.support.test.espresso:espresso-core:3.0.2&#39;</span><br></pre></td></tr></table></figure>
+<p>使用示例：<br>譬如在<code>MainActivity</code>中添加有一个如下的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity extends AppCompatActivity  &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">    * 需要测试的方法,简单的调起浏览器打开baidu首页</span><br><span class="line">    **&#x2F;</span><br><span class="line">    public static void startActiviy(Context context)&#123;</span><br><span class="line">        Uri uri &#x3D; Uri.parse(&quot;http:&#x2F;&#x2F;wwww.baidu.com&quot;);</span><br><span class="line">        Intent t &#x3D; new Intent(Intent.ACTION_VIEW);</span><br><span class="line">        t.setData(uri);</span><br><span class="line">        t.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span><br><span class="line">        context.startActivity(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，我们还是可以选择<code>ctrl+shift+T</code>来创建测试类，选择<code>android test</code>目录即可。<br>然后我们可以编写一个类似于这样类来进行测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Instrumented test, which will execute on an Android device.</span><br><span class="line"> *</span><br><span class="line"> * @see &lt;a href&#x3D;&quot;http:&#x2F;&#x2F;d.android.com&#x2F;tools&#x2F;testing&quot;&gt;Testing documentation&lt;&#x2F;a&gt;</span><br><span class="line"> *&#x2F;</span><br><span class="line">@RunWith(AndroidJUnit4.class)</span><br><span class="line">public class ExampleInstrumentedTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    public void useAppContext() throws Exception &#123;</span><br><span class="line">        &#x2F;&#x2F; Context of the app under test.</span><br><span class="line">        Context appContext &#x3D; InstrumentationRegistry.getTargetContext();</span><br><span class="line"></span><br><span class="line">        assertEquals(&quot;com.example.cm.testpulgin&quot;, appContext.getPackageName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testOpenUrl()&#123;</span><br><span class="line">        MainActivity.startActiviy(InstrumentationRegistry.getTargetContext());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void test1()&#123;</span><br><span class="line">        assertEquals(1,1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们选择运行，选择目标手机，即可在手机上实现测试。这里关键的一点是利用<code>InstrumentationRegistry.getTargetContext()</code>获取到了<code>Context</code>对象。<br>我们可以利用这个<code>Context</code>对象来测试与手机密切相关的一些属性了，前面的单元测试只能测试代码在jvm上是否运行正常，而到了这里我们就可以测试代码是否在手机上运行正常了。<br>譬如我们要测试一些用户的操作的行为是否符合预期，我们可以写一个类似于这样的测试类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">@LargeTest</span><br><span class="line">@RunWith(AndroidJUnit4.class)</span><br><span class="line">public class MainActivityTest &#123;</span><br><span class="line"></span><br><span class="line">    @Rule</span><br><span class="line">    public ActivityTestRule&lt;MainActivity&gt; mActivityTestRule &#x3D; new ActivityTestRule&lt;&gt;(MainActivity.class);</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void mainActivityTest() &#123;</span><br><span class="line">        ViewInteraction button &#x3D; onView(</span><br><span class="line">                allOf(withId(R.id.but1),</span><br><span class="line">                        childAtPosition(</span><br><span class="line">                                childAtPosition(</span><br><span class="line">                                        withId(android.R.id.content),</span><br><span class="line">                                        0),</span><br><span class="line">                                0),</span><br><span class="line">                        isDisplayed()));</span><br><span class="line">        button.check(matches(isDisplayed()));</span><br><span class="line"></span><br><span class="line">        ViewInteraction appCompatButton &#x3D; onView(</span><br><span class="line">                allOf(withId(R.id.but1), withText(&quot;测试hook-ams&quot;),</span><br><span class="line">                        childAtPosition(</span><br><span class="line">                                childAtPosition(</span><br><span class="line">                                        withId(android.R.id.content),</span><br><span class="line">                                        0),</span><br><span class="line">                                0),</span><br><span class="line">                        isDisplayed()));</span><br><span class="line">        appCompatButton.perform(click());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static Matcher&lt;View&gt; childAtPosition(</span><br><span class="line">            final Matcher&lt;View&gt; parentMatcher, final int position) &#123;</span><br><span class="line"></span><br><span class="line">        return new TypeSafeMatcher&lt;View&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void describeTo(Description description) &#123;</span><br><span class="line">                description.appendText(&quot;Child at position &quot; + position + &quot; in parent &quot;);</span><br><span class="line">                parentMatcher.describeTo(description);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public boolean matchesSafely(View view) &#123;</span><br><span class="line">                ViewParent parent &#x3D; view.getParent();</span><br><span class="line">                return parent instanceof ViewGroup &amp;&amp; parentMatcher.matches(parent)</span><br><span class="line">                        &amp;&amp; view.equals(((ViewGroup) parent).getChildAt(position));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对其中的一些方法进行简单说明：</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>click()</td>
+<td>点击view</td>
+</tr>
+<tr>
+<td>clearText()</td>
+<td>清除文本内容</td>
+</tr>
+<tr>
+<td>swipeLeft()</td>
+<td>从右往左滑</td>
+</tr>
+<tr>
+<td>swipeRight()</td>
+<td>从左往右滑</td>
+</tr>
+<tr>
+<td>swipeDown()</td>
+<td>从上往下滑</td>
+</tr>
+<tr>
+<td>swipeUp()</td>
+<td>从下往上滑</td>
+</tr>
+<tr>
+<td>click()</td>
+<td>点击view</td>
+</tr>
+<tr>
+<td>closeSoftKeyboard()</td>
+<td>关闭软键盘</td>
+</tr>
+<tr>
+<td>pressBack()</td>
+<td>按下物理返回键</td>
+</tr>
+<tr>
+<td>doubleClick()</td>
+<td>双击</td>
+</tr>
+<tr>
+<td>longClick()</td>
+<td>长按</td>
+</tr>
+<tr>
+<td>scrollTo()</td>
+<td>滚动</td>
+</tr>
+<tr>
+<td>replaceText()</td>
+<td>替换文本</td>
+</tr>
+<tr>
+<td>openLinkWithText()</td>
+<td>打开指定超链</td>
+</tr>
+</tbody></table>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="https://blog.csdn.net/qq_17766199/article/details/78243176" target="_blank" rel="noopener">Android单元测试(一)：JUnit框架的使用</a></li>
+<li><a href="https://developer.android.com/studio/test/espresso-test-recorder" target="_blank" rel="noopener">使用 Espresso 测试记录器创建界面测试</a></li>
+<li><a href="https://developer.android.com/studio/test/#run_a_test" target="_blank" rel="noopener">测试应用</a></li>
+<li><a href="https://juejin.im/post/5b66de2c6fb9a04fbd1b4725" target="_blank" rel="noopener">解放双手 - Android 开发应该尝试的 UI 自动化测试</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/android-junit/" rel="tag"># android,junit</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/08/22/android/WebView%E7%BC%93%E5%AD%98%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%92%8C%E5%BA%94%E7%94%A8/" rel="prev" title="散记">
+      <i class="fa fa-chevron-left"></i> 散记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/08/31/android/Android%20%E6%8F%92%E4%BB%B6%E5%8C%96%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%E2%80%94%E2%80%94%E6%8F%92%E4%BB%B6%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" rel="next" title="Android 插件化原理解析——插件加载机制">
+      Android 插件化原理解析——插件加载机制 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#单元测试"><span class="nav-number">1.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#junit-工具类"><span class="nav-number">2.</span> <span class="nav-text">junit 工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注解"><span class="nav-number">2.1.</span> <span class="nav-text">注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Parameters配置多组测试数据"><span class="nav-number">2.1.1.</span> <span class="nav-text">使用@Parameters配置多组测试数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试抛出异常"><span class="nav-number">2.1.2.</span> <span class="nav-text">测试抛出异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Assert类的主要用法"><span class="nav-number">2.1.3.</span> <span class="nav-text">Assert类的主要用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配器"><span class="nav-number">2.2.</span> <span class="nav-text">匹配器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UI测试"><span class="nav-number">3.</span> <span class="nav-text">UI测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#espresso必要的依赖"><span class="nav-number">3.1.</span> <span class="nav-text">espresso必要的依赖</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">reoger</p>
+  <div class="site-description" itemprop="description">reoger</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/reoger" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;reoger" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:reoger112@gmail.com" title="E-Mail → mailto:reoger112@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">reoger</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="之前在window 10上安装elasticSearch是很简单的，但是真正要linux系统上安装时，还是出现了许多的问题，下面就是我记录的我遇到的一些问题。  整体流程 下载elasticSearch5.6.1的压缩包，然后解压到指定文件夹下，参考解压命令：  1tar -zxvf elasticsearch5.6.1.tar  为其创建新用户（root用户无法启动），参考命令如下： 123[">
+<meta property="og:type" content="article">
+<meta property="og:title" content="centos 6.5下安装ElasticSearch5.6.1问题记录">
+<meta property="og:url" content="http://reoger.tk/2017/11/06/backEnd/centos%E4%B8%8B%E5%AE%89%E8%A3%85elasticSeach/index.html">
+<meta property="og:site_name" content="reoger的记录">
+<meta property="og:description" content="之前在window 10上安装elasticSearch是很简单的，但是真正要linux系统上安装时，还是出现了许多的问题，下面就是我记录的我遇到的一些问题。  整体流程 下载elasticSearch5.6.1的压缩包，然后解压到指定文件夹下，参考解压命令：  1tar -zxvf elasticsearch5.6.1.tar  为其创建新用户（root用户无法启动），参考命令如下： 123[">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-06T14:44:55.000Z">
+<meta property="article:modified_time" content="2020-04-12T14:56:24.281Z">
+<meta property="article:author" content="reoger">
+<meta property="article:tag" content="eleasticSearch">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://reoger.tk/2017/11/06/backEnd/centos%E4%B8%8B%E5%AE%89%E8%A3%85elasticSeach/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>centos 6.5下安装ElasticSearch5.6.1问题记录 | reoger的记录</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">reoger的记录</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">--以后的你会感激现在那么努力的自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2017/11/06/backEnd/centos%E4%B8%8B%E5%AE%89%E8%A3%85elasticSeach/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          centos 6.5下安装ElasticSearch5.6.1问题记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-11-06 22:44:55" itemprop="dateCreated datePublished" datetime="2017-11-06T22:44:55+08:00">2017-11-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 22:56:24" itemprop="dateModified" datetime="2020-04-12T22:56:24+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9D%82%E7%83%A9/" itemprop="url" rel="index"><span itemprop="name">杂烩</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>之前在window 10上安装elasticSearch是很简单的，但是真正要linux系统上安装时，还是出现了许多的问题，下面就是我记录的我遇到的一些问题。</p>
+</blockquote>
+<h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><ol>
+<li>下载elasticSearch5.6.1的压缩包，然后解压到指定文件夹下，参考解压命令：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf elasticsearch5.6.1.tar</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><p>为其创建新用户（root用户无法启动），参考命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root]# adduser elsearch</span><br><span class="line">[root]# passwd elsearch</span><br><span class="line">[root]# chown -R elsearch:elsearch elasticSearch5.6.1&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li><p>切换到指定用户，并运行.参考命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root]# su elsearch</span><br><span class="line">[elsearch]$ cd elasticSearch5.6.1&#x2F;bin</span><br><span class="line">[elsearch]$ .&#x2F;elasticSearch</span><br><span class="line"></span><br><span class="line">在正常启动之后，应该就能通过访问http:&#x2F;&#x2F;localhost:9200来使用elasticsearch了</span><br></pre></td></tr></table></figure></li>
+<li><p>配置ip地址访问。<br>这里和windows下修改的地方一样，但是不一样的是，这里出现的问题会很多,要修改的内容参考如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">vim  elasticsearch-5.6.1&#x2F;config&#x2F;elasticsearch.yml</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">cluster.name: EsMaster  # 集群master的名称</span><br><span class="line"></span><br><span class="line">node.name: master   # 当前结点的名称</span><br><span class="line">node.master: true  # 设置为master节点</span><br><span class="line"></span><br><span class="line">bootstrap.memory_lock: false  # 关闭内存锁定</span><br><span class="line">bootstrap.system_call_filter: false</span><br><span class="line"></span><br><span class="line">network.host: 127.0.0.1 # 这里修改成你要绑定的id</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http.cors.enabled: true     # 设置跨域访问，为后面的head-master的配置</span><br><span class="line">http.cors.allow-origin: &quot;*&quot;</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">保存，重启elasticsearch，发现诸多问题，下面是我遇到一些问题的记录。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>问题及解决方案</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ERROR: [3] bootstrap checks failed</span><br><span class="line">#文件句柄太少，至少要65536</span><br><span class="line">[1]: max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]</span><br><span class="line">#最大线程数太少，至少2048个(经典的2048游戏)</span><br><span class="line">[2]: max number of threads [1024] for user [king] is too low, increase to at least [2048]</span><br><span class="line">#虚拟内存太少，至少262144</span><br><span class="line">[3]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>[1]解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root]# vi &#x2F;etc&#x2F;security&#x2F;limits.conf</span><br><span class="line"></span><br><span class="line"># 添加如下配置：</span><br><span class="line">* soft nofile 65536</span><br><span class="line">* hard nofile 131072</span><br><span class="line">* soft nproc 2048</span><br><span class="line">* hard nproc 4096</span><br></pre></td></tr></table></figure>
+<p>[2]解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root]#  vi &#x2F;etc&#x2F;security&#x2F;limits.d&#x2F;90-nproc.conf </span><br><span class="line"></span><br><span class="line">将</span><br><span class="line">*          soft    nproc     1024</span><br><span class="line">改成</span><br><span class="line">*          soft    nproc     2048</span><br></pre></td></tr></table></figure>
+
+<p>[3]解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root]# vim &#x2F;etc&#x2F;sysctl.conf </span><br><span class="line">添加如下代码：</span><br><span class="line">vm.max_map_count&#x3D;655360</span><br><span class="line"></span><br><span class="line">保存后，执行</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<p>最后，还有一个错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system call filters failed to install; check the logs and fix your configur                                                                                                             ation or disable system call filters at your own risk</span><br></pre></td></tr></table></figure>
+<p>解决方案：<br>在elasticsearch.yml文件中配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root]# vim elasticsearch.yml</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">bootstrap.memory_lock: false</span><br><span class="line">bootstrap.system_call_filter: false</span><br></pre></td></tr></table></figure>
+
+
+<p>差不多解决上面的问题，应该就能正常运行elsearch了。</p>
+<h1 id="远程访问"><a href="#远程访问" class="headerlink" title="远程访问"></a>远程访问</h1><p>我这里是利用ssh进行远程访问，记录一下基础的运行方式：<br>避免断开连接后<code>elasticsearch</code>就停止运行的运行方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup bin&#x2F;elasticsearch &amp;</span><br></pre></td></tr></table></figure>
+<p>当然，也直接直接进行如下命令来运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin&#x2F;elasticsearch -d</span><br></pre></td></tr></table></figure>
+
+<p>关闭ElasticSearch服务就需要用到ps命令，参考如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[elsearch]$  ps -ef|grep elastic</span><br><span class="line">elsearch 22097     1  0 15:06 ?        00:01:24 &#x2F;usr&#x2F;bin&#x2F;java -Xms2g -Xmx2g </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root]# kill -9 22097</span><br></pre></td></tr></table></figure>
+
+<p>【ps】 在选择启动方式的时候，虽然两种方式都能通过ssh启动elasticsearch服务，但是笔者实践证明，非主节点通过<code>bin/elasticsearch -d</code>这条命令启动的服务不能加入到集群中，所以推荐多用<code>nohup bin/elasticsearch &amp;</code>来避免踩雷。</p>
+<p>还有一点就是安装head-master，其实也没有太多的坑，只需要按照步骤一步一步来就OK了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;github.com&#x2F;mobz&#x2F;elasticsearch-head.git</span><br><span class="line">(如果 没有安装git，也可以采用其他方式下载head-master)</span><br><span class="line"></span><br><span class="line">cd elasticsearch-head</span><br><span class="line"></span><br><span class="line">npm install</span><br><span class="line"></span><br><span class="line">（如果提示npm是无效命令，则需要先安装npm，参考步骤如下）</span><br><span class="line"></span><br><span class="line">--安装npm</span><br><span class="line">curl --silent --location https:&#x2F;&#x2F;rpm.nodesource.com&#x2F;setup_5.x | bash -</span><br><span class="line"></span><br><span class="line">yum install -y nodejs</span><br><span class="line"></span><br><span class="line">输入下面的命令是检验:</span><br><span class="line">[root@]# node -v</span><br><span class="line"></span><br><span class="line">[root@]# npm -v</span><br><span class="line">如果不提示是无效命令即成功安装。</span><br><span class="line">----</span><br></pre></td></tr></table></figure>
+<p>在安装之后，进行简单的配置：<br>修改elasticsearch-head下Gruntfile.js文件，默认监听在127.0.0.1下9200端口：<br>在<code>connect</code>关键字下，<code>options</code>项中添加一项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname: &#39;0.0.0.0&#39;,</span><br></pre></td></tr></table></figure>
+<p>保存退出后，输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run start</span><br></pre></td></tr></table></figure>
+<p>来启动head-master。<br>然后通过浏览器 <a href="http://localhost:9100" target="_blank" rel="noopener">http://localhost:9100</a> 来访问。</p>
+<p>到此，记录结束。</p>
+<hr>
+<p>最后，记录两个比较有用的操作命令</p>
+<p>远程启动服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">方式1：</span><br><span class="line"></span><br><span class="line">nohup bin&#x2F;elasticsearch &amp;</span><br><span class="line"></span><br><span class="line">方式2：</span><br><span class="line">.&#x2F;elasticsearch -d</span><br></pre></td></tr></table></figure>
+
+<p>远程关闭服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">通过： </span><br><span class="line">ps -ef|grep elastic</span><br><span class="line">获取elastic的PID</span><br><span class="line">然后通过kill命令杀死就OK：</span><br><span class="line">kill -9 22789</span><br></pre></td></tr></table></figure>
+<h2 id="彩蛋"><a href="#彩蛋" class="headerlink" title="彩蛋"></a>彩蛋</h2><p>抄袭一下利用pscp传输文件的命令。</p>
+<p>1、把服务器上的/root/dir目录取回本地”C:\My Documents\data&quot;目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;pscp.exe -r root@192.168.32.50:&#x2F;root&#x2F;dir &quot;C:\My Documents\data\&quot;</span><br></pre></td></tr></table></figure>
+<p>2、把服务器上的/root/file文件取回来本地当前目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;pscp.exe root@192.168.32.50:&#x2F;root&#x2F;file .</span><br></pre></td></tr></table></figure>
+<p>3、把本地目录dir、文件file传输到Linux服务器的/root/，并指定服务器端口2009</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;pscp.exe -P 2009 -r dir file root@192.168.32.50:&#x2F;root&#x2F;</span><br></pre></td></tr></table></figure>
+<p>4、把本地文件file传输到Linux服务器的/root/</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;pscp.exe file root@192.168.32.50:&#x2F;root&#x2F;</span><br></pre></td></tr></table></figure>
+<p>它会提示你输入密码，就像Linux下使用scp那样。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="http://blog.csdn.net/KingBoyWorld/article/details/77814528" target="_blank" rel="noopener">CentOS6.5安装ElasticSearch5.5完整纪录与问题总结</a></li>
+<li><a href="http://www.jianshu.com/p/e62bd4afe325" target="_blank" rel="noopener">在Linux上安装Elasticsearch5.x</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/eleasticSearch/" rel="tag"># eleasticSearch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/10/24/backEnd/hdfs%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="prev" title="hdfs基本操作">
+      <i class="fa fa-chevron-left"></i> hdfs基本操作
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/11/28/backEnd/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A1%AB%E5%9D%91/" rel="next" title="mysql数据库填坑">
+      mysql数据库填坑 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#整体流程"><span class="nav-number">1.</span> <span class="nav-text">整体流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#远程访问"><span class="nav-number">2.</span> <span class="nav-text">远程访问</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#彩蛋"><span class="nav-number">2.1.</span> <span class="nav-text">彩蛋</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">reoger</p>
+  <div class="site-description" itemprop="description">reoger</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/reoger" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;reoger" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:reoger112@gmail.com" title="E-Mail → mailto:reoger112@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">reoger</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

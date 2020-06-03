@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="reoger">
@@ -146,6 +146,11 @@
     <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
 
   </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
   </ul>
 </nav>
 
@@ -173,7 +178,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/04/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E6%98%BE%E7%A4%BA%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87%E5%B9%B6%E6%B7%BB%E5%8A%A0%E8%BE%B9%E6%A1%86/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/07/java/java%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -187,7 +192,216 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/08/04/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E6%98%BE%E7%A4%BA%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87%E5%B9%B6%E6%B7%BB%E5%8A%A0%E8%BE%B9%E6%A1%86/" class="post-title-link" itemprop="url">自定义View之将图片显示圆形图片并添加边框</a>
+            <a href="/2018/08/07/java/java%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" class="post-title-link" itemprop="url">java中的动态代理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-07 16:44:55" itemprop="dateCreated datePublished" datetime="2018-08-07T16:44:55+08:00">2018-08-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 22:58:47" itemprop="dateModified" datetime="2020-04-12T22:58:47+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h1><p>什么是代理模式？代理模式给某一个对象提供一个代理对象，并由代理对象控制对原对象的引用。通俗的来讲代理模式就是我们生活中常见的中介。<br>下面以一个简单的例子来说明代理模式。<br>小明有两件事要做，用代码表示为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface IDoSomething &#123;</span><br><span class="line">    String[] doShopping(int money);</span><br><span class="line">    Object doOtherThing(String thing);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，小明要做这些事情，他也知道怎么去做，购物和做其他事情的实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class DoSomethingImpl implements IDoSomething &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String[] doShopping(int money) &#123;</span><br><span class="line">        System.out.println(&quot;买买买！！&quot;);</span><br><span class="line">        System.out.println(String.format(&quot;花费%d $&quot;,money));</span><br><span class="line">        return new String[]&#123;&quot;零食&quot;,&quot;游戏机&quot;,&quot;mac&quot;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object doOtherThing(String thing) &#123;</span><br><span class="line">        System.out.println(&quot; Other Thing -&gt;&quot;+thing);</span><br><span class="line"></span><br><span class="line">        return thing+&quot; is done&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然，小明有这两件事要做，他也知道怎么去做，但是他现在就是不想自己去做。那怎么办？<br>找人帮他做呗，也就是找个<code>代理</code>，代理的简单实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class ProxyDoSomething implements IDoSomething&#123;</span><br><span class="line">    private IDoSomething base;</span><br><span class="line"></span><br><span class="line">    public ProxyDoSomething(IDoSomething base) &#123;</span><br><span class="line">        this.base &#x3D; base;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String[] doShopping(int money) &#123;</span><br><span class="line">        &#x2F;&#x2F;先扣点手续费</span><br><span class="line">        int realMoney &#x3D; (int) (money*0.1);</span><br><span class="line">        String [] object &#x3D; base.doShopping(realMoney);</span><br><span class="line">        if (object !&#x3D; null &amp;&amp; object.length &gt; 1)&#123;</span><br><span class="line">            object[0]&#x3D; &quot;把这个换成拼多多的货&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        return object;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object doOtherThing(String thing) &#123;</span><br><span class="line">        String str &#x3D; thing+&quot; 这件事是代理出面做的&quot;;</span><br><span class="line">        String res &#x3D; (String) base.doOtherThing(str);</span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>找人做代理，难免要点手续费，然后可能还会动点手脚。当然，最终事情还是帮我们做好了，接下来我们看不要小明亲自出面，怎么来实现的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String args[])&#123;</span><br><span class="line">        IDoSomething iDoSomething &#x3D; new DoSomethingImpl();</span><br><span class="line">        ProxyDoSomething proxyDoSomething &#x3D; new ProxyDoSomething(iDoSomething);</span><br><span class="line">        System.out.print(proxyDoSomething.doOtherThing(&quot; clean house&quot;).toString());</span><br><span class="line">        System.out.println(Arrays.toString(proxyDoSomething.doShopping(1000)));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，本来是小明要做的事情，最终代理给了<code>ProxyDoSomething</code>去完成，当然，代价也比较惨重。<br>最终打印的结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> Other Thing -&gt; clean house 这件事是代理出面做的</span><br><span class="line"> clean house 这件事是代理出面做的 is done买买买！！</span><br><span class="line">花费100 $</span><br><span class="line">[把这个换成拼多多的货, 游戏机, mac]</span><br></pre></td></tr></table></figure>
+
+<h1 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h1><p>通过前一个例子理解了什么是代理，那么什么是动态代理呢？<br>通俗的理解就是，这个代理的对象可以代理很多事情，不会局限于静态代理一对一的关系，动态代理可以实现一 对多。类似于一个万能的代理，既能给代理购物，也能给别人代理做家务等等。<br>废话不多说，先上代理的核心代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.InvocationHandler;</span><br><span class="line">import java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 动态代理实现的核心，很多事情就是在这里进行实现的。</span><br><span class="line"> * 首先，我们需要拿到需要代理的对象</span><br><span class="line"> * 然后，需要判断对应的方法</span><br><span class="line"> * 最后，通过反射进行调用</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class DoSomethingHandler implements InvocationHandler &#123;</span><br><span class="line">    private IDoSomething doSomething;</span><br><span class="line"></span><br><span class="line">    public DoSomethingHandler(IDoSomething doSomething) &#123;</span><br><span class="line">        this.doSomething &#x3D; doSomething;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</span><br><span class="line">        if (&quot;doShopping&quot;.equals(method.getName()))&#123;</span><br><span class="line">            int money &#x3D; (int) ((int) args[0]*0.8);</span><br><span class="line">            doSomething.doShopping(money);</span><br><span class="line">            String[] things &#x3D; (String[]) method.invoke(doSomething, money);</span><br><span class="line">            if (things !&#x3D; null &amp;&amp; things.length &gt; 1)&#123;</span><br><span class="line">                things[0] &#x3D; &quot;这个我要掉包，换个来自拼多多的好货&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            return things;</span><br><span class="line">        &#125;else if(&quot;doOtherThing&quot;.equals(method.getName()))&#123;</span><br><span class="line">            String str &#x3D; args[0] +&quot; by DosomeThingHadler&quot;;</span><br><span class="line">            Object o &#x3D; method.invoke(doSomething,str);</span><br><span class="line">            return o+&quot; 来自 DosomeThingHadler 的问候&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单的介绍在代码里进行介绍了，这里就不多介绍了。我们来看调用的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(&quot;开始啦啦啦啦~ &quot;);</span><br><span class="line">      IDoSomething people &#x3D; new DoSomethingImpl();</span><br><span class="line">      &#x2F;&#x2F;不使用代理，自己来</span><br><span class="line">      System.out.println(Arrays.toString(people.doShopping(1000)));</span><br><span class="line">      &#x2F;&#x2F;动态代理</span><br><span class="line">      people &#x3D; (IDoSomething) Proxy.newProxyInstance(IDoSomething.class.getClassLoader(),people.getClass().getInterfaces()</span><br><span class="line">              ,new DoSomethingHandler(people));</span><br><span class="line">      System.out.println(Arrays.toString(people.doShopping(1000)));</span><br><span class="line">      System.out.print(people.doOtherThing(&quot; clean house&quot;));</span><br></pre></td></tr></table></figure>
+<p>通过<code>Proxy.newProxyInstance</code>创建出动态代理实例，然后进行调用即可。<br>上例运行的结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">开始啦啦啦啦~ </span><br><span class="line">买买买！！</span><br><span class="line">花费1000 $</span><br><span class="line">[零食, 游戏机, mac]</span><br><span class="line"></span><br><span class="line">买买买！！</span><br><span class="line">花费800 $</span><br><span class="line">买买买！！</span><br><span class="line">花费800 $</span><br><span class="line">[这个我要掉包，换个来自拼多多的好货, 游戏机, mac]</span><br><span class="line"> Other Thing -&gt; clean house by DosomeThingHadler</span><br><span class="line"> clean house by DosomeThingHadler is done 来自 DosomeThingHadler 的问候</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>动态代理的实现主要是基于<code>Proxy.newProxyInstance</code>创建出我们需要的代理对象，而创建这个对象又依赖于一个<code>InvocationHandler</code>，通过他来实现我们要代理的事情。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="http://weishu.me/2016/01/28/understand-plugin-framework-proxy-hook/" target="_blank" rel="noopener">http://weishu.me/2016/01/28/understand-plugin-framework-proxy-hook/</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/07/android/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%E2%80%94%E2%80%94%E6%A6%82%E8%A6%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/08/07/android/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%E2%80%94%E2%80%94%E6%A6%82%E8%A6%81/" class="post-title-link" itemprop="url">Android插件化原理解析——概要</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-07 16:44:55" itemprop="dateCreated datePublished" datetime="2018-08-07T16:44:55+08:00">2018-08-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 22:55:42" itemprop="dateModified" datetime="2020-04-12T22:55:42+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%AC%E8%BD%BD/" itemprop="url" rel="index"><span itemprop="name">转载</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Android插件化原理解析——概要"><a href="#Android插件化原理解析——概要" class="headerlink" title="Android插件化原理解析——概要"></a>Android插件化原理解析——概要</h1><p>发表于 2016-01-28   |   63874次阅读</p>
+<p>2015年是Android插件化技术突飞猛进的一年，随着业务的发展各大厂商都碰到了Android Native平台的瓶颈：</p>
+<ol>
+<li>从技术上讲，业务逻辑的复杂导致代码量急剧膨胀，各大厂商陆续出到65535方法数的天花板；同时，运营为王的时代对于模块热更新提出了更高的要求。</li>
+<li>在业务层面上，功能模块的解耦以及维护团队的分离也是大势所趋；各个团队维护着同一个App的不同模块，如果每个模块升级新功能都需要对整个app进行升级，那么发布流程不仅复杂而且效率低下；在讲究小步快跑和持续迭代的移动互联网必将遭到淘汰。</li>
+</ol>
+<p>H5和Hybird可以解决这些问题，但是始终比不上native的用户体验；于是，国外的FaceBook推出了<code>react-native</code>；而国内各大厂商几乎都选择纯native的插件化技术。可以说，Android的未来必将是<code>react-native</code>和插件化的天下。</p>
+<p><code>react-native</code>资料很多，但是讲述插件化的却凤毛菱角；插件化技术听起来高深莫测，实际上要解决的就是两个问题：</p>
+<ol>
+<li>代码加载</li>
+<li>资源加载</li>
+</ol>
+<h2 id="代码加载"><a href="#代码加载" class="headerlink" title="代码加载"></a>代码加载</h2><p>类的加载可以使用Java的<code>ClassLoader</code>机制，但是对于Android来说，并不是说类加载进来就可以用了，很多组件都是有“生命”的；因此对于这些有血有肉的类，必须给它们注入活力，也就是所谓的<strong>组件生命周期管理</strong>；</p>
+<p>另外，如何管理加载进来的类也是一个问题。假设多个插件依赖了相同的类，是抽取公共依赖进行管理还是插件单独依赖？这就是<strong>ClassLoader的管理问题</strong>；</p>
+<h2 id="资源加载"><a href="#资源加载" class="headerlink" title="资源加载"></a>资源加载</h2><p>资源加载方案大家使用的原理都差不多，都是用<code>AssetManager</code>的隐藏方法<code>addAssetPath</code>；但是，不同插件的资源如何管理？是公用一套资源还是插件独立资源？共用资源如何避免资源冲突？对于资源加载，有的方案共用一套资源并采用资源分段机制解决冲突（要么修改<code>aapt</code>要么添加编译插件）；有的方案选择独立资源，不同插件管理自己的资源。</p>
+<p>目前国内开源的较成熟的插件方案有<a href="https://github.com/singwhatiwanna/dynamic-load-apk" target="_blank" rel="noopener">DL</a>和<a href="https://github.com/Qihoo360/DroidPlugin" target="_blank" rel="noopener">DroidPlugin</a>；但是DL方案仅仅对Frameworl的表层做了处理，严重依赖<code>that</code>语法，编写插件代码和主程序代码需单独区分；而DroidPlugin通过Hook增强了Framework层的很多系统服务，开发插件就跟开发独立app差不多；就拿Activity生命周期的管理来说，DL的代理方式就像是牵线木偶，插件只不过是操纵傀儡而已；而DroidPlugin则是借尸还魂，插件是有血有肉的系统管理的真正组件；DroidPlugin Hook了系统几乎所有的Sevice，欺骗了大部分的系统API；掌握这个Hook过程需要掌握很多系统原理，因此学习DroidPlugin对于整个Android FrameWork层大有裨益。</p>
+<p>接下来的一系列文章将以DroidPlugin为例讲解插件框架的原理，揭开插件化的神秘面纱；同时还能帮助深入理解Android Framewrok；主要内容如下：</p>
+<ul>
+<li><a href="http://weishu.me/2016/01/28/understand-plugin-framework-proxy-hook/" target="_blank" rel="noopener">Hook机制之动态代理</a></li>
+<li><a href="http://weishu.me/2016/02/16/understand-plugin-framework-binder-hook/" target="_blank" rel="noopener">Hook机制之Binder Hook</a></li>
+<li><a href="http://weishu.me/2016/03/07/understand-plugin-framework-ams-pms-hook/" target="_blank" rel="noopener">Hook机制之AMS&amp;PMS</a></li>
+<li><a href="http://weishu.me/2016/03/21/understand-plugin-framework-activity-management/" target="_blank" rel="noopener">Activity生命周期管理</a></li>
+<li><a href="http://weishu.me/2016/04/05/understand-plugin-framework-classloader/" target="_blank" rel="noopener">插件加载机制</a></li>
+<li><a href="http://weishu.me/2016/04/12/understand-plugin-framework-receiver/" target="_blank" rel="noopener">广播的管理方式</a></li>
+<li><a href="http://weishu.me/2016/05/11/understand-plugin-framework-service/" target="_blank" rel="noopener">Service的插件化</a></li>
+<li><a href="http://weishu.me/2016/07/12/understand-plugin-framework-content-provider/" target="_blank" rel="noopener">ContentProvider的插件化</a></li>
+<li>DroidPlugin插件通信机制</li>
+<li>插件机制之资源管理</li>
+<li>不同插件框架方案对比</li>
+<li>插件化的未来</li>
+</ul>
+<p>另外，对于每一章内容都会有详细的demo，具体见<a href="https://github.com/tiann/understand-plugin-framework" target="_blank" rel="noopener">understand-plugin-framework</a>；喜欢就点个关注吧～定期更新，敬请期待！</p>
+<p><a href="/tags/android/">#android</a> <a href="/tags/droidplugin/">#droidplugin</a> <a href="/tags/plugin-framework/">#plugin framework</a></p>
+<p><a href="/2016/01/28/understand-plugin-framework-proxy-hook/">Android插件化原理解析——Hook机制之动态代理</a></p>
+<p><a href="/2016/01/18/dive-into-asynctask/">你真的了解AsyncTask？</a></p>
+<p><a href="/archives">37 日志</a></p>
+<p><a href="/atom.xml">RSS</a></p>
+<p> <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" target="_blank" rel="noopener"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a> </p>
+<ol>
+<li><a href="#代码加载">1. 代码加载</a></li>
+<li><a href="#资源加载">2. 资源加载</a></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/04/android/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E6%98%BE%E7%A4%BA%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87%E5%B9%B6%E6%B7%BB%E5%8A%A0%E8%BE%B9%E6%A1%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/08/04/android/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E6%98%BE%E7%A4%BA%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87%E5%B9%B6%E6%B7%BB%E5%8A%A0%E8%BE%B9%E6%A1%86/" class="post-title-link" itemprop="url">自定义View之将图片显示圆形图片并添加边框</a>
         </h2>
 
         <div class="post-meta">
@@ -274,7 +488,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/02/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E8%A3%81%E5%89%AA%E6%88%90%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/02/android/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E8%A3%81%E5%89%AA%E6%88%90%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -288,7 +502,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/08/02/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E8%A3%81%E5%89%AA%E6%88%90%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87/" class="post-title-link" itemprop="url">自定义View之将图片裁剪成圆形图片</a>
+            <a href="/2018/08/02/android/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E8%A3%81%E5%89%AA%E6%88%90%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87/" class="post-title-link" itemprop="url">自定义View之将图片裁剪成圆形图片</a>
         </h2>
 
         <div class="post-meta">
@@ -385,7 +599,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/30/%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC%E6%90%AD%E5%BB%BASS(R)/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/30/system/%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC%E6%90%AD%E5%BB%BASS(R)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -399,7 +613,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/30/%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC%E6%90%AD%E5%BB%BASS(R)/" class="post-title-link" itemprop="url">一键脚本搭建SS/搭建SSR服务并开启BBR加速</a>
+            <a href="/2018/07/30/system/%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC%E6%90%AD%E5%BB%BASS(R)/" class="post-title-link" itemprop="url">一键脚本搭建SS/搭建SSR服务并开启BBR加速</a>
         </h2>
 
         <div class="post-meta">
@@ -597,7 +811,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/27/%E6%82%AC%E6%B5%AE%E7%AA%97%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/27/android/%E6%82%AC%E6%B5%AE%E7%AA%97%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -611,7 +825,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/27/%E6%82%AC%E6%B5%AE%E7%AA%97%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93/" class="post-title-link" itemprop="url">悬浮窗使用小结</a>
+            <a href="/2018/07/27/android/%E6%82%AC%E6%B5%AE%E7%AA%97%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93/" class="post-title-link" itemprop="url">悬浮窗使用小结</a>
         </h2>
 
         <div class="post-meta">
@@ -722,7 +936,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/20/PopupWindow%20%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/20/android/PopupWindow%20%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -736,7 +950,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/20/PopupWindow%20%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B/" class="post-title-link" itemprop="url">PopupWindow 使用实例</a>
+            <a href="/2018/07/20/android/PopupWindow%20%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B/" class="post-title-link" itemprop="url">PopupWindow 使用实例</a>
         </h2>
 
         <div class="post-meta">
@@ -817,7 +1031,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/18/%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/18/algorithm/%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -831,7 +1045,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/18/%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F/" class="post-title-link" itemprop="url">旋转图像</a>
+            <a href="/2018/07/18/algorithm/%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F/" class="post-title-link" itemprop="url">旋转图像</a>
         </h2>
 
         <div class="post-meta">
@@ -908,7 +1122,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/14/%E7%A7%BB%E5%8A%A8%E9%9B%B6/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/14/algorithm/%E7%A7%BB%E5%8A%A8%E9%9B%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -922,7 +1136,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/14/%E7%A7%BB%E5%8A%A8%E9%9B%B6/" class="post-title-link" itemprop="url">移动零</a>
+            <a href="/2018/07/14/algorithm/%E7%A7%BB%E5%8A%A8%E9%9B%B6/" class="post-title-link" itemprop="url">移动零</a>
         </h2>
 
         <div class="post-meta">
@@ -995,7 +1209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/13/%E5%8A%A0%E4%B8%80/">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/13/algorithm/%E5%8A%A0%E4%B8%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1009,7 +1223,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2018/07/13/%E5%8A%A0%E4%B8%80/" class="post-title-link" itemprop="url">加一</a>
+            <a href="/2018/07/13/algorithm/%E5%8A%A0%E4%B8%80/" class="post-title-link" itemprop="url">加一</a>
         </h2>
 
         <div class="post-meta">
@@ -1063,180 +1277,6 @@
 
 <h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>就是大数相加的思想，将数组倒叙，加1大于9就进一位，最后的进位标志为1时，说明需要扩充数组。实现如下<br>Language: <strong>Java</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] plusOne(<span class="keyword">int</span>[] digits) &#123;</span><br><span class="line">          <span class="keyword">int</span> len = digits.length;</span><br><span class="line">        List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">        <span class="keyword">int</span> temp =<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=len-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            <span class="keyword">int</span> md = digits[i]+temp;</span><br><span class="line">            <span class="keyword">if</span>(md&gt;<span class="number">9</span>)&#123;</span><br><span class="line">                temp =<span class="number">1</span>;</span><br><span class="line">                list.add(<span class="number">0</span>,md-<span class="number">10</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                temp = <span class="number">0</span>;</span><br><span class="line">                list.add(<span class="number">0</span>,md);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(temp ==<span class="number">1</span> )&#123;</span><br><span class="line">            list.add(<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">            len ++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res[] = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;list.size();i++)&#123;</span><br><span class="line">            res[i] = list.get(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/11/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%20II/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/07/11/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%20II/" class="post-title-link" itemprop="url">两个数组的交集 II(</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-07-11 10:55:48" itemprop="dateCreated datePublished" datetime="2018-07-11T10:55:48+08:00">2018-07-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:07:58" itemprop="dateModified" datetime="2020-04-12T23:07:58+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="350-两个数组的交集-II-Intersection-of-Two-Arrays-II"><a href="#350-两个数组的交集-II-Intersection-of-Two-Arrays-II" class="headerlink" title="350. 两个数组的交集 II(Intersection of Two Arrays II)"></a><a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/description/" target="_blank" rel="noopener">350. 两个数组的交集 II(Intersection of Two Arrays II)</a></h3><p>题目难度： <strong>简单</strong></p>
-<p>给定两个数组，写一个方法来计算它们的交集。</p>
-<p><strong>例如:</strong><br>给定<em>nums1</em> = <code>[1, 2, 2, 1]</code>, <em>nums2</em> = <code>[2, 2]</code>, 返回 <code>[2, 2]</code>.</p>
-<p><strong>注意：</strong></p>
-<ul>
-<li>输出结果中每个元素出现的次数，应与元素在两个数组中出现的次数一致。</li>
-<li>我们可以不考虑输出结果的顺序。</li>
-</ul>
-<p><strong><strong>跟进:</strong></strong></p>
-<ul>
-<li>如果给定的数组已经排好序呢？你将如何优化你的算法？</li>
-<li>如果 _nums1 _的大小比 _nums2 _小很多，哪种方法更优？</li>
-<li>如果_nums2_的元素存储在磁盘上，内存是有限的，你不能一次加载所有的元素到内存中，你该怎么办？</li>
-</ul>
-<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><p><strong>解题思路:</strong><br>先将两个数组排好序，我们需要维护两个指针，指针i用于指向nums1，指针j指向nums2。当<code>nums1[i] &gt; nums2[j]</code>时，j++,当<code>nums1[i] &lt; nums2[j]</code>，i++。我们需要寻找的情况就是有多少对nums1[i] == nums2[j]的情况，记录下来即可，记得把指针i和j往前移一位。</p>
-<p>Language: <strong>Java</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] intersect(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2) &#123;</span><br><span class="line">      <span class="keyword">if</span>(nums1.length ==<span class="number">0</span> || nums2.length == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">0</span>];</span><br><span class="line">        Arrays.sort(nums1);</span><br><span class="line">        Arrays.sort(nums2);</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>,j=<span class="number">0</span>;</span><br><span class="line">        List res = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">        <span class="keyword">while</span>(i&lt;nums1.length &amp;&amp; j&lt;nums2.length)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums1[i]==nums2[j])&#123;</span><br><span class="line">                res.add(nums1[i]);</span><br><span class="line">                i++;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums1[i]&gt;nums2[j])&#123;</span><br><span class="line">                j++;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums1[i]&lt;nums2[j])&#123;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> a[] = <span class="keyword">new</span> <span class="keyword">int</span>[res.size()];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;res.size();k++)&#123;</span><br><span class="line">            a[k] = (<span class="keyword">int</span>) res.get(k);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/11/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/07/11/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/" class="post-title-link" itemprop="url">只出现一次的数字</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-07-11 10:55:48" itemprop="dateCreated datePublished" datetime="2018-07-11T10:55:48+08:00">2018-07-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:13:50" itemprop="dateModified" datetime="2020-04-12T23:13:50+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="只出现一次的数字"><a href="#只出现一次的数字" class="headerlink" title="只出现一次的数字"></a>只出现一次的数字</h1><p>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。<br>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。</p>
-<p><strong>说明：</strong></p>
-<p>你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？</p>
-<p><strong>示例 1:</strong></p>
-<p>输入: [2,2,1]<br>输出: 1</p>
-<p><strong>示例 2:</strong></p>
-<p>输入: [4,1,2,1,2]<br>输出: 4</p>
-<h1 id="常规解法"><a href="#常规解法" class="headerlink" title="常规解法"></a>常规解法</h1><p>先排序，排完序在前后两个数字间进行比较，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int singleNumber(int[] nums) &#123;</span><br><span class="line">          Arrays.sort(nums);</span><br><span class="line">        for(int i&#x3D;0;i&lt;nums.length-1;i++)&#123;</span><br><span class="line">            if(nums[i]!&#x3D;nums[i+1])&#123;</span><br><span class="line">                return nums[i];</span><br><span class="line">            &#125;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        return nums[nums.length-1];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="高级解法"><a href="#高级解法" class="headerlink" title="高级解法"></a>高级解法</h1><p>利用^,异或，相同为1，不同为0。利用临时变量一直异或，最终得到的一定是与众不同的的那个。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int singleNumber(int[] nums) &#123;</span><br><span class="line">        int k&#x3D;0;</span><br><span class="line">        for(int i &#x3D;0 ;i&lt;nums.length;i++)&#123;</span><br><span class="line">            k^&#x3D;nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        return k;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -1320,7 +1360,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1329,7 +1369,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -1370,7 +1410,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">reoger</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -1396,7 +1436,7 @@
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>

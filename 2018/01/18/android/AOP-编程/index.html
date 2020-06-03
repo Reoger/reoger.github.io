@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="参考资料 Android AOP面向切面编程详解 深入理解Android之AOP http:&#x2F;&#x2F;blog.csdn.net&#x2F;autfish&#x2F;article&#x2F;details&#x2F;51184405   AOP 基本思想刚接触编程的时候，一般先接触的c语言这类的OOP（Procedure Oriented，即面向过程）语言，面相过程是一种以过程为中心的编程思想。这些都是以什么正在发生为主要目标进行编程，就是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AOP 编程">
+<meta property="og:url" content="http://reoger.tk/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="reoger的记录">
+<meta property="og:description" content="参考资料 Android AOP面向切面编程详解 深入理解Android之AOP http:&#x2F;&#x2F;blog.csdn.net&#x2F;autfish&#x2F;article&#x2F;details&#x2F;51184405   AOP 基本思想刚接触编程的时候，一般先接触的c语言这类的OOP（Procedure Oriented，即面向过程）语言，面相过程是一种以过程为中心的编程思想。这些都是以什么正在发生为主要目标进行编程，就是">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-01-18T12:22:12.000Z">
+<meta property="article:modified_time" content="2020-04-12T14:56:07.932Z">
+<meta property="article:author" content="reoger">
+<meta property="article:tag" content="android,aop">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://reoger.tk/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AOP 编程 | reoger的记录</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">reoger的记录</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">--以后的你会感激现在那么努力的自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AOP 编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-18 20:22:12" itemprop="dateCreated datePublished" datetime="2018-01-18T20:22:12+08:00">2018-01-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 22:56:07" itemprop="dateModified" datetime="2020-04-12T22:56:07+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://www.jianshu.com/p/9fb07b2596f7" target="_blank" rel="noopener">Android AOP面向切面编程详解</a></li>
+<li><a href="http://blog.csdn.net/innost/article/details/49387395" target="_blank" rel="noopener">深入理解Android之AOP</a></li>
+<li><a href="http://blog.csdn.net/autfish/article/details/51184405" target="_blank" rel="noopener">http://blog.csdn.net/autfish/article/details/51184405</a></li>
+</ul>
+<hr>
+<h1 id="AOP-基本思想"><a href="#AOP-基本思想" class="headerlink" title="AOP 基本思想"></a>AOP 基本思想</h1><p>刚接触编程的时候，一般先接触的c语言这类的OOP（Procedure Oriented，即面向过程）语言，面相过程是一种以过程为中心的编程思想。这些都是以什么正在发生为主要目标进行编程，就是分析出解决问题所需要的步骤，然后用函数把这些步骤一步一步实现，使用的时候一个一个依次调用就可以了。</p>
+<p>然后，我们就会学到另一种更符合我们思维方式的一种思想，OOP（Object-Oriented Programming，即面向过程程序设计）语言，面向过程其实是最为实际的一种思考方式，就算是面向对象的方法也是含有面向过程的思想。可以说面向过程是一种基础的方法。它考虑的是实际地实现。一般的面向过程是从上往下步步求精，所以面向过程最重要的是模块化的思想方法。对比面向过程，面向对象的方法主要是把事物给对象化，对象包括属性与行为。当程序规模不是很大时，面向过程的方法还会体现出一种优势。因为程序的流程很清楚，按着模块与函数的方法可以很好的组织。<br>但是，在重复代码很多，需要重复利用的情况下，面相对象程序设计也显得很鸡肋，必要每次都主动去调用该方法，而且有特殊需求的时候还不能去需改写好的方法，因为这可能会造成其他其他调用该方法的地方出现问题。</p>
+<p>这个时候AOP就出现了。AOP是Aspect Oriented Programming的缩写，即『面向切面编程』。它和我们平时接触到的OOP都是编程的不同思想，OOP，即『面向对象编程』，它提倡的是将功能模块化，对象化，而AOP的思想，则不太一样，它提倡的是针对同一类问题的统一处理，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。</p>
+<p>最后总结成一句话就是：<br><strong>在运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。</strong></p>
+<h1 id="编程实践"><a href="#编程实践" class="headerlink" title="编程实践"></a>编程实践</h1><p>讲了思想，我们通过具体的例子来进行说明。我们实现为方法自动添加log日志，不同于以前的主动调用，我们通过Aspect来实现AOP注入。</p>
+<p>项目代码托管：<a href="https://github.com/Reoger/AOPTest" target="_blank" rel="noopener">https://github.com/Reoger/AOPTest</a></p>
+<p>首先是配置：<code>app</code>下的<code>build.gradle</code>文件，配置类似如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: &#39;com.android.application&#39;</span><br><span class="line">import org.aspectj.bridge.IMessage</span><br><span class="line">import org.aspectj.bridge.MessageHandler</span><br><span class="line">import org.aspectj.tools.ajc.Main</span><br><span class="line"></span><br><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        mavenCentral()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath &#39;org.aspectj:aspectjtools:1.8.9&#39;</span><br><span class="line">        classpath &#39;org.aspectj:aspectjweaver:1.8.9&#39;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line">final def log &#x3D; project.logger</span><br><span class="line">final def variants &#x3D; project.android.applicationVariants</span><br><span class="line">variants.all &#123; variant -&gt;</span><br><span class="line">    if (!variant.buildType.isDebuggable()) &#123;</span><br><span class="line">        log.debug(&quot;Skipping non-debuggable build type &#39;$&#123;variant.buildType.name&#125;&#39;.&quot;)</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    JavaCompile javaCompile &#x3D; variant.javaCompile</span><br><span class="line">    javaCompile.doLast &#123;</span><br><span class="line">        String[] args &#x3D; [&quot;-showWeaveInfo&quot;,</span><br><span class="line">                         &quot;-1.8&quot;,</span><br><span class="line">                         &quot;-inpath&quot;, javaCompile.destinationDir.toString(),</span><br><span class="line">                         &quot;-aspectpath&quot;, javaCompile.classpath.asPath,</span><br><span class="line">                         &quot;-d&quot;, javaCompile.destinationDir.toString(),</span><br><span class="line">                         &quot;-classpath&quot;, javaCompile.classpath.asPath,</span><br><span class="line">                         &quot;-bootclasspath&quot;, project.android.bootClasspath.join(File.pathSeparator)]</span><br><span class="line">        log.debug &quot;ajc args: &quot; + Arrays.toString(args)</span><br><span class="line"></span><br><span class="line">        MessageHandler handler &#x3D; new MessageHandler(true);</span><br><span class="line">        new Main().run(args, handler);</span><br><span class="line">        for (IMessage message : handler.getMessages(null, true)) &#123;</span><br><span class="line">            switch (message.getKind()) &#123;</span><br><span class="line">                case IMessage.ABORT:</span><br><span class="line">                case IMessage.ERROR:</span><br><span class="line">                case IMessage.FAIL:</span><br><span class="line">                    log.error message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.WARNING:</span><br><span class="line">                    log.warn message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.INFO:</span><br><span class="line">                    log.info message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.DEBUG:</span><br><span class="line">                    log.debug message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion 25</span><br><span class="line">    buildToolsVersion &#39;25.0.0&#39;</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId &quot;com.example.cm.aoptest&quot;</span><br><span class="line">        minSdkVersion 20</span><br><span class="line">        targetSdkVersion 25</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0&quot;</span><br><span class="line">        testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&#39;proguard-android.txt&#39;), &#39;proguard-rules.pro&#39;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    compile fileTree(include: [&#39;*.jar&#39;], dir: &#39;libs&#39;)</span><br><span class="line">    androidTestCompile(&#39;com.android.support.test.espresso:espresso-core:2.2.2&#39;, &#123;</span><br><span class="line">        exclude group: &#39;com.android.support&#39;, module: &#39;support-annotations&#39;</span><br><span class="line">    &#125;)</span><br><span class="line">    compile &#39;com.android.support:appcompat-v7:25.3.1&#39;</span><br><span class="line">    compile &#39;com.android.support.constraint:constraint-layout:1.0.2&#39;</span><br><span class="line">    compile &#39;org.aspectj:aspectjrt:1.8.9&#39;</span><br><span class="line">    testCompile &#39;junit:junit:4.12&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后就是实现我们的要实现的注入的log方法，<code>AspectLogTest.java</code>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import org.aspectj.lang.JoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.Aspect;</span><br><span class="line">import org.aspectj.lang.annotation.Before;</span><br><span class="line">import org.aspectj.lang.annotation.Pointcut;</span><br><span class="line">import org.aspectj.lang.reflect.MethodSignature;</span><br><span class="line"></span><br><span class="line">import java.lang.annotation.ElementType;</span><br><span class="line">import java.lang.annotation.Retention;</span><br><span class="line">import java.lang.annotation.RetentionPolicy;</span><br><span class="line">import java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * Created by CM on 2018&#x2F;1&#x2F;18.</span><br><span class="line"> *</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Aspect</span><br><span class="line">public class AspectLogTest &#123;</span><br><span class="line"></span><br><span class="line">    @Target(ElementType.METHOD) &#x2F;&#x2F;可以注解在方法 上</span><br><span class="line">    @Retention(RetentionPolicy.RUNTIME) &#x2F;&#x2F;运行时（执行时）存在</span><br><span class="line">    public @interface AspectLog &#123;</span><br><span class="line">        String value();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    final static String TAG &#x3D; &quot;TAG&quot;;</span><br><span class="line"></span><br><span class="line">    @Pointcut(&quot;execution(@com.example.cm.aoptest.log.AspectLogTest.AspectLog * *(..))&quot;)</span><br><span class="line">    public void logForActivity()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Before(&quot;logForActivity()&quot;)</span><br><span class="line">    public Object doRealLog(JoinPoint joinPoint)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            MethodSignature methodSignature &#x3D; (MethodSignature) joinPoint.getSignature();</span><br><span class="line">            AspectLog aspectJAnnotation &#x3D; methodSignature.getMethod().getAnnotation(AspectLog.class);</span><br><span class="line">            String log &#x3D; aspectJAnnotation.value();</span><br><span class="line">            Log.d(TAG, &quot;doRealLog: 打印日志&quot;+log);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>写好了接口，我们来实现自动注入代码，这里我们还是需要借助注解来实现。如果我们向打印<code>onCreate()</code>、<code>onStart()</code>等方法的中的信息，我们在<code>MainActivity</code>中这么写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@AspectLogTest.AspectLog(value &#x3D; &quot;来自OnStop的日志信息&quot;)</span><br><span class="line">@Override</span><br><span class="line">protected void onStop() &#123;</span><br><span class="line">    super.onStop();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@AspectLogTest.AspectLog(value &#x3D; &quot;来自OnPause的日志信息&quot;)</span><br><span class="line">@Override</span><br><span class="line">protected void onPause() &#123;</span><br><span class="line">    super.onPause();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@AspectLogTest.AspectLog(value &#x3D; &quot;来自OnCreate的日志信息&quot;)</span><br><span class="line">@Override</span><br><span class="line">protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">    super.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就实现这里自动log功能。<br>当然，从这个例子看起来好像和自己手动写<code>Log.d()</code>没有区别，只是用注解的方式调用而已。但是这里仅仅是为了展示他的功能，真正使用的时候我们可以通过他们来实现复杂的控制。</p>
+<p>介绍一下Aspect常见的注解。</p>
+<ul>
+<li><strong>@Aspect</strong> 把当前类标识为一个切面供容器读取</li>
+<li><strong>@Before</strong> 表示一个前置增强方法</li>
+<li><strong>@AfterReturning</strong> 表示一个后置增强方法</li>
+<li><strong>@AfterThrowing</strong> 异常抛出增强</li>
+<li><strong>@After</strong> final增强，不管是抛出异常或是正常退出都会执行</li>
+<li><strong>@Around</strong> 环绕增强，先执行注入的方法，只有返回对应现场才能执行被注入的方法。</li>
+<li><strong>@DeclareParents</strong> 引介增强</li>
+</ul>
+<p>介绍一下<code>execution</code>切点函数，其定义为<code>execution([方法修饰符] [返回类型] 方法名 参数 [异常模式])</code><br>在上例中，我们的<code>execution</code>函数为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execution(@com.example.cm.aoptest.log.AspectLogTest.AspectLog * *(..))</span><br></pre></td></tr></table></figure>
+<p>注意这里的方法名需要添加包名，*表示匹配任意字符，..表示匹配任意字符，可以匹配任意多个元素。<br>+必须跟在类名后面，表示类本身和继承或扩展制定类的所有类。</p>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ul>
+<li><strong>PointCut 切入点</strong>：想要动态添加代码的连接点</li>
+<li><strong>Advice 通知</strong> ：向切点中注入代码实现方法</li>
+<li><strong>Aspect 切面</strong> ：切入点和通知的集合。</li>
+<li><strong>Joint Point 连接点</strong>：所有目标方法都是连接点</li>
+<li><strong>Weaving 编织</strong> 将切面代码注入到目标中，并生成代码混合到.class的过程。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/android-aop/" rel="tag"># android,aop</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/01/17/algorithm/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/" rel="prev" title="android-开发技巧表">
+      <i class="fa fa-chevron-left"></i> android-开发技巧表
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/03/17/android/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/" rel="next" title="android中的类加载">
+      android中的类加载 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">1.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AOP-基本思想"><span class="nav-number">2.</span> <span class="nav-text">AOP 基本思想</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编程实践"><span class="nav-number">3.</span> <span class="nav-text">编程实践</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础概念"><span class="nav-number">4.</span> <span class="nav-text">基础概念</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">reoger</p>
+  <div class="site-description" itemprop="description">reoger</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/reoger" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;reoger" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:reoger112@gmail.com" title="E-Mail → mailto:reoger112@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">reoger</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

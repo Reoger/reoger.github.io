@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"reoger.tk","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="什么是泛型Java 泛型（generics）是 JDK 5 中引入的一个新特性, 泛型提供了编译时类型安全检测机制，该机制允许程序员在编译时检测到非法的类型。泛型的本质是参数化类型，也就是说所操作的数据类型被指定为一个参数。  假定我们有这样一个需求：写一个排序方法，能够对整型数组、字符串数组甚至其他任何类型的数组进行排序，该如何实现？ 答案是可以使用 Java 泛型。 使用 Java 泛型的概念">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java中的泛型">
+<meta property="og:url" content="http://reoger.tk/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B/index.html">
+<meta property="og:site_name" content="reoger的记录">
+<meta property="og:description" content="什么是泛型Java 泛型（generics）是 JDK 5 中引入的一个新特性, 泛型提供了编译时类型安全检测机制，该机制允许程序员在编译时检测到非法的类型。泛型的本质是参数化类型，也就是说所操作的数据类型被指定为一个参数。  假定我们有这样一个需求：写一个排序方法，能够对整型数组、字符串数组甚至其他任何类型的数组进行排序，该如何实现？ 答案是可以使用 Java 泛型。 使用 Java 泛型的概念">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-15T06:44:55.000Z">
+<meta property="article:modified_time" content="2020-04-12T15:00:51.414Z">
+<meta property="article:author" content="reoger">
+<meta property="article:tag" content="android">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://reoger.tk/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>java中的泛型 | reoger的记录</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">reoger的记录</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">--以后的你会感激现在那么努力的自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java中的泛型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-15 14:44:55" itemprop="dateCreated datePublished" datetime="2018-08-15T14:44:55+08:00">2018-08-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:00:51" itemprop="dateModified" datetime="2020-04-12T23:00:51+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="什么是泛型"><a href="#什么是泛型" class="headerlink" title="什么是泛型"></a>什么是泛型</h1><p>Java 泛型（generics）是 JDK 5 中引入的一个新特性, 泛型提供了编译时类型安全检测机制，该机制允许程序员在编译时检测到非法的类型。<br>泛型的本质是参数化类型，也就是说所操作的数据类型被指定为一个参数。</p>
+<hr>
+<p>假定我们有这样一个需求：写一个排序方法，能够对整型数组、字符串数组甚至其他任何类型的数组进行排序，该如何实现？</p>
+<p>答案是可以使用 Java 泛型。</p>
+<p>使用 Java 泛型的概念，我们可以写一个泛型方法来对一个对象数组排序。然后，调用该泛型方法来对整型数组、浮点数数组、字符串数组等进行排序。</p>
+<h1 id="泛型的分类"><a href="#泛型的分类" class="headerlink" title="泛型的分类"></a>泛型的分类</h1><p>根据泛型的使用场景，一般可以分成三类，分别是:<strong>泛型类</strong>、<strong>泛型方法</strong>、<strong>和泛型接口</strong>。</p>
+<h1 id="泛型类型擦出"><a href="#泛型类型擦出" class="headerlink" title="泛型类型擦出"></a>泛型类型擦出</h1><p>Java中的泛型，只在编译阶段有效。在编译过程中，正确检验泛型结果后，会将泛型的相关信息擦出，并且在对象进入和离开方法的边界处添加类型检查和类型转换的方法。也就是说，泛型信息不会进入到运行时阶段。<br>用代码来说明就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class test &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        List&lt;Integer&gt; a &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;String&gt;  b &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">        System.out.println(a.getClass().toString());</span><br><span class="line">        System.out.println(a.getClass().toString());</span><br><span class="line"></span><br><span class="line">        System.out.println(b.getClass().equals(a.getClass()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行的结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class java.util.ArrayList</span><br><span class="line">class java.util.ArrayList</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+<p>可以看到，<code>List&lt;Integer&gt;</code>和<code>List&lt;String&gt;</code>的类是相同的。</p>
+<p>总结成一句话就是：<strong>泛型类型在逻辑上看以看成是多个不同的类型，实际上都是相同的基本类型。</strong></p>
+<h2 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h2><p>泛型类的使用非常简单,在类名添加<code>&lt;T&gt;</code> 或者类似于这类的泛型类声明即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Person&lt;T&gt;&#123;</span><br><span class="line">    private T t;</span><br><span class="line"></span><br><span class="line">    public Person(T t) &#123;</span><br><span class="line">        this.t &#x3D; t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public T getKey()&#123;</span><br><span class="line">        return t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们在使用这个泛型类的时候，就可以传入不同类型的参数来进行初始化，可以显示声明数据类型，也可以不声明，<code>jvm</code>会自动帮我们声明。使用实例代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Person p1 &#x3D; new Person&lt;Integer&gt;(12345);</span><br><span class="line">Person p2 &#x3D; new Person&lt;Double&gt;(8989.9);</span><br><span class="line">Person p3 &#x3D; new Person&lt;&gt;(true);</span><br><span class="line">Person p4 &#x3D; new Person&lt;&gt;(&quot;i am ok!&quot;);</span><br><span class="line"></span><br><span class="line">System.out.println(&quot;p1 -&gt; &quot;+p1.getKey());</span><br><span class="line">System.out.println(&quot;p2 -&gt; &quot;+p2.getKey());</span><br><span class="line">System.out.println(&quot;p3 -&gt; &quot;+p3.getKey());</span><br><span class="line">System.out.println(&quot;p4 -&gt; &quot;+p4.getKey());</span><br></pre></td></tr></table></figure>
+<p>输出的结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p1 -&gt; 12345</span><br><span class="line">p2 -&gt; 8989.9</span><br><span class="line">p3 -&gt; true</span><br><span class="line">p4 -&gt; i am ok!</span><br></pre></td></tr></table></figure>
+<p>可以看到，使用泛型类非常简单，只需要在定义类的时候添加<code>&lt;T&gt;</code>、<code>&lt;K&gt;</code>、<code>&lt;V&gt;</code>这类的泛型类的定义即可。当然，如果有需要，我们可以限制其使用范围，例如<code>&lt;T extends Number&gt;</code> 就规定了传入的类型是只能是<code>Number</code>的子类。</p>
+<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>泛型方法的规则如下：</p>
+<ol>
+<li>所有泛型方法声明都有一个类型参数声明部分（由尖括号分隔），该类型参数声明部分在方法返回类型之前（在下面例子中的<E>）。</li>
+<li>每一个类型参数声明部分包含一个或多个类型参数，参数间用逗号隔开。一个泛型参数，也被称为一个类型变量，是用于指定一个泛型类型名称的标识符。</li>
+<li>类型参数能被用来声明返回值类型，并且能作为泛型方法得到的实际参数类型的占位符。</li>
+<li>泛型方法体的声明和其他方法一样。注意类型参数只能代表引用型类型，不能是原始类型（像int,double,char的等）。</li>
+</ol>
+<p>泛型方法与泛型类的定义类似，泛型类的定义是在类名后加<code>&lt;T&gt;</code>这类的泛型修饰词，泛型方法的定义就是在方法的返回值添加<code>&lt;T&gt;</code>这类的修饰词。先来看泛型方法的定义示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private &lt;T&gt; void helloPerson(T t)&#123;</span><br><span class="line">       System.out.println(&quot;t &#x3D; [&quot; + t + &quot;]&quot;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>注意，这里我们称他为泛型方法是因为<code>void</code>前面的<code>&lt;T&gt;</code>，而不是<code>helloPerson(T t)</code>中的<code>T</code>。<br>我们在泛型类的<code>Person</code>中的<code>public T getKey()</code> 就不能算一个泛型方法，因为这里的<code>T</code>只是<code>getKey</code>方法的一个返回值而已。<br>然后泛型方法的使用也很简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">helloPerson(123);</span><br><span class="line">helloPerson(12.3);</span><br><span class="line">helloPerson(true);</span><br><span class="line">helloPerson(&quot;i am ok&quot;);</span><br></pre></td></tr></table></figure>
+<p>上面方法的运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">t &#x3D; [123]</span><br><span class="line">t &#x3D; [12.3]</span><br><span class="line">t &#x3D; [true]</span><br><span class="line">t &#x3D; [i am ok]</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="泛型接口"><a href="#泛型接口" class="headerlink" title="泛型接口"></a>泛型接口</h2><p>泛型接口的定义同样很简单，只需要在接口的名字后加上<code>&lt;T&gt;</code>这类的泛型定义接口。例如下面是一个泛型接口的示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface IFunction&lt;T&gt; &#123;</span><br><span class="line">    void doSomeThing(T t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在泛型接口里面定义了泛型，我们就可以在对应的方法中使用其类型。<br>当然，接口的定义好之后还是需要去实现这个接口的，实现的方式有两种，一种是声明类型，一种是不声明类型。<br>下面是第一种，申明类型的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Eat implements IFunction&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doSomeThing(String s) &#123;</span><br><span class="line">        System.out.println(&quot;s &#x3D; [&quot; + s + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，在<code>Eat</code>的实现中，我们讲泛型显示声明成了<code>String</code>，如此我们在使用<code>Eat</code>类中的<code>doSomeThing</code>方法时，就只能传入<code>String</code>类型的。<br>另一种，是不声明具体类型的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Read&lt;T&gt; implements IFunction&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doSomeThing(T t) &#123;</span><br><span class="line">        System.out.println(&quot;t &#x3D; [&quot; + t + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，其实<code>Read</code>就已经被声明成了一个泛型类，因为实现了泛型接口，我们要继续使用泛型来实现的话，就需要将类实现成泛型类。<br>我们来看其调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">IFunction f1 &#x3D; new Eat();</span><br><span class="line">IFunction f2 &#x3D; new Read();</span><br><span class="line"></span><br><span class="line">f1.doSomeThing(&quot;f1-&gt; only eat!&quot;);</span><br><span class="line">&#x2F;&#x2F;f1.doSomeThing(123456);</span><br><span class="line">&#x2F;&#x2F;这句编译不会报错，运行会抛出java.lang.Integer cannot be cast to java.lang.String 异常</span><br><span class="line"></span><br><span class="line">f2.doSomeThing(132);</span><br><span class="line">f2.doSomeThing(&quot;read&quot;);</span><br><span class="line">f2.doSomeThing(true);</span><br><span class="line">f2.doSomeThing(52.1);</span><br></pre></td></tr></table></figure>
+<p>输出的结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">s &#x3D; [f1-&gt; only eat!]</span><br><span class="line">t &#x3D; [132]</span><br><span class="line">t &#x3D; [read]</span><br><span class="line">t &#x3D; [true]</span><br><span class="line">t &#x3D; [52.1]</span><br></pre></td></tr></table></figure>
+<p>可以看到，我们在继承泛型接口时，显示申明了其类型之后，我们调用时也只能使用对应的类型，如果传入其他的类型，编译器并不会报错，但是运行时会抛出 类型强转失败的异常 。</p>
+<h1 id="泛型通配符"><a href="#泛型通配符" class="headerlink" title="泛型通配符"></a>泛型通配符</h1><p>类型通配符一般是使用<code>?</code>代替具体的类型参数。例如 List&lt;?&gt; 在逻辑上是List<String>,List<Integer> 等所有List&lt;具体类型实参&gt;的父类。注意，<code>?</code>可以代表<code>String</code>,<code>Interger</code>等其他具体的类型，但它是不确定的，而<code>&lt;T&gt;</code>表示一个类型参数，不能当作实际参数使用。说白了，就是<code>?</code>,表示不确定的类型，和<code>String</code>，<code>Integer</code>这种类型一样，是实实在在的类型，而<code>T</code>，只是表示类型参数，在使用时还是会转化成对应的实际参数的。<br>使用实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class TypeTest &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        TypeTest typeTest  &#x3D; new TypeTest();</span><br><span class="line">        typeTest.helloMan(Arrays.asList(&quot;1&quot;,&quot;hello&quot;));</span><br><span class="line">        typeTest.helloMan(Arrays.asList(1,2,3));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void helloMan(List&lt;?&gt; a)&#123;</span><br><span class="line">        System.out.println(&quot;a &#x3D; [&quot; + a + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，我往同一个方法出入不同类型的参数也时可以正常运行的，输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; [[1, hello]]</span><br><span class="line">a &#x3D; [[1, 2, 3]]</span><br></pre></td></tr></table></figure>
+<p>还有，补充两点;</p>
+<ol>
+<li><code>&lt;? extends T&gt;</code>表示该通配符所代表的类型是<code>T</code>类型的子类。</li>
+<li><code>&lt;? super T&gt;</code>表示该通配符所代表的类型是<code>T</code>类型的父类</li>
+</ol>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="https://blog.csdn.net/s10461/article/details/53941091" target="_blank" rel="noopener">java 泛型详解</a></li>
+<li><a href="http://www.runoob.com/java/java-generics.html" target="_blank" rel="noopener">Java 泛型</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/android/" rel="tag"># android</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84/" rel="prev" title="java中的反射">
+      <i class="fa fa-chevron-left"></i> java中的反射
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/08/22/android/WebView%E7%BC%93%E5%AD%98%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%92%8C%E5%BA%94%E7%94%A8/" rel="next" title="散记">
+      散记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是泛型"><span class="nav-number">1.</span> <span class="nav-text">什么是泛型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型的分类"><span class="nav-number">2.</span> <span class="nav-text">泛型的分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型类型擦出"><span class="nav-number">3.</span> <span class="nav-text">泛型类型擦出</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型类"><span class="nav-number">3.1.</span> <span class="nav-text">泛型类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型方法"><span class="nav-number">3.2.</span> <span class="nav-text">泛型方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型接口"><span class="nav-number">3.3.</span> <span class="nav-text">泛型接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型通配符"><span class="nav-number">4.</span> <span class="nav-text">泛型通配符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">reoger</p>
+  <div class="site-description" itemprop="description">reoger</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/reoger" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;reoger" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:reoger112@gmail.com" title="E-Mail → mailto:reoger112@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">reoger</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
