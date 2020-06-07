@@ -178,6 +178,104 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/11/01/algorithm/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/01/algorithm/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/" class="post-title-link" itemprop="url">二叉搜索树的最近公共祖先</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-01 23:41:48" itemprop="dateCreated datePublished" datetime="2018-11-01T23:41:48+08:00">2018-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:09:00" itemprop="dateModified" datetime="2020-04-12T23:09:00+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="二叉搜索树的最近公共祖先"><a href="#二叉搜索树的最近公共祖先" class="headerlink" title="二叉搜索树的最近公共祖先"></a><a href="https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/" target="_blank" rel="noopener">二叉搜索树的最近公共祖先</a></h3><p>难度 <strong>简单</strong></p>
+<p>给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。</p>
+<p>中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（<strong>一个节点也可以是它自己的祖先</strong>）。”</p>
+<p>例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">     _______6______</span><br><span class="line">    &#x2F;              \</span><br><span class="line"> ___2__          ___8__</span><br><span class="line">&#x2F;      \        &#x2F;      \</span><br><span class="line">0      _4       7       9</span><br><span class="line">      &#x2F;  \</span><br><span class="line">      3   5</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">**输入:** root &#x3D; [6,2,8,0,4,7,9,null,null,3,5], p &#x3D; 2, q &#x3D; 8</span><br><span class="line">**输出:** 6 </span><br><span class="line">**解释:** 节点 2 和节点 8 的最近公共祖先是 6。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">**输入:** root &#x3D; [6,2,8,0,4,7,9,null,null,3,5], p &#x3D; 2, q &#x3D; 4</span><br><span class="line">**输出:** 2</span><br><span class="line">**解释:** 节点 &#96;2&#96; 和节点 &#96;4&#96; 的最近公共祖先是 &#96;2&#96;, 因为根据定义最近公共祖先节点可以为节点本身。</span><br></pre></td></tr></table></figure>
+
+<p><strong>说明:</strong></p>
+<ul>
+<li>所有节点的值都是唯一的。</li>
+<li>p、q 为不同节点且均存在于给定的二叉搜索树中。</li>
+</ul>
+<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><h3 id="解法1，自顶向下遍历"><a href="#解法1，自顶向下遍历" class="headerlink" title="解法1，自顶向下遍历"></a>解法1，自顶向下遍历</h3><p>我们可以从根结点出发，判断当前结点的左右子树是否包含这两个结点。如果左子树包含两个结点，则它们的最低公共祖先结点也一定在左子树中。如果右子树包含两个结点，则它们的最低公共祖先结点也一定在右子树中。如果一个结点在左子树，而另一个结点在右子树中，则当前结点就是它们的最低公共祖先结点。根据该思路写出代码如下，注意这里已经假定p和q是二叉树中的结点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) &#123;</span><br><span class="line">       if (root &#x3D;&#x3D; null)</span><br><span class="line">           return null;</span><br><span class="line">      if (containTargetTreeNode(root.left, p)  &amp;&amp; containTargetTreeNode(root.left, q))&#123;</span><br><span class="line">          return lowestCommonAncestor(root.left, p, q);</span><br><span class="line">      &#125;else if (containTargetTreeNode(root.right, p)  &amp;&amp; containTargetTreeNode(root.right, q))&#123;</span><br><span class="line">          return lowestCommonAncestor(root.right, p, q);</span><br><span class="line">      &#125;</span><br><span class="line">       return root;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   private boolean containTargetTreeNode(TreeNode root, TreeNode targetNode) &#123;</span><br><span class="line">       if (root &#x3D;&#x3D; null)</span><br><span class="line">           return false;</span><br><span class="line">       if (root &#x3D;&#x3D; targetNode)</span><br><span class="line">           return true;</span><br><span class="line">       return containTargetTreeNode(root.left, targetNode) || containTargetTreeNode(root.right, targetNode);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="思路二：自顶向上"><a href="#思路二：自顶向上" class="headerlink" title="思路二：自顶向上"></a>思路二：自顶向上</h3><p>由于自顶向下的方法需要重复遍历结点，使用自底向上的方法可以避免这种情况。</p>
+<p>自底向上遍历结点，一旦遇到结点等于p或者q，则将其向上传递给它的父结点。父结点会判断它的左右子树是否都包含其中一个结点，如果是，则父结点一定是这两个节点p和q的LCA，传递父结点到root。如果不是，我们向上传递其中的包含结点p或者q的子结点，或者NULL(如果子结点不包含任何一个)。该方法时间复杂度为O(N)。</p>
+<p>Language: <strong>Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) &#123; val = x; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> TreeNode <span class="title">lowestCommonAncestor</span><span class="params">(TreeNode root, TreeNode p, TreeNode q)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (p == root || q == root)</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        TreeNode l = lowestCommonAncestor(root.left, p, q);</span><br><span class="line">        TreeNode r = lowestCommonAncestor(root.right, p, q);</span><br><span class="line">        <span class="keyword">if</span> (l != <span class="keyword">null</span> &amp;&amp; r != <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        <span class="keyword">return</span> l == <span class="keyword">null</span> ? r : l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="思路三：利用搜索树的性质"><a href="#思路三：利用搜索树的性质" class="headerlink" title="思路三：利用搜索树的性质"></a>思路三：利用搜索树的性质</h3><p>因为树是二叉树，我们从根节点开始遍历，一定有顶点root的值大于p和q的值时，p、q的最近祖先一定在root的左子树下，当root的值小于p、q的值时，那么p、q的最近祖先一定在root的左子树下，不是上述两种情况的话，说明当前的root已经是最近的祖先了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> TreeNode <span class="title">lowestCommonAncestor3</span><span class="params">(TreeNode root, TreeNode p, TreeNode q)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (root.val &gt; p.val &amp;&amp; root.val &gt; q.val)</span><br><span class="line">            <span class="keyword">return</span> lowestCommonAncestor3(root.left, p, q);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (root.val &lt; p.val &amp;&amp; root.val &lt; q.val)</span><br><span class="line">            <span class="keyword">return</span> lowestCommonAncestor3(root.right, p, q);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/11/01/algorithm/%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E7%9A%84%E6%9C%80%E5%A4%A7%E8%B7%AF%E5%BE%84%E5%92%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -381,7 +479,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:56:42" itemprop="dateModified" datetime="2020-04-12T22:56:42+08:00">2020-04-12</time>
+                <time title="修改时间：2020-06-06 17:33:47" itemprop="dateModified" datetime="2020-06-06T17:33:47+08:00">2020-06-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -389,7 +487,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%BD%AC%E8%BD%BD/" itemprop="url" rel="index"><span itemprop="name">转载</span></a>
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
                 </span>
             </span>
 
@@ -1963,225 +2061,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84/" class="post-title-link" itemprop="url">java中的反射</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-08-15 14:44:55" itemprop="dateCreated datePublished" datetime="2018-08-15T14:44:55+08:00">2018-08-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:59:37" itemprop="dateModified" datetime="2020-04-12T22:59:37+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="java中的反射"><a href="#java中的反射" class="headerlink" title="java中的反射"></a>java中的反射</h1><p>在java中，有一种可以跨越常规语法的用法，它就是反射。通过反射，我们可以访问到我们原本访问不到的类和对象，也不能调用我们原本调用不到的方法。虽然反射很强大，但是它违反了程序设计的初衷，且用反射的性能会有一定的影响，所以我们应该避免使用反射。但是反射功能实在强大，正确的使用能使得我们的代码变得很简洁，所以我们还是有必要学习一下反射的相关知识。</p>
-<h1 id="反射的原理"><a href="#反射的原理" class="headerlink" title="反射的原理"></a>反射的原理</h1><p><a href="http://www.importnew.com/23902.html" target="_blank" rel="noopener">深入分析Java方法反射的实现原理</a></p>
-<h2 id="获取类实例"><a href="#获取类实例" class="headerlink" title="获取类实例"></a>获取类实例</h2><p>获取类实例一般有两种写法，一种是<code>类名.class</code>,另一种则是<code>class.forName()</code>。假如我们已经有了一个<code>Person</code>的类，那么我们可以通过如下三种方式来获取类实例。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;方式1</span><br><span class="line">Class person1 &#x3D; Person.class;</span><br><span class="line">&#x2F;&#x2F;方式2</span><br><span class="line">Class person2 &#x3D; Class.forName(&quot;day18.Person&quot;);</span><br><span class="line">&#x2F;&#x2F;方式3,如果能用这种肯定用这种！</span><br><span class="line">Person person3 &#x3D; new Person();</span><br></pre></td></tr></table></figure>
-<p>两种方式的区别是，一种是我们能直接拿到那个类对象，另一种是我们无法中拿到类对象，必须通过反射才能获取到类对象。</p>
-<h2 id="通过反射获取构造方法"><a href="#通过反射获取构造方法" class="headerlink" title="通过反射获取构造方法"></a>通过反射获取构造方法</h2><p>假设我们有这个一个<code>Person</code>类，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">class Person &#123;</span><br><span class="line">    public String name;</span><br><span class="line">    public char sex;</span><br><span class="line">    public int height;</span><br><span class="line">    protected float id;</span><br><span class="line">    private String des;</span><br><span class="line"></span><br><span class="line">    private Person() &#123;</span><br><span class="line">        this.name &#x3D; &quot;jone&quot;;</span><br><span class="line">        this.sex &#x3D; &#39;f&#39;;</span><br><span class="line">        this.height &#x3D; 155;</span><br><span class="line">        this.id &#x3D; 420458188603268922F;</span><br><span class="line">        this.des &#x3D; &quot;just a normal person&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Person(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Person(String name, char sex) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">        this.sex &#x3D; sex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Person(String name, char sex, int height) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">        this.sex &#x3D; sex;</span><br><span class="line">        this.height &#x3D; height;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>那么我们如何去创建对应的<code>Person</code>对象呢，不能因为我们没有对象就不创建对象呀！答案是我们可以利用反射获得对应的构造方法，然后利用<code>newInstance()</code>方法，即可创建对应的<code>Person</code>对象。例如我们可以这么写，来获得对应的构造方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> try &#123;</span><br><span class="line">    &#x2F;&#x2F;获取对应的类对象，如果直接获取不到，可以用Class.forName(&quot;packageName.Person&quot;); 来获取</span><br><span class="line">    Class person1 &#x3D; Person.class;</span><br><span class="line">    &#x2F;&#x2F;获取无参的构造方法</span><br><span class="line">    Constructor constructor &#x3D; person1.getDeclaredConstructor();</span><br><span class="line">    &#x2F;&#x2F;设置属性为可访问，因为其构造方法是private的，所以这句必不可少，</span><br><span class="line">    &#x2F;&#x2F;否则会报  can not access a member of class day18.Person with modifiers &quot;private&quot; 的错误</span><br><span class="line">    constructor.setAccessible(true);</span><br><span class="line">    &#x2F;&#x2F;利用newInstance 创建对应的对象</span><br><span class="line">    Person p1 &#x3D; (Person) constructor.newInstance();</span><br><span class="line"></span><br><span class="line">    Constructor constructor2 &#x3D; person1.getDeclaredConstructor(String.class);</span><br><span class="line">    constructor2.setAccessible(true);</span><br><span class="line">    Person p2 &#x3D; (Person) constructor2.newInstance(&quot;p2&quot;);</span><br><span class="line"></span><br><span class="line">    System.out.println(p1.name);</span><br><span class="line">    System.out.println(p2.name);</span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jone</span><br><span class="line">p2</span><br></pre></td></tr></table></figure>
-<p>我们可以利用<code>getDeclaredConstructor()</code>，来获取对应的构造方法。当然，还有其他方法可以获取到构造方法，我们这里以他为例。<code>getDeclaredConstructor()</code>，中间可以添加任意个参数，表示有多少个参数的构造方法。例如<code>getDeclaredConstructor(String.class)</code> ，对应的构造方法就是<code>private Person(String name)</code>,然后在<code>newInstance</code>，传入对应的参数即可。</p>
-<p><strong>获取构造方法的四个方法</strong>：</p>
-<table>
-<thead>
-<tr>
-<th align="center">方法名</th>
-<th>作用</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>public Constructor&lt;T&gt; getDeclaredConstructor(Class&lt;?&gt;... parameterTypes)</code></td>
-<td>获得对应的构造方法</td>
-<td>获取的构造方法必须是当前类申明的，无法获取到父类的构造方法</td>
-</tr>
-<tr>
-<td align="center"><code>public Annotation[] getDeclaredAnnotations()</code></td>
-<td>获得所有的构造方法</td>
-<td>获取所有的构造方法都是当前类申明的，无法获取到父类的构造方法</td>
-</tr>
-<tr>
-<td align="center"><code>public Constructor&lt;T&gt; getConstructor(Class&lt;?&gt;... parameterTypes)</code></td>
-<td>获得指定的构造方法</td>
-<td>获得的构造方法必须是<code>public</code>的，可以获取从父类继承的构造方法</td>
-</tr>
-<tr>
-<td align="center"><code>public Constructor&lt;?&gt;[] getConstructors()</code></td>
-<td>获得所有的构造方法</td>
-<td>获取构造方法都是<code>public</code>的，可以获取到父类的<code>phblic</code>构造方法</td>
-</tr>
-</tbody></table>
-<h2 id="通过反射获取属性"><a href="#通过反射获取属性" class="headerlink" title="通过反射获取属性"></a>通过反射获取属性</h2><p>还是沿用上次的<code>Person</code>类，我们这次来获取他的<code>des</code>属性。观察一下，发现<code>des</code>属性为<code>private</code>,常规就无法获取到其属性值，下面我们通过反射来获取其<code>des</code>属性的值。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> try &#123;</span><br><span class="line">    &#x2F;&#x2F;获取对应的类对象，如果直接获取不到，可以用Class.forName(&quot;packageName.Person&quot;); 来获取</span><br><span class="line">    Class person1 &#x3D; Person.class;</span><br><span class="line">    &#x2F;&#x2F;获取无参构造方法</span><br><span class="line">    Constructor constructor &#x3D; person1.getDeclaredConstructor();</span><br><span class="line">    &#x2F;&#x2F;设置构造方法可访问</span><br><span class="line">    constructor.setAccessible(true);</span><br><span class="line">    &#x2F;&#x2F;创建Person对象</span><br><span class="line">    Person p1 &#x3D; (Person) constructor.newInstance();</span><br><span class="line">    &#x2F;&#x2F;获取des 属性值</span><br><span class="line">    Field des &#x3D; person1.getDeclaredField(&quot;des&quot;);</span><br><span class="line">    &#x2F;&#x2F;设置 des 可访问</span><br><span class="line">    des.setAccessible(true);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    System.out.println(&quot;des&#x3D; &quot;+des.get(p1));</span><br><span class="line"></span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注释很详细，不在赘述了，这里打印的结果就是<code>Person</code>类里无参构造方法赋值的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">des&#x3D; just a normal person</span><br></pre></td></tr></table></figure>
-<p><strong>获取属性的方法</strong></p>
-<table>
-<thead>
-<tr>
-<th align="center">方法名</th>
-<th>作用</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>public Field[] getDeclaredFields()</code></td>
-<td>获取所有的属性</td>
-<td>只能获取本类的属性（包括private的），不能获取到父类的属性</td>
-</tr>
-<tr>
-<td align="center"><code>public Field getDeclaredField(String name)</code></td>
-<td>获取指定的的属性</td>
-<td>只能到获取本类的属性（包括private的），不能获取到父类的属性</td>
-</tr>
-<tr>
-<td align="center"><code>public Field[] getFields()</code></td>
-<td>获取所有的属性</td>
-<td>只能到获取<code>public</code>的属性，也可以获取到父类的<code>public</code>属性</td>
-</tr>
-<tr>
-<td align="center"><code>public Field getField(String name)</code></td>
-<td>获取指定的的属性</td>
-<td>只能到获取<code>public</code>的属性，也可以获取到父类的<code>public</code>属性</td>
-</tr>
-</tbody></table>
-<h2 id="通过反射获取方法"><a href="#通过反射获取方法" class="headerlink" title="通过反射获取方法"></a>通过反射获取方法</h2><p>我们还是是假设有一个<code>Person</code>类，我们将其改造成如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class Person &#123;</span><br><span class="line">    public String name;</span><br><span class="line">    public char sex;</span><br><span class="line">    public int height;</span><br><span class="line">    protected float id;</span><br><span class="line">    private String des;</span><br><span class="line"></span><br><span class="line">    private Person() &#123;</span><br><span class="line">        this.name &#x3D; &quot;jone&quot;;</span><br><span class="line">        this.sex &#x3D; &#39;f&#39;;</span><br><span class="line">        this.height &#x3D; 155;</span><br><span class="line">        this.id &#x3D; 420458188603268922F;</span><br><span class="line">        this.des &#x3D; &quot;just a normal person&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    private void showInfo()&#123;</span><br><span class="line">        System.out.println(&quot;name&#x3D;&quot;+name);</span><br><span class="line">        System.out.println(&quot;sex&#x3D;&quot;+sex);</span><br><span class="line">        System.out.println(&quot;height&#x3D;&quot;+height);</span><br><span class="line">        System.out.println(&quot;id&#x3D;&quot;+id);</span><br><span class="line">        System.out.println(&quot;des&#x3D;&quot;+des);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void showInfo(String name)&#123;</span><br><span class="line">        System.out.println(&quot;name &#x3D; [&quot; + name + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private String showInfo(String name,String des)&#123;</span><br><span class="line">        return &quot;the people name is&quot;+name+&quot; and des is &quot;+des;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如上，我们实现了三个<code>ShowInfo()</code>的重载方法，但是都是<code>private</code>类型的，一般情况下在外部是无法调用的，下面我们通过反射来进行调用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">    &#x2F;&#x2F;获取对应的类对象，如果直接获取不到，可以用Class.forName(&quot;packageName.Person&quot;); 来获取</span><br><span class="line">    Class person1 &#x3D; Person.class;</span><br><span class="line">    &#x2F;&#x2F;获取无参构造方法</span><br><span class="line">    Constructor constructor &#x3D; person1.getDeclaredConstructor();</span><br><span class="line">    &#x2F;&#x2F;设置构造方法可访问</span><br><span class="line">    constructor.setAccessible(true);</span><br><span class="line">    &#x2F;&#x2F;创建Person对象</span><br><span class="line">    Person p1 &#x3D; (Person) constructor.newInstance();</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;获取无参的showInfo方法</span><br><span class="line">    Method method1 &#x3D; person1.getDeclaredMethod(&quot;showInfo&quot;);</span><br><span class="line">    &#x2F;&#x2F;设置showInfo方法访问</span><br><span class="line">    method1.setAccessible(true);</span><br><span class="line">    &#x2F;&#x2F;执行无参的showInfo方法</span><br><span class="line">    method1.invoke(p1);</span><br><span class="line">    System.out.println();</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;获取一个参数的的showInfo方法</span><br><span class="line">    Method method2 &#x3D; person1.getDeclaredMethod(&quot;showInfo&quot;,String.class);</span><br><span class="line">    &#x2F;&#x2F;设置showInfo方法访问</span><br><span class="line">    method2.setAccessible(true);</span><br><span class="line">    &#x2F;&#x2F;执行无参的showInfo方法</span><br><span class="line">    method2.invoke(p1,&quot;call from outside:&quot;);</span><br><span class="line">    System.out.println();</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;获取两个参数的的showInfo方法</span><br><span class="line">    Method method3 &#x3D; person1.getDeclaredMethod(&quot;showInfo&quot;,String.class,String.class);</span><br><span class="line">    &#x2F;&#x2F;设置showInfo方法访问</span><br><span class="line">    method3.setAccessible(true);</span><br><span class="line">    &#x2F;&#x2F;执行无参的showInfo方法</span><br><span class="line">    String dsc &#x3D; (String) method3.invoke(p1,&quot; arche&quot;,&quot;call from outside:&quot;);</span><br><span class="line">    System.out.println(dsc);</span><br><span class="line"></span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们通过反射分别调用了上述的三个参数，输出的结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;jone</span><br><span class="line">sex&#x3D;f</span><br><span class="line">height&#x3D;155</span><br><span class="line">id&#x3D;4.20458194E17</span><br><span class="line">des&#x3D;just a normal person</span><br><span class="line"></span><br><span class="line">name &#x3D; [call from outside:]</span><br><span class="line"></span><br><span class="line">the people name is arche and des is call from outside:</span><br></pre></td></tr></table></figure>
-<p>下面总结一下反射方法相关的函数：</p>
-<h2 id="通过反射获取参数"><a href="#通过反射获取参数" class="headerlink" title="通过反射获取参数"></a>通过反射获取参数</h2><table>
-<thead>
-<tr>
-<th align="center">方法名</th>
-<th>作用</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>public Method getDeclaredMethod(String name, Class&lt;?&gt;... parameterTypes)</code></td>
-<td>获取指定的方法</td>
-<td>只能获取本类的方法（包括private的），不能获取到父类的方法</td>
-</tr>
-<tr>
-<td align="center"><code>public Field[] getDeclaredFields()</code></td>
-<td>获取所有的的方法</td>
-<td>只能获取本类的方法（包括private的），不能获取到父类的方法</td>
-</tr>
-<tr>
-<td align="center"><code>public Method getMethod(String name, Class&lt;?&gt;... parameterTypes)</code></td>
-<td>获取指定的的方法</td>
-<td>只能获取<code>public</code>的方法，也能获取到父类的<code>public</code>方法</td>
-</tr>
-<tr>
-<td align="center"><code>public Method[] getMethods()</code></td>
-<td>获取所有的的方法</td>
-<td>只能获取<code>public</code>的方法，能获取到父类的<code>public</code>方法</td>
-</tr>
-<tr>
-<td align="center"><code>public Object invoke(Object obj, Object... args)</code></td>
-<td>执行对应的方法</td>
-<td>执行方法的参数应和获取方法时的参数类型相同,可以为null</td>
-</tr>
-<tr>
-<td align="center"><code>public Class&lt;?&gt; getReturnType()</code></td>
-<td>获取方法的返回值类型</td>
-<td>使用示例<code>Class&lt;?&gt; type = method1.getReturnType();</code></td>
-</tr>
-<tr>
-<td align="center"><code>public Class&lt;?&gt;[] getParameterTypes()</code></td>
-<td>获得方法的传入参数类型</td>
-<td>使用示例<code>Class&lt;?&gt;[] Parametertypes = method1.getParameterTypes();</code></td>
-</tr>
-<tr>
-<td align="center"><code>public Class&lt;?&gt;[] getParameterTypes()</code></td>
-<td>获得方法的传入参数类型</td>
-<td>使用示例<code>Class&lt;?&gt;[] Parametertypes = method1.getParameterTypes();</code></td>
-</tr>
-</tbody></table>
-<h2 id="通过反射获取注解"><a href="#通过反射获取注解" class="headerlink" title="通过反射获取注解"></a>通过反射获取注解</h2><h2 id="通过反射获取泛型"><a href="#通过反射获取泛型" class="headerlink" title="通过反射获取泛型"></a>通过反射获取泛型</h2><p>假设<code>Person</code>对象如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class Person &#123;</span><br><span class="line">     private List&lt;String&gt; friends;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们要获取其 friends对象的泛型，可以用下面的方式实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> try &#123;</span><br><span class="line">    Class&lt;?&gt; p &#x3D; Person.class;</span><br><span class="line">    Field friends &#x3D; p.getDeclaredField(&quot;friends&quot;);</span><br><span class="line">    Type genericType &#x3D; friends.getGenericType();&#x2F;&#x2F;获取对应的类型</span><br><span class="line">    ParameterizedTypeImpl parameterizedType &#x3D; (ParameterizedTypeImpl) genericType; &#x2F;&#x2F;强转成具体的实现类</span><br><span class="line">    Type[] genericTypes &#x3D; parameterizedType.getActualTypeArguments();  &#x2F;&#x2F;取得包含的泛型类型</span><br><span class="line">    System.out.println(genericTypes[0]);</span><br><span class="line"></span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如此我们就获取的了<code>friends</code>的泛型类，打印的结果为：</p>
-<blockquote>
-<p>class java.lang.String</p>
-</blockquote>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
-<li><a href="https://blog.csdn.net/liujiahan629629/article/details/18013523" target="_blank" rel="noopener">JAVA中的反射机制</a></li>
-<li><a href="https://blog.csdn.net/gdutxiaoxu/article/details/68947735" target="_blank" rel="noopener">Java 反射机制详解</a></li>
-<li><a href="https://blog.csdn.net/u012585964/article/details/52011138" target="_blank" rel="noopener">深入理解java反射机制</a></li>
-<li><a href="http://www.importnew.com/23902.html" target="_blank" rel="noopener">深入分析Java方法反射的实现原理</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2251,7 +2130,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2260,7 +2139,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

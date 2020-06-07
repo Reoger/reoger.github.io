@@ -178,6 +178,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/13/algorithm/%E5%8A%A0%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/13/algorithm/%E5%8A%A0%E4%B8%80/" class="post-title-link" itemprop="url">加一</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-13 11:45:48" itemprop="dateCreated datePublished" datetime="2018-07-13T11:45:48+08:00">2018-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:11:02" itemprop="dateModified" datetime="2020-04-12T23:11:02+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="66-加一-Plus-One"><a href="#66-加一-Plus-One" class="headerlink" title="66. 加一(Plus One)"></a><a href="https://leetcode-cn.com/problems/plus-one/description/" target="_blank" rel="noopener">66. 加一(Plus One)</a></h3><p>题目难度： <strong>简单</strong></p>
+<p>给定一个<strong>非负整数</strong>组成的<strong>非空</strong>数组，在该数的基础上加一，返回一个新的数组。</p>
+<p>最高位数字存放在数组的首位， 数组中每个元素只存储一个数字。</p>
+<p>你可以假设除了整数 0 之外，这个整数不会以零开头。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">**输入:** [1,2,3]</span><br><span class="line">**输出:** [1,2,4]</span><br><span class="line">**解释:** 输入数组表示数字 123。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">**输入:** [4,3,2,1]</span><br><span class="line">**输出:** [4,3,2,2]</span><br><span class="line">**解释:** 输入数组表示数字 4321。</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>就是大数相加的思想，将数组倒叙，加1大于9就进一位，最后的进位标志为1时，说明需要扩充数组。实现如下<br>Language: <strong>Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] plusOne(<span class="keyword">int</span>[] digits) &#123;</span><br><span class="line">          <span class="keyword">int</span> len = digits.length;</span><br><span class="line">        List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">        <span class="keyword">int</span> temp =<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=len-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            <span class="keyword">int</span> md = digits[i]+temp;</span><br><span class="line">            <span class="keyword">if</span>(md&gt;<span class="number">9</span>)&#123;</span><br><span class="line">                temp =<span class="number">1</span>;</span><br><span class="line">                list.add(<span class="number">0</span>,md-<span class="number">10</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                temp = <span class="number">0</span>;</span><br><span class="line">                list.add(<span class="number">0</span>,md);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(temp ==<span class="number">1</span> )&#123;</span><br><span class="line">            list.add(<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">            len ++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res[] = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;list.size();i++)&#123;</span><br><span class="line">            res[i] = list.get(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/11/algorithm/%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86%20II/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1138,413 +1224,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/17/algorithm/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/01/17/algorithm/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/" class="post-title-link" itemprop="url">android-开发技巧表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-01-17 19:50:52" itemprop="dateCreated datePublished" datetime="2018-01-17T19:50:52+08:00">2018-01-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:54:34" itemprop="dateModified" datetime="2020-04-12T22:54:34+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
-<li><a href="http://blog.csdn.net/my_truelove/article/details/52240558" target="_blank" rel="noopener">超详细的dubug教程</a></li>
-<li><a href="http://www.10tiao.com/html/169/201612/2650821802/1.html" target="_blank" rel="noopener">Android Studio 调试技巧</a></li>
-<li><a href="https://www.jianshu.com/p/a3459ffe4a95?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation" target="_blank" rel="noopener">Android中开发需要的高效助推的命令总结</a></li>
-<li><a href="http://blog.csdn.net/soslinken/article/details/50245865" target="_blank" rel="noopener">Android adb shell am 命令介绍</a></li>
-<li><a href="https://www.jianshu.com/p/d859480613a4" target="_blank" rel="noopener">adb shell dumpsys 命令用法</a></li>
-<li><a href="http://gityuan.com/2017/07/04/ams_dumpsys/" target="_blank" rel="noopener">AMS之dumpsys篇</a></li>
-</ul>
-<h1 id="debug-技巧"><a href="#debug-技巧" class="headerlink" title="debug 技巧"></a>debug 技巧</h1><p>关于android studio的debug技巧，前面的两篇参考文章已经写的特别好了，也没必要再写一次了，主要就记录一下debug的关键概念和快捷键。至于如何debug，就请参考前面两篇文章。</p>
-<h2 id="工具栏介绍"><a href="#工具栏介绍" class="headerlink" title="工具栏介绍"></a>工具栏介绍</h2><p><img src="http://ovec6nnof.bkt.clouddn.com/too.png" alt=""></p>
-<p>上图从左往右看，名称和作用如下表所示。</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>作用</th>
-<th>备注</th>
-<th>快捷键</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>show Execution Point</td>
-<td>定位到当前正在调试的位置</td>
-<td>无备注</td>
-<td>alt+F10</td>
-</tr>
-<tr>
-<td>step over</td>
-<td>单步跳过</td>
-<td>一步一步执行，遇到方法会直接执行方法，然后进入下一步，不会进入方法内容</td>
-<td>F8</td>
-</tr>
-<tr>
-<td>step into</td>
-<td>单步跳入</td>
-<td>单步向下执行，如果当前是自定义方法，hi进入方法内部，系统方法则不进入方法内部</td>
-<td>F7</td>
-</tr>
-<tr>
-<td>Force step into</td>
-<td>强制单步跳入</td>
-<td>与单步跳入不同的是，不管什么方法他都会进入</td>
-<td>Alt + Shfit + F7</td>
-</tr>
-<tr>
-<td>step out</td>
-<td>单步跳出</td>
-<td>与单步跳入相对，表示从方法体中跳出，回到进入方法的位置，以继续断点</td>
-<td>shfit + F8</td>
-</tr>
-<tr>
-<td>run to cursor</td>
-<td>执行到光标处</td>
-<td>直接从当前位置运行到光标处，但是能被中间的断点拦截。</td>
-<td>alt + F9</td>
-</tr>
-<tr>
-<td>Evalyate Exoression</td>
-<td>计算表达式</td>
-<td>支持在点点过程中，通过直接赋值或者表达式方式，修改任意表俩个的值。</td>
-<td>alt+F8</td>
-</tr>
-</tbody></table>
-<p>再加来几个快捷键。</p>
-<table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>功能</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>右击断点</td>
-<td>为断点设置执行条件，或打印信息</td>
-<td>只能针对本断点生效</td>
-</tr>
-<tr>
-<td>alt + 单击</td>
-<td>查看断点时变量的值</td>
-<td>无</td>
-</tr>
-<tr>
-<td>ctrl+alt+F8</td>
-<td>为断点添加执行条件，或打印信息</td>
-<td>这个可以对所有的断点生效</td>
-</tr>
-</tbody></table>
-<h1 id="工具篇"><a href="#工具篇" class="headerlink" title="工具篇"></a>工具篇</h1><h2 id="uiautorviewer"><a href="#uiautorviewer" class="headerlink" title="uiautorviewer"></a>uiautorviewer</h2><p>可以通过这个工具快速定位到UI控件的ID，并通过ID快速找到相应的逻辑。</p>
-<h2 id="DDMS"><a href="#DDMS" class="headerlink" title="DDMS"></a>DDMS</h2><p>可以利用ddms这个工具，实现截屏，查看线程和堆信息，日志信息，进程，广播状态信息，模拟来电，呼叫和短信等功能。<br>具体使用方法参考这里<a href="https://developer.android.com/studio/profile/monitor.html" target="_blank" rel="noopener">https://developer.android.com/studio/profile/monitor.html</a></p>
-<h1 id="命令篇"><a href="#命令篇" class="headerlink" title="命令篇"></a>命令篇</h1><h2 id="adb-shell-am"><a href="#adb-shell-am" class="headerlink" title="adb shell am"></a>adb shell am</h2><p>am 就是activity manager的简称，可以用于启动activity、打开或关闭进程、发送广播等操作。<br>关于具体的命令，可以参考这里<a href="http://blog.csdn.net/soslinken/article/details/50245865" target="_blank" rel="noopener">http://blog.csdn.net/soslinken/article/details/50245865</a>.<br>然后，这里就记录常用的<code>adb shell am</code>命令。<br>[注：这里默认省略了<code>adb shell</code>]</p>
-<table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-<th>备注</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>am start -n &lt;package name&gt;/&lt;ativity name&gt;</code></td>
-<td>启动acivity</td>
-<td>-n 表示以组件式启动，还可以</td>
-<td><code>am start -a android.settings.INPUT_METHOD_SETTINGS</code>//使用Action方式打开系统设置-输入法设置</td>
-</tr>
-<tr>
-<td><code>am start -a -n --es extra &quot;hello&quot; --ei pid 10  &lt;package name&gt;/&lt;ativity name&gt;</code></td>
-<td>待参数的启动activity</td>
-<td>–es 表示带string，–ei 表示整型数据,都是以键值对的形式</td>
-<td><code>am start -a -n --es extra &quot;hello&quot; --ei pid 10 com.reoger.app/com.example.cm.myapplication.NextActivity</code></td>
-</tr>
-<tr>
-<td><code>am  broadcast -a &lt;action&gt;</code></td>
-<td>启动广播</td>
-<td>还可以通过<code>--user</code>指定用户发送广播</td>
-<td><code>com.android.broadcast.test</code></td>
-</tr>
-<tr>
-<td><code>am  broadcast  -a  &lt;action&gt; --es &lt;key&gt;  &lt;value&gt;</code></td>
-<td>带信息的发送广播</td>
-<td>–es表示字符串，还有–ez（布尔值）等多种类型数据，都是以键值对的形式</td>
-<td><code>am  broadcast  -a  com.android.broadcast.test --es adb_extra &quot;hello&quot;</code></td>
-</tr>
-<tr>
-<td><code>am startservice &lt;package name&gt;/&lt;service name&gt;</code></td>
-<td>启动服务</td>
-<td>可以通过<code>--user&lt;USER_ID&gt;</code>指定启动的用户</td>
-<td><code>am startservice com.reoger.app/com.example.cm.myapplication.MyService</code></td>
-</tr>
-<tr>
-<td><code>am force-stop &lt;package name&gt;</code></td>
-<td>关闭指定包名的应用程序</td>
-<td>无</td>
-<td><code>am force-stop com.reoger.app</code></td>
-</tr>
-<tr>
-<td><code>am kill &lt;package name&gt;</code></td>
-<td>杀死与应该程序包想关联的所有进程，但只会杀死安全进程</td>
-<td>可以通过<code>--user &lt;USER_ID&gt;</code>指定用户</td>
-<td><code>am kill com.reoger.app</code></td>
-</tr>
-<tr>
-<td><code>am kill -all</code></td>
-<td>杀死全部的后台进程</td>
-<td>无</td>
-<td><code>am kill -all</code></td>
-</tr>
-</tbody></table>
-<p>详情参考这里：<a href="http://blog.csdn.net/soslinken/article/details/50245865" target="_blank" rel="noopener">http://blog.csdn.net/soslinken/article/details/50245865</a></p>
-<h2 id="adb-shell-pm"><a href="#adb-shell-pm" class="headerlink" title="adb shell pm"></a>adb shell pm</h2><p>pm即是 package manager的简称，可以用于安装应用、查询应用信息、系统权限、控制应用。</p>
-<table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-<th>备注</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>pm list packages [options] [fileter]</code></td>
-<td>打印所有已经安装的应用的包名</td>
-<td>options 常用的有<code>-3</code> 表示只显示第三方应用的包名，filter表示按名字筛选</td>
-<td><code>pm list packages -e</code> 显示可用的应用和包名</td>
-</tr>
-<tr>
-<td><code>pm list permission [options] [group]</code></td>
-<td>打印权限</td>
-<td><code>-g</code>表示按组列出，<code>-s</code>表示简短打印</td>
-<td><code>pm list permission-groups</code>  打印所有已知的权限组</td>
-</tr>
-<tr>
-<td><code>grant &lt;package_name&gt; &lt;permission&gt;</code></td>
-<td>授予应用权限</td>
-<td>必须android 6.0及以上的设备</td>
-<td><code>grant com.reoger.app android.permission.WRITE_EXTERNAL_STORAGE</code></td>
-</tr>
-<tr>
-<td><code>revoke &lt;package_name&gt; &lt;permission&gt;</code></td>
-<td>撤销应用权限</td>
-<td>必须android 6.0及以上的设备</td>
-<td><code>revoke com.reoger.app android.permission.WRITE_EXTERNAL_STORAGE</code></td>
-</tr>
-<tr>
-<td><code>pm clear &lt;package name&gt;</code></td>
-<td>清除应用数据</td>
-<td>无</td>
-<td><code>pm clear com.reoger.app</code></td>
-</tr>
-<tr>
-<td><code>pm enable &lt;package or component&gt;</code></td>
-<td>使得packaege或componet可用</td>
-<td>只针对第系统应用</td>
-<td><code>pm enable com.reoger.app</code></td>
-</tr>
-<tr>
-<td><code>pm hide &lt;package or component&gt;</code></td>
-<td>隐藏package或componet</td>
-<td>被隐藏应用在管理中变得不可见，桌面图标也会消失</td>
-<td><code>pm hide com.reoger.app</code></td>
-</tr>
-<tr>
-<td><code>pm unhide &lt;package or component&gt;</code></td>
-<td>取消隐藏package或componet</td>
-<td>桌面图标需要重新添加</td>
-<td><code>pm unhide com.reoger.app</code></td>
-</tr>
-</tbody></table>
-<p>详情请参考这里：<a href="https://www.cnblogs.com/JianXu/p/5380882.html" target="_blank" rel="noopener">https://www.cnblogs.com/JianXu/p/5380882.html</a></p>
-<h2 id="adb-shell-dumysys"><a href="#adb-shell-dumysys" class="headerlink" title="adb shell dumysys"></a>adb shell dumysys</h2><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>dumpsys cpuinfo</code></td>
-<td>查看CPU信息</td>
-</tr>
-<tr>
-<td><code>dumpsys activity</code></td>
-<td>查看一大堆信息，包括activity、broadcasts、providers、permissions等等信息</td>
-</tr>
-<tr>
-<td><code>dumpsys activity top</code></td>
-<td>获取当前android系统中与用户交互的activity的详细信息</td>
-</tr>
-<tr>
-<td><code>dumpsys activity activities</code></td>
-<td>显示当前所有运行的任务栈,可以与管道<code>- grep XXX</code>结合使用，用于筛选我们需要的任务栈</td>
-</tr>
-<tr>
-<td><code>dumpsys activity meminfo &lt;package name&gt;</code></td>
-<td>显示应用内存使用的情况</td>
-</tr>
-<tr>
-<td><code>dumpsys activity package &lt;package name&gt;</code></td>
-<td>显示apk的信息</td>
-</tr>
-</tbody></table>
-<p>其中的<code>dumpsys activity [options] [WHAT]</code>参数可选如下：</p>
-<table>
-<thead>
-<tr>
-<th>option</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-a</td>
-<td>包括所有可用server状态</td>
-</tr>
-<tr>
-<td>-c</td>
-<td>包括client状态，即app端情况</td>
-</tr>
-<tr>
-<td>-p package</td>
-<td>限定输出指定包名</td>
-</tr>
-</tbody></table>
-<p>其中WHAT参数可选如下：</p>
-<table>
-<thead>
-<tr>
-<th>WHAT</th>
-<th>解释</th>
-<th>对应源码</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>a[ctivities]</td>
-<td>activity状态</td>
-<td>dumpActivitiesLocked()</td>
-</tr>
-<tr>
-<td>b[roadcasts] [PACKAGE_NAME]</td>
-<td>broadcast状态</td>
-<td>dumpBroadcastsLocked()</td>
-</tr>
-<tr>
-<td>s[ervices] [COMP_SPEC …]</td>
-<td>service状态</td>
-<td>newServiceDumperLocked().dumpLocked</td>
-</tr>
-<tr>
-<td>prov[iders] [COMP_SPEC …]</td>
-<td>content provider状态</td>
-<td>dumpProvidersLocked()</td>
-</tr>
-<tr>
-<td>p[rocesses] [PACKAGE_NAME]</td>
-<td>进程状态</td>
-<td>dumpProcessesLocked()</td>
-</tr>
-<tr>
-<td>o[om]</td>
-<td>内存管理</td>
-<td>dumpOomLocked()</td>
-</tr>
-<tr>
-<td>i[ntents] [PACKAGE_NAME]</td>
-<td>pending intent状态</td>
-<td>dumpPendingIntentsLocked()</td>
-</tr>
-<tr>
-<td>r[ecents]</td>
-<td>最近activity</td>
-<td>dumpRecentsLocked()</td>
-</tr>
-<tr>
-<td>perm[issions]</td>
-<td>URI授权情况</td>
-<td>dumpPermissionsLocked()</td>
-</tr>
-<tr>
-<td>all</td>
-<td>所有activities信息</td>
-<td>dumpActivity()</td>
-</tr>
-<tr>
-<td>top</td>
-<td>顶部activity信息</td>
-<td>dumpActivity()</td>
-</tr>
-<tr>
-<td>package</td>
-<td>package相关信息</td>
-<td>dump()</td>
-</tr>
-</tbody></table>
-<p>最后，附上我用于测试adb 命令的demo：<a href="https://github.com/Reoger/adbTest" target="_blank" rel="noopener">https://github.com/Reoger/adbTest</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1614,7 +1293,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1623,7 +1302,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

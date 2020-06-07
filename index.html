@@ -178,6 +178,120 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2020/06/06/java/Kotlin%20%E4%B8%AD%E7%9A%84%20trim%20%E5%92%8C%20Java%20%E4%B8%AD%20trim/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/06/java/Kotlin%20%E4%B8%AD%E7%9A%84%20trim%20%E5%92%8C%20Java%20%E4%B8%AD%20trim/" class="post-title-link" itemprop="url">Java 中的 trim() 和 kotlin 中的 trim()</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-06 17:34:05" itemprop="dateCreated datePublished" datetime="2020-06-06T17:34:05+08:00">2020-06-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-07 12:20:20" itemprop="dateModified" datetime="2020-06-07T12:20:20+08:00">2020-06-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="java-中-trim-方法的实现"><a href="#java-中-trim-方法的实现" class="headerlink" title="java 中 trim 方法的实现"></a>java 中 trim 方法的实现</h1><p>源代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public String trim() &#123;</span><br><span class="line">    int len &#x3D; value.length;</span><br><span class="line">    int st &#x3D; 0;</span><br><span class="line">    char[] val &#x3D; value;    &#x2F;* avoid getfield opcode *&#x2F;</span><br><span class="line"></span><br><span class="line">    while ((st &lt; len) &amp;&amp; (val[st] &lt;&#x3D; &#39; &#39;)) &#123;</span><br><span class="line">        st++;</span><br><span class="line">    &#125;</span><br><span class="line">    while ((st &lt; len) &amp;&amp; (val[len - 1] &lt;&#x3D; &#39; &#39;)) &#123;</span><br><span class="line">        len--;</span><br><span class="line">    &#125;</span><br><span class="line">    return ((st &gt; 0) || (len &lt; value.length)) ? substring(st, len) : this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，在 java 实现中， <code>trim</code>方法截取掉了前后 Unicode 小于等于空格的所有控制字符。具体截取的字符可以参考 <a href="https://zh.wikipedia.org/wiki/Unicode%E5%AD%97%E7%AC%A6%E5%88%97%E8%A1%A8" target="_blank" rel="noopener">unicode 字符列表</a>.</p>
+<h1 id="kotlin-中-trim-方法的实现"><a href="#kotlin-中-trim-方法的实现" class="headerlink" title="kotlin 中 trim() 方法的实现"></a>kotlin 中 trim() 方法的实现</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">@kotlin.internal.InlineOnly</span><br><span class="line">public inline fun String.trim(): String &#x3D; (this as CharSequence).trim().toString()</span><br><span class="line"></span><br><span class="line">public fun CharSequence.trim(): CharSequence &#x3D; trim(Char::isWhitespace)</span><br><span class="line"></span><br><span class="line">public inline fun CharSequence.trim(predicate: (Char) -&gt; Boolean): CharSequence &#123;</span><br><span class="line">    var startIndex &#x3D; 0</span><br><span class="line">    var endIndex &#x3D; length - 1</span><br><span class="line">    var startFound &#x3D; false</span><br><span class="line"></span><br><span class="line">    while (startIndex &lt;&#x3D; endIndex) &#123;</span><br><span class="line">        val index &#x3D; if (!startFound) startIndex else endIndex</span><br><span class="line">        val match &#x3D; predicate(this[index])</span><br><span class="line"></span><br><span class="line">        if (!startFound) &#123;</span><br><span class="line">            if (!match)</span><br><span class="line">                startFound &#x3D; true</span><br><span class="line">            else</span><br><span class="line">                startIndex +&#x3D; 1</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            if (!match)</span><br><span class="line">                break</span><br><span class="line">            else</span><br><span class="line">                endIndex -&#x3D; 1</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return subSequence(startIndex, endIndex + 1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，kotlin 中的 trim 方法和 java 中的 trim 方法实现基本差不多，唯一的差别就是匹配的字符规则不一样，在 java 匹配的规则是 <code>&lt;= &#39; &#39;</code>, 而 kotlin 中匹配的规则是 <code>Char::isWhitespace</code>。</p>
+<p>接下来我们看看 <code>Char::isWhitespace</code> 的具体实现：<a href="https://github.com/JetBrains/kotlin/blob/deb416484c5128a6f4bc76c39a3d9878b38cec8c/libraries/stdlib/jvm/src/kotlin/text/CharJVM.kt#L72" target="_blank" rel="noopener">参考</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String.kt</span><br><span class="line">expect fun Char.isWhitespace(): Boolean</span><br><span class="line"></span><br><span class="line">实现在 charJVM.kt</span><br><span class="line">public actual fun Char.isWhitespace(): Boolean &#x3D; Character.isWhitespace(this) || Character.isSpaceChar(this)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到, 在 String.kt 中只是通过 <code>expect</code> 声明了这个方法，具体实现还是在 charJVM.kt 中。关于 <code>expect</code> 和 <code>actual</code> 的用法可以参考 <a href="https://www.kotlincn.net/docs/reference/platform-specific-declarations.html" target="_blank" rel="noopener">kotlin 平台相关声明</a>.</p>
+<p>而在<code>Charactr</code> 类中，<code>isWhitespace()</code> 和 <code>isSpaceChar()</code>的实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public static boolean isWhitespace(char ch) &#123;</span><br><span class="line">    return isWhitespace((int)ch);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static boolean isWhitespace(int codePoint) &#123;</span><br><span class="line">    return CharacterData.of(codePoint).isWhitespace(codePoint);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public static boolean isSpaceChar(char ch) &#123;</span><br><span class="line">    return isSpaceChar((int)ch);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static boolean isSpaceChar(int codePoint) &#123;</span><br><span class="line">    return ((((1 &lt;&lt; Character.SPACE_SEPARATOR) |</span><br><span class="line">              (1 &lt;&lt; Character.LINE_SEPARATOR) |</span><br><span class="line">              (1 &lt;&lt; Character.PARAGRAPH_SEPARATOR)) &gt;&gt; getType(codePoint)) &amp; 1)</span><br><span class="line">        !&#x3D; 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里 <code>isWhitespace()</code> 和 <code>isSpaceChar()</code> 的实现其实比较复杂，简单介绍一下其区别。</p>
+<p><code>isWhiteSpace()</code>符合下面条件的字符将会返回 <code>true</code></p>
+<li> It is a Unicode space character ({@code SPACE_SEPARATOR},
+    {@code LINE_SEPARATOR}, or {@code PARAGRAPH_SEPARATOR})
+    but is not also a non-breaking space ({@code '\u005Cu00A0'},
+    {@code '\u005Cu2007'}, {@code '\u005Cu202F'}).
+<li> It is {@code '\u005Ct'}, U+0009 HORIZONTAL TABULATION.
+<li> It is {@code '\u005Cn'}, U+000A LINE FEED.
+<li> It is {@code '\u005Cu000B'}, U+000B VERTICAL TABULATION.
+<li> It is {@code '\u005Cf'}, U+000C FORM FEED.
+<li> It is {@code '\u005Cr'}, U+000D CARRIAGE RETURN.
+<li> It is {@code '\u005Cu001C'}, U+001C FILE SEPARATOR.
+<li> It is {@code '\u005Cu001D'}, U+001D GROUP SEPARATOR.
+<li> It is {@code '\u005Cu001E'}, U+001E RECORD SEPARATOR.
+<li> It is {@code '\u005Cu001F'}, U+001F UNIT SEPARATOR.
+
+
+<p><code>isSpaceChar()</code>用于检查<code>Unicodei</code>分割符和空格，参考<a href="https://zh.wikipedia.org/wiki/Unicode%E6%8E%A7%E5%88%B6%E5%AD%97%E7%AC%A6" target="_blank" rel="noopener">Unicode控制字符</a>,分割符号包括</p>
+<li> U+2028 line separator ，HTML：&#8232;，LSEP
+<li> U+2029 paragraph separator ，HTML：&#8233;，PSEP
+
+
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在 java 中和 kotlin 中，因为 <code>trim</code> 方法中使用到的匹配规则不一样，所以他们对同一个串进行处理之后，结果可能也是不一样的。所以为了保险起见，建议不要使用分别用 java 和 kotlin 语言 trim 之后的字符串在进行比较，可能会得有意料之外的结果。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="https://zh.wikipedia.org/wiki/Unicode%E5%AD%97%E7%AC%A6%E5%88%97%E8%A1%A8" target="_blank" rel="noopener">Unicode字符列表</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/Unicode%E6%8E%A7%E5%88%B6%E5%AD%97%E7%AC%A6" target="_blank" rel="noopener">Unicode控制字符</a></li>
+<li><a href="https://www.kotlincn.net/docs/reference/platform-specific-declarations.html" target="_blank" rel="noopener">kotlin 平台相关声明</a></li>
+<li><a href="https://unicode-table.com/cn/blocks/control-character/" target="_blank" rel="noopener">Unicode 字符百科</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://reoger.tk/2020/05/17/java/hashMap%E8%AF%A6%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1054,104 +1168,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/11/01/algorithm/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/11/01/algorithm/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/" class="post-title-link" itemprop="url">二叉搜索树的最近公共祖先</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-11-01 23:41:48" itemprop="dateCreated datePublished" datetime="2018-11-01T23:41:48+08:00">2018-11-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:09:00" itemprop="dateModified" datetime="2020-04-12T23:09:00+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="二叉搜索树的最近公共祖先"><a href="#二叉搜索树的最近公共祖先" class="headerlink" title="二叉搜索树的最近公共祖先"></a><a href="https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/" target="_blank" rel="noopener">二叉搜索树的最近公共祖先</a></h3><p>难度 <strong>简单</strong></p>
-<p>给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。</p>
-<p>中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（<strong>一个节点也可以是它自己的祖先</strong>）。”</p>
-<p>例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">     _______6______</span><br><span class="line">    &#x2F;              \</span><br><span class="line"> ___2__          ___8__</span><br><span class="line">&#x2F;      \        &#x2F;      \</span><br><span class="line">0      _4       7       9</span><br><span class="line">      &#x2F;  \</span><br><span class="line">      3   5</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">**输入:** root &#x3D; [6,2,8,0,4,7,9,null,null,3,5], p &#x3D; 2, q &#x3D; 8</span><br><span class="line">**输出:** 6 </span><br><span class="line">**解释:** 节点 2 和节点 8 的最近公共祖先是 6。</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">**输入:** root &#x3D; [6,2,8,0,4,7,9,null,null,3,5], p &#x3D; 2, q &#x3D; 4</span><br><span class="line">**输出:** 2</span><br><span class="line">**解释:** 节点 &#96;2&#96; 和节点 &#96;4&#96; 的最近公共祖先是 &#96;2&#96;, 因为根据定义最近公共祖先节点可以为节点本身。</span><br></pre></td></tr></table></figure>
-
-<p><strong>说明:</strong></p>
-<ul>
-<li>所有节点的值都是唯一的。</li>
-<li>p、q 为不同节点且均存在于给定的二叉搜索树中。</li>
-</ul>
-<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><h3 id="解法1，自顶向下遍历"><a href="#解法1，自顶向下遍历" class="headerlink" title="解法1，自顶向下遍历"></a>解法1，自顶向下遍历</h3><p>我们可以从根结点出发，判断当前结点的左右子树是否包含这两个结点。如果左子树包含两个结点，则它们的最低公共祖先结点也一定在左子树中。如果右子树包含两个结点，则它们的最低公共祖先结点也一定在右子树中。如果一个结点在左子树，而另一个结点在右子树中，则当前结点就是它们的最低公共祖先结点。根据该思路写出代码如下，注意这里已经假定p和q是二叉树中的结点。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) &#123;</span><br><span class="line">       if (root &#x3D;&#x3D; null)</span><br><span class="line">           return null;</span><br><span class="line">      if (containTargetTreeNode(root.left, p)  &amp;&amp; containTargetTreeNode(root.left, q))&#123;</span><br><span class="line">          return lowestCommonAncestor(root.left, p, q);</span><br><span class="line">      &#125;else if (containTargetTreeNode(root.right, p)  &amp;&amp; containTargetTreeNode(root.right, q))&#123;</span><br><span class="line">          return lowestCommonAncestor(root.right, p, q);</span><br><span class="line">      &#125;</span><br><span class="line">       return root;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   private boolean containTargetTreeNode(TreeNode root, TreeNode targetNode) &#123;</span><br><span class="line">       if (root &#x3D;&#x3D; null)</span><br><span class="line">           return false;</span><br><span class="line">       if (root &#x3D;&#x3D; targetNode)</span><br><span class="line">           return true;</span><br><span class="line">       return containTargetTreeNode(root.left, targetNode) || containTargetTreeNode(root.right, targetNode);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="思路二：自顶向上"><a href="#思路二：自顶向上" class="headerlink" title="思路二：自顶向上"></a>思路二：自顶向上</h3><p>由于自顶向下的方法需要重复遍历结点，使用自底向上的方法可以避免这种情况。</p>
-<p>自底向上遍历结点，一旦遇到结点等于p或者q，则将其向上传递给它的父结点。父结点会判断它的左右子树是否都包含其中一个结点，如果是，则父结点一定是这两个节点p和q的LCA，传递父结点到root。如果不是，我们向上传递其中的包含结点p或者q的子结点，或者NULL(如果子结点不包含任何一个)。该方法时间复杂度为O(N)。</p>
-<p>Language: <strong>Java</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) &#123; val = x; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> TreeNode <span class="title">lowestCommonAncestor</span><span class="params">(TreeNode root, TreeNode p, TreeNode q)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (p == root || q == root)</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        TreeNode l = lowestCommonAncestor(root.left, p, q);</span><br><span class="line">        TreeNode r = lowestCommonAncestor(root.right, p, q);</span><br><span class="line">        <span class="keyword">if</span> (l != <span class="keyword">null</span> &amp;&amp; r != <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        <span class="keyword">return</span> l == <span class="keyword">null</span> ? r : l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="思路三：利用搜索树的性质"><a href="#思路三：利用搜索树的性质" class="headerlink" title="思路三：利用搜索树的性质"></a>思路三：利用搜索树的性质</h3><p>因为树是二叉树，我们从根节点开始遍历，一定有顶点root的值大于p和q的值时，p、q的最近祖先一定在root的左子树下，当root的值小于p、q的值时，那么p、q的最近祖先一定在root的左子树下，不是上述两种情况的话，说明当前的root已经是最近的祖先了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> TreeNode <span class="title">lowestCommonAncestor3</span><span class="params">(TreeNode root, TreeNode p, TreeNode q)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (root.val &gt; p.val &amp;&amp; root.val &gt; q.val)</span><br><span class="line">            <span class="keyword">return</span> lowestCommonAncestor3(root.left, p, q);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (root.val &lt; p.val &amp;&amp; root.val &lt; q.val)</span><br><span class="line">            <span class="keyword">return</span> lowestCommonAncestor3(root.right, p, q);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1221,7 +1237,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1230,7 +1246,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>

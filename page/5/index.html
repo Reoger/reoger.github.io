@@ -178,6 +178,413 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/17/algorithm/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/01/17/algorithm/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/" class="post-title-link" itemprop="url">android-开发技巧表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-17 19:50:52" itemprop="dateCreated datePublished" datetime="2018-01-17T19:50:52+08:00">2018-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 22:54:34" itemprop="dateModified" datetime="2020-04-12T22:54:34+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="http://blog.csdn.net/my_truelove/article/details/52240558" target="_blank" rel="noopener">超详细的dubug教程</a></li>
+<li><a href="http://www.10tiao.com/html/169/201612/2650821802/1.html" target="_blank" rel="noopener">Android Studio 调试技巧</a></li>
+<li><a href="https://www.jianshu.com/p/a3459ffe4a95?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation" target="_blank" rel="noopener">Android中开发需要的高效助推的命令总结</a></li>
+<li><a href="http://blog.csdn.net/soslinken/article/details/50245865" target="_blank" rel="noopener">Android adb shell am 命令介绍</a></li>
+<li><a href="https://www.jianshu.com/p/d859480613a4" target="_blank" rel="noopener">adb shell dumpsys 命令用法</a></li>
+<li><a href="http://gityuan.com/2017/07/04/ams_dumpsys/" target="_blank" rel="noopener">AMS之dumpsys篇</a></li>
+</ul>
+<h1 id="debug-技巧"><a href="#debug-技巧" class="headerlink" title="debug 技巧"></a>debug 技巧</h1><p>关于android studio的debug技巧，前面的两篇参考文章已经写的特别好了，也没必要再写一次了，主要就记录一下debug的关键概念和快捷键。至于如何debug，就请参考前面两篇文章。</p>
+<h2 id="工具栏介绍"><a href="#工具栏介绍" class="headerlink" title="工具栏介绍"></a>工具栏介绍</h2><p><img src="http://ovec6nnof.bkt.clouddn.com/too.png" alt=""></p>
+<p>上图从左往右看，名称和作用如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+<th>备注</th>
+<th>快捷键</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>show Execution Point</td>
+<td>定位到当前正在调试的位置</td>
+<td>无备注</td>
+<td>alt+F10</td>
+</tr>
+<tr>
+<td>step over</td>
+<td>单步跳过</td>
+<td>一步一步执行，遇到方法会直接执行方法，然后进入下一步，不会进入方法内容</td>
+<td>F8</td>
+</tr>
+<tr>
+<td>step into</td>
+<td>单步跳入</td>
+<td>单步向下执行，如果当前是自定义方法，hi进入方法内部，系统方法则不进入方法内部</td>
+<td>F7</td>
+</tr>
+<tr>
+<td>Force step into</td>
+<td>强制单步跳入</td>
+<td>与单步跳入不同的是，不管什么方法他都会进入</td>
+<td>Alt + Shfit + F7</td>
+</tr>
+<tr>
+<td>step out</td>
+<td>单步跳出</td>
+<td>与单步跳入相对，表示从方法体中跳出，回到进入方法的位置，以继续断点</td>
+<td>shfit + F8</td>
+</tr>
+<tr>
+<td>run to cursor</td>
+<td>执行到光标处</td>
+<td>直接从当前位置运行到光标处，但是能被中间的断点拦截。</td>
+<td>alt + F9</td>
+</tr>
+<tr>
+<td>Evalyate Exoression</td>
+<td>计算表达式</td>
+<td>支持在点点过程中，通过直接赋值或者表达式方式，修改任意表俩个的值。</td>
+<td>alt+F8</td>
+</tr>
+</tbody></table>
+<p>再加来几个快捷键。</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>右击断点</td>
+<td>为断点设置执行条件，或打印信息</td>
+<td>只能针对本断点生效</td>
+</tr>
+<tr>
+<td>alt + 单击</td>
+<td>查看断点时变量的值</td>
+<td>无</td>
+</tr>
+<tr>
+<td>ctrl+alt+F8</td>
+<td>为断点添加执行条件，或打印信息</td>
+<td>这个可以对所有的断点生效</td>
+</tr>
+</tbody></table>
+<h1 id="工具篇"><a href="#工具篇" class="headerlink" title="工具篇"></a>工具篇</h1><h2 id="uiautorviewer"><a href="#uiautorviewer" class="headerlink" title="uiautorviewer"></a>uiautorviewer</h2><p>可以通过这个工具快速定位到UI控件的ID，并通过ID快速找到相应的逻辑。</p>
+<h2 id="DDMS"><a href="#DDMS" class="headerlink" title="DDMS"></a>DDMS</h2><p>可以利用ddms这个工具，实现截屏，查看线程和堆信息，日志信息，进程，广播状态信息，模拟来电，呼叫和短信等功能。<br>具体使用方法参考这里<a href="https://developer.android.com/studio/profile/monitor.html" target="_blank" rel="noopener">https://developer.android.com/studio/profile/monitor.html</a></p>
+<h1 id="命令篇"><a href="#命令篇" class="headerlink" title="命令篇"></a>命令篇</h1><h2 id="adb-shell-am"><a href="#adb-shell-am" class="headerlink" title="adb shell am"></a>adb shell am</h2><p>am 就是activity manager的简称，可以用于启动activity、打开或关闭进程、发送广播等操作。<br>关于具体的命令，可以参考这里<a href="http://blog.csdn.net/soslinken/article/details/50245865" target="_blank" rel="noopener">http://blog.csdn.net/soslinken/article/details/50245865</a>.<br>然后，这里就记录常用的<code>adb shell am</code>命令。<br>[注：这里默认省略了<code>adb shell</code>]</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>备注</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>am start -n &lt;package name&gt;/&lt;ativity name&gt;</code></td>
+<td>启动acivity</td>
+<td>-n 表示以组件式启动，还可以</td>
+<td><code>am start -a android.settings.INPUT_METHOD_SETTINGS</code>//使用Action方式打开系统设置-输入法设置</td>
+</tr>
+<tr>
+<td><code>am start -a -n --es extra &quot;hello&quot; --ei pid 10  &lt;package name&gt;/&lt;ativity name&gt;</code></td>
+<td>待参数的启动activity</td>
+<td>–es 表示带string，–ei 表示整型数据,都是以键值对的形式</td>
+<td><code>am start -a -n --es extra &quot;hello&quot; --ei pid 10 com.reoger.app/com.example.cm.myapplication.NextActivity</code></td>
+</tr>
+<tr>
+<td><code>am  broadcast -a &lt;action&gt;</code></td>
+<td>启动广播</td>
+<td>还可以通过<code>--user</code>指定用户发送广播</td>
+<td><code>com.android.broadcast.test</code></td>
+</tr>
+<tr>
+<td><code>am  broadcast  -a  &lt;action&gt; --es &lt;key&gt;  &lt;value&gt;</code></td>
+<td>带信息的发送广播</td>
+<td>–es表示字符串，还有–ez（布尔值）等多种类型数据，都是以键值对的形式</td>
+<td><code>am  broadcast  -a  com.android.broadcast.test --es adb_extra &quot;hello&quot;</code></td>
+</tr>
+<tr>
+<td><code>am startservice &lt;package name&gt;/&lt;service name&gt;</code></td>
+<td>启动服务</td>
+<td>可以通过<code>--user&lt;USER_ID&gt;</code>指定启动的用户</td>
+<td><code>am startservice com.reoger.app/com.example.cm.myapplication.MyService</code></td>
+</tr>
+<tr>
+<td><code>am force-stop &lt;package name&gt;</code></td>
+<td>关闭指定包名的应用程序</td>
+<td>无</td>
+<td><code>am force-stop com.reoger.app</code></td>
+</tr>
+<tr>
+<td><code>am kill &lt;package name&gt;</code></td>
+<td>杀死与应该程序包想关联的所有进程，但只会杀死安全进程</td>
+<td>可以通过<code>--user &lt;USER_ID&gt;</code>指定用户</td>
+<td><code>am kill com.reoger.app</code></td>
+</tr>
+<tr>
+<td><code>am kill -all</code></td>
+<td>杀死全部的后台进程</td>
+<td>无</td>
+<td><code>am kill -all</code></td>
+</tr>
+</tbody></table>
+<p>详情参考这里：<a href="http://blog.csdn.net/soslinken/article/details/50245865" target="_blank" rel="noopener">http://blog.csdn.net/soslinken/article/details/50245865</a></p>
+<h2 id="adb-shell-pm"><a href="#adb-shell-pm" class="headerlink" title="adb shell pm"></a>adb shell pm</h2><p>pm即是 package manager的简称，可以用于安装应用、查询应用信息、系统权限、控制应用。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>备注</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pm list packages [options] [fileter]</code></td>
+<td>打印所有已经安装的应用的包名</td>
+<td>options 常用的有<code>-3</code> 表示只显示第三方应用的包名，filter表示按名字筛选</td>
+<td><code>pm list packages -e</code> 显示可用的应用和包名</td>
+</tr>
+<tr>
+<td><code>pm list permission [options] [group]</code></td>
+<td>打印权限</td>
+<td><code>-g</code>表示按组列出，<code>-s</code>表示简短打印</td>
+<td><code>pm list permission-groups</code>  打印所有已知的权限组</td>
+</tr>
+<tr>
+<td><code>grant &lt;package_name&gt; &lt;permission&gt;</code></td>
+<td>授予应用权限</td>
+<td>必须android 6.0及以上的设备</td>
+<td><code>grant com.reoger.app android.permission.WRITE_EXTERNAL_STORAGE</code></td>
+</tr>
+<tr>
+<td><code>revoke &lt;package_name&gt; &lt;permission&gt;</code></td>
+<td>撤销应用权限</td>
+<td>必须android 6.0及以上的设备</td>
+<td><code>revoke com.reoger.app android.permission.WRITE_EXTERNAL_STORAGE</code></td>
+</tr>
+<tr>
+<td><code>pm clear &lt;package name&gt;</code></td>
+<td>清除应用数据</td>
+<td>无</td>
+<td><code>pm clear com.reoger.app</code></td>
+</tr>
+<tr>
+<td><code>pm enable &lt;package or component&gt;</code></td>
+<td>使得packaege或componet可用</td>
+<td>只针对第系统应用</td>
+<td><code>pm enable com.reoger.app</code></td>
+</tr>
+<tr>
+<td><code>pm hide &lt;package or component&gt;</code></td>
+<td>隐藏package或componet</td>
+<td>被隐藏应用在管理中变得不可见，桌面图标也会消失</td>
+<td><code>pm hide com.reoger.app</code></td>
+</tr>
+<tr>
+<td><code>pm unhide &lt;package or component&gt;</code></td>
+<td>取消隐藏package或componet</td>
+<td>桌面图标需要重新添加</td>
+<td><code>pm unhide com.reoger.app</code></td>
+</tr>
+</tbody></table>
+<p>详情请参考这里：<a href="https://www.cnblogs.com/JianXu/p/5380882.html" target="_blank" rel="noopener">https://www.cnblogs.com/JianXu/p/5380882.html</a></p>
+<h2 id="adb-shell-dumysys"><a href="#adb-shell-dumysys" class="headerlink" title="adb shell dumysys"></a>adb shell dumysys</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>dumpsys cpuinfo</code></td>
+<td>查看CPU信息</td>
+</tr>
+<tr>
+<td><code>dumpsys activity</code></td>
+<td>查看一大堆信息，包括activity、broadcasts、providers、permissions等等信息</td>
+</tr>
+<tr>
+<td><code>dumpsys activity top</code></td>
+<td>获取当前android系统中与用户交互的activity的详细信息</td>
+</tr>
+<tr>
+<td><code>dumpsys activity activities</code></td>
+<td>显示当前所有运行的任务栈,可以与管道<code>- grep XXX</code>结合使用，用于筛选我们需要的任务栈</td>
+</tr>
+<tr>
+<td><code>dumpsys activity meminfo &lt;package name&gt;</code></td>
+<td>显示应用内存使用的情况</td>
+</tr>
+<tr>
+<td><code>dumpsys activity package &lt;package name&gt;</code></td>
+<td>显示apk的信息</td>
+</tr>
+</tbody></table>
+<p>其中的<code>dumpsys activity [options] [WHAT]</code>参数可选如下：</p>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-a</td>
+<td>包括所有可用server状态</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>包括client状态，即app端情况</td>
+</tr>
+<tr>
+<td>-p package</td>
+<td>限定输出指定包名</td>
+</tr>
+</tbody></table>
+<p>其中WHAT参数可选如下：</p>
+<table>
+<thead>
+<tr>
+<th>WHAT</th>
+<th>解释</th>
+<th>对应源码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a[ctivities]</td>
+<td>activity状态</td>
+<td>dumpActivitiesLocked()</td>
+</tr>
+<tr>
+<td>b[roadcasts] [PACKAGE_NAME]</td>
+<td>broadcast状态</td>
+<td>dumpBroadcastsLocked()</td>
+</tr>
+<tr>
+<td>s[ervices] [COMP_SPEC …]</td>
+<td>service状态</td>
+<td>newServiceDumperLocked().dumpLocked</td>
+</tr>
+<tr>
+<td>prov[iders] [COMP_SPEC …]</td>
+<td>content provider状态</td>
+<td>dumpProvidersLocked()</td>
+</tr>
+<tr>
+<td>p[rocesses] [PACKAGE_NAME]</td>
+<td>进程状态</td>
+<td>dumpProcessesLocked()</td>
+</tr>
+<tr>
+<td>o[om]</td>
+<td>内存管理</td>
+<td>dumpOomLocked()</td>
+</tr>
+<tr>
+<td>i[ntents] [PACKAGE_NAME]</td>
+<td>pending intent状态</td>
+<td>dumpPendingIntentsLocked()</td>
+</tr>
+<tr>
+<td>r[ecents]</td>
+<td>最近activity</td>
+<td>dumpRecentsLocked()</td>
+</tr>
+<tr>
+<td>perm[issions]</td>
+<td>URI授权情况</td>
+<td>dumpPermissionsLocked()</td>
+</tr>
+<tr>
+<td>all</td>
+<td>所有activities信息</td>
+<td>dumpActivity()</td>
+</tr>
+<tr>
+<td>top</td>
+<td>顶部activity信息</td>
+<td>dumpActivity()</td>
+</tr>
+<tr>
+<td>package</td>
+<td>package相关信息</td>
+<td>dump()</td>
+</tr>
+</tbody></table>
+<p>最后，附上我用于测试adb 命令的demo：<a href="https://github.com/Reoger/adbTest" target="_blank" rel="noopener">https://github.com/Reoger/adbTest</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/17/android/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1661,106 +2068,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2017/10/12/android/%E4%BD%BF%E7%94%A8retrofit%E6%9F%A5%E8%AF%A2elasticsearch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/10/12/android/%E4%BD%BF%E7%94%A8retrofit%E6%9F%A5%E8%AF%A2elasticsearch/" class="post-title-link" itemprop="url">android端对elasticsearch进行增、删、改、查</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-10-12 16:33:08" itemprop="dateCreated datePublished" datetime="2017-10-12T16:33:08+08:00">2017-10-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:10:27" itemprop="dateModified" datetime="2020-04-12T23:10:27+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9D%82%E7%83%A9/" itemprop="url" rel="index"><span itemprop="name">杂烩</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>Retrofit与okhttp共同出自于Square公司，retrofit就是对okhttp做了一层封装。把网络请求都交给给了Okhttp，我们只需要通过简单的配置就能使用retrofit来进行网络请求了，其主要作者是Android大神JakeWharton。</p>
-</blockquote>
-<p>我们上篇学习了如何通过poastMan来模拟http请求来学习elasticsearch的基本请求操作。接下来记录的是如何代码来对我们之前配置好的elasticsearch服务器进行增删改查的基本操作。为了简单起见，我们使用的是开源库<code>retrofit</code>来实现android断的网络通信。</p>
-<h1 id="保证可访问"><a href="#保证可访问" class="headerlink" title="保证可访问"></a>保证可访问</h1><p>在正式编写代码之前，我们需要做的一件非常重要的事情就是，确保我们的手机能正确访问到elasticsearch服务器，为了简单起见，我们就实现在同一个局域网之间能正常访问即可。至于如果将elasticsearch如果通过外网访问，这里我就不做介绍了。在确保我们手机与电脑在同一个局域网之后，我们需要做的事情就很简单了，用手机浏览器访问<code>http://you ip:9200</code>,如果浏览器显示如下提示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">name: &quot;msater&quot;,</span><br><span class="line">cluster_name: &quot;reoger&quot;,</span><br><span class="line">cluster_uuid: &quot;D8qVJjX5SCSh62mz9ei3og&quot;,</span><br><span class="line">version: &#123;</span><br><span class="line">number: &quot;5.6.1&quot;,</span><br><span class="line">build_hash: &quot;667b497&quot;,</span><br><span class="line">build_date: &quot;2017-09-14T19:22:05.189Z&quot;,</span><br><span class="line">build_snapshot: false,</span><br><span class="line">lucene_version: &quot;6.6.1&quot;</span><br><span class="line">&#125;,</span><br><span class="line">tagline: &quot;You Know, for Search&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>则说明我们的手机已经可以正常访问到eslasticsearch服务器了，这个时候我们就可以进行android端的代码编写了。如果手机浏览器提示我们无法访问，可能是我们的eslasticsearch并并没有绑定我们指定的ip地址，具体做法就是到我们eslasticseach/config/elasticsearch.yml中，修改<code>network.host:</code>的值（如果没有就创建）为我们要访问的ip地址即可。如图：<br><img src="http://ovec6nnof.bkt.clouddn.com/%E9%85%8D%E7%BD%AEip%E5%9C%B0%E5%9D%80.png" alt="配置IP地址"></p>
-<h1 id="访问测试"><a href="#访问测试" class="headerlink" title="访问测试"></a>访问测试</h1><p>下面的代码开始就是直接通过retrofit来进行网络请求，如果这个开源库不是很熟悉的话，可以先通过<a href="">这里</a>了解<code>retroift</code>的基本操作。因为例子比较简单，也可以通过本示例对<code>retrofit</code>做一个简单的了解。<br>通过我们手机浏览器的测试我们知道，我们只需要用代码实现访问之前测试通过的地址就可以陈宫访问，接下来我们就通过<code>Retrofit</code>来实现对Elasticsearch的访问测试。<br>代码很简单，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient client&#x3D;new OkHttpClient();</span><br><span class="line">        Request request &#x3D; new Request.Builder().url(&quot;http:&#x2F;&#x2F;you Ip:9200&#x2F;&quot;).build();</span><br><span class="line">       client.newCall(request).enqueue(new okhttp3.Callback() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void onFailure(okhttp3.Call call, IOException e) &#123;</span><br><span class="line">               Log.d(&quot;TAG&quot;,e.toString());</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           @Override</span><br><span class="line">           public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException &#123;</span><br><span class="line">               if(response!&#x3D;null)</span><br><span class="line">                Log.d(&quot;TAG&quot;,response.body().string());</span><br><span class="line">               else</span><br><span class="line">                   Log.d(&quot;TAG&quot;,&quot;没有返回任何的数据&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br></pre></td></tr></table></figure>
-<p>观察到，当我们运行上面的代码的时候，会打印出我们用浏览器访问的相同的输出。代表着我们的访问测试成功通过。上面ip地址需要修改成你真正的访问ip地址，本例主要通过okhttp来实现网络请求，<code>retrofit</code>是对<code>okhttp</code>进一步的封装，但是这里我们用okhttp反而更加清晰，简单。</p>
-<h1 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h1><p>在我们前面的介绍中，我们已经知道如何通过postman这一工具来创建索引，其实就是通过<code>put</code>请求来访问<code>http://you ip/你要创建的索引名称</code>，然后通过上传json信息来确定索引的详细信息，示例的json代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;settings&quot;:&#123;</span><br><span class="line">		&quot;number_of_shards&quot;:3,</span><br><span class="line">		&quot;number_of_replicas&quot;:1</span><br><span class="line">	&#125;,</span><br><span class="line">	&quot;mappings&quot;:&#123;</span><br><span class="line">		&quot;man&quot;:&#123;</span><br><span class="line">			&quot;properties&quot;:&#123;</span><br><span class="line">				&quot;name&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;text&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;country&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;age&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;integer&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;data&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;date&quot;,</span><br><span class="line">					&quot;format&quot;: &quot;yyyy-MM-dd HH:mm:ss||yyy-MM-dd||epoch_millis&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		&quot;woman&quot;:&#123;</span><br><span class="line">			&quot;properties&quot;:&#123;</span><br><span class="line">				&quot;name&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;text&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;country&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;age&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;integer&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;data&quot;:&#123;</span><br><span class="line">					&quot;type&quot;:&quot;date&quot;,</span><br><span class="line">					&quot;format&quot;:&quot;yyyy-MM-dd HH:mm:ss||yyy-MM-dd||epoch_millis&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>下面我们来在android中创建上述的索引。整体来说，代码还是很简单，我们先看实现代码，然后进行简要的说明：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">String sry &#x3D;&quot;&#123; \&quot;settings\&quot;: &#123; \&quot;number_of_shards\&quot;: 3, \&quot;number_of_replicas\&quot;: 1 &#125;, \&quot;mappings\&quot;: &#123; \&quot;man\&quot;: &#123; \&quot;properties\&quot;: &#123; \&quot;name\&quot;: &#123; \&quot;type\&quot;: \&quot;text\&quot; &#125;, \&quot;country\&quot;: &#123; \&quot;type\&quot;: \&quot;keyword\&quot; &#125;, \&quot;age\&quot;: &#123; \&quot;type\&quot;: \&quot;integer\&quot; &#125;, \&quot;data\&quot;: &#123; \&quot;type\&quot;: \&quot;date\&quot;, \&quot;format\&quot;: \&quot;yyyy-MM-dd HH:mm:ss||yyy-MM-dd||epoch_millis\&quot; &#125; &#125; &#125;, \&quot;woman\&quot;: &#123; \&quot;properties\&quot;: &#123; \&quot;name\&quot;: &#123; \&quot;type\&quot;: \&quot;text\&quot; &#125;, \&quot;country\&quot;: &#123; \&quot;type\&quot;: \&quot;keyword\&quot; &#125;, \&quot;age\&quot;: &#123; \&quot;type\&quot;: \&quot;integer\&quot; &#125;, \&quot;data\&quot;: &#123; \&quot;type\&quot;: \&quot;date\&quot;, \&quot;format\&quot;: \&quot;yyyy-MM-dd HH:mm:ss||yyy-MM-dd||epoch_millis\&quot; &#125; &#125; &#125; &#125; &#125;&quot;;</span><br><span class="line"></span><br><span class="line">      RequestBody body &#x3D; RequestBody.create(okhttp3.MediaType.parse(&quot;application&#x2F;json; charset&#x3D;utf-8&quot;),sry);</span><br><span class="line">      final Request request &#x3D; new Request.Builder()</span><br><span class="line">              .url(&quot;http:&#x2F;&#x2F;192.168.139.1:9200&#x2F;test&quot;)</span><br><span class="line">              .put(body)</span><br><span class="line">              .build();</span><br><span class="line">      OkHttpClient client&#x3D;new OkHttpClient();</span><br><span class="line">      client.newCall(request).enqueue(new okhttp3.Callback() &#123;</span><br><span class="line">          @Override</span><br><span class="line">          public void onFailure(okhttp3.Call call, IOException e) &#123;</span><br><span class="line">              Log.d(&quot;TAG&quot;, &quot;onFailure: &quot;+e);</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          @Override</span><br><span class="line">          public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException &#123;</span><br><span class="line">              if(response!&#x3D;null)</span><br><span class="line">                  Log.d(&quot;TAG&quot;,response.body().string());</span><br><span class="line">              else</span><br><span class="line">                  Log.d(&quot;TAG&quot;,&quot;没有返回任何的数据&quot;);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;);</span><br></pre></td></tr></table></figure>
-<p>运行上面的代码就能可以在android端创建一个索引，其实我们的代码也比较简单，就是将我们要上传的json数据当作boby一同提交给服务端就OK了。当然，这里我们的json数据是固定的，但是就对于创建索引来说，固定的json数据也能应该大部分情况了，但是添加数据就不能用固定的json数据，那么我们就不能采用这种简单粗暴的方法了，下面将会介绍如果上传动态json数据。</p>
-<h1 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h1><p>前面文章中已经介绍过如果在postman中添加数据，那么我们现在通过自己编写代码来实现在android中向elsactisearch中添加数据，请求方式是一样的，因为实现起来非常简单，我们只介绍不指定文档ID插入。前面我们介绍到指定文档ID添加数据需要使用<code>put</code>请求方式，并且需要请求地址中表明ID，而不指定文档ID添加数据则需要用<code>post</code>请求方式，并且不需要再请求地址中表明ID。我们这里就实现用不指定文档ID插入。</p>
-<p>通过前面的常见索引，相信大家应该知道如果将json数据上传到服务器，我们这里注重讲的书如何将上传动态json数据。<br>创建动态json数据，我们需要准备json格式对应的bean对象，这里我们采用<code>gsonFormat</code>插件来生成bean对象，例如我们要上传的json数据如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;name&quot;: &quot;张三&quot;,</span><br><span class="line">	&quot;country&quot;: &quot;Englis&quot;,</span><br><span class="line">	&quot;age&quot;: 18,</span><br><span class="line">	&quot;date&quot;: &quot;1999-03-07&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意，这里上传的数据要与前面我们创建索引数据格式对应起来，否则不能成功添加。我们将该json对象的bean对象命名为<code>AddData</code>，源码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">public class AddData &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private String name;</span><br><span class="line">    private String country;</span><br><span class="line">    private int age;</span><br><span class="line">    private String date;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getCountry() &#123;</span><br><span class="line">        return country;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setCountry(String country) &#123;</span><br><span class="line">        this.country &#x3D; country;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age &#x3D; age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getDate() &#123;</span><br><span class="line">        return date;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setDate(String date) &#123;</span><br><span class="line">        this.date &#x3D; date;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>创建上述的bean对象后，我们就可以通过代码来动态的修改json数据，主要的代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">AddData addData &#x3D; new AddData();</span><br><span class="line">       addData.setAge(23);</span><br><span class="line">       addData.setCountry(&quot;China&quot;);</span><br><span class="line">       addData.setDate(&quot;2017-09-19&quot;);</span><br><span class="line">       addData.setName(&quot;DongMingZhu&quot;);&#x2F;&#x2F;动态设置json数据</span><br><span class="line"></span><br><span class="line">       Gson gson &#x3D; new Gson();</span><br><span class="line">       String dyJson &#x3D; gson.toJson(addData);</span><br><span class="line">       RequestBody body &#x3D; RequestBody.create(okhttp3.MediaType.parse(&quot;application&#x2F;json; charset&#x3D;utf-8&quot;),dyJson);</span><br><span class="line">       final Request request &#x3D; new Request.Builder()</span><br><span class="line">               .url(&quot;http:&#x2F;&#x2F;192.168.139.1:9200&#x2F;test&#x2F;woman&quot;)</span><br><span class="line">               .post(body)</span><br><span class="line">               .build();</span><br><span class="line">       OkHttpClient client&#x3D;new OkHttpClient();</span><br><span class="line">       client.newCall(request).enqueue(new okhttp3.Callback() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void onFailure(okhttp3.Call call, IOException e) &#123;</span><br><span class="line">               Log.d(&quot;TAG&quot;, &quot;onFailure: &quot;+e);</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           @Override</span><br><span class="line">           public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException &#123;</span><br><span class="line">               if(response!&#x3D;null)</span><br><span class="line">                   Log.d(&quot;TAG&quot;,response.body().string());</span><br><span class="line">               else</span><br><span class="line">                   Log.d(&quot;TAG&quot;,&quot;没有返回任何的数据&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br></pre></td></tr></table></figure>
-<p>运行上述的代码后，发现我们的json数据已经成功上传到服务端。简单吧<del>~</del></p>
-<h1 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h1><p>删除操作就是用通过DELETE访问即可，要删除指定文档，我们通过DELETE访问到指定的文档ID即可，例如我想删除test索引中man类中的id为1的文档，我的访问链接可能就是<code>http://127.0.0.1/9100/test/man/1</code> ，如果我们想要直接删除test索引，我们可以通过delete方法访问<code>http://127.0.0.1/9100/test</code>，删除操作很简单，但是我们却要很慎重的对待他，因为我们一旦删除就无法找回。在做删除操作之前最好确保数据备份。因为实现起来很简单，仅贴出删除指定数据的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient client&#x3D;new OkHttpClient();</span><br><span class="line">     Request request &#x3D; new Request.Builder().url(&quot;http:&#x2F;&#x2F;127.0.0.1&#x2F;9100&#x2F;test&#x2F;man&#x2F;1&quot;).delete().build();</span><br><span class="line">    client.newCall(request).enqueue(new okhttp3.Callback() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onFailure(okhttp3.Call call, IOException e) &#123;</span><br><span class="line">            Log.d(&quot;TAG&quot;,e.toString());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException &#123;</span><br><span class="line">            if(response!&#x3D;null)</span><br><span class="line">             Log.d(&quot;TAG&quot;,response.body().string());</span><br><span class="line">            else</span><br><span class="line">                Log.d(&quot;TAG&quot;,&quot;没有返回任何的数据&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h1><h1 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h1>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1830,7 +2137,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1839,7 +2146,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
