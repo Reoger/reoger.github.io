@@ -2,6 +2,314 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://reoger.tk/2018/01/17/android/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/</loc>
+    
+    <lastmod>2020-07-18T06:45:34.132Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2020/07/12/android/android%20%E4%B8%AD%E7%9A%84%20Unsafe%20%E7%B1%BB/</loc>
+    
+    <lastmod>2020-07-18T06:45:11.984Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/08/31/android/Android%20%E6%8F%92%E4%BB%B6%E5%8C%96%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%E2%80%94%E2%80%94%E6%8F%92%E4%BB%B6%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/</loc>
+    
+    <lastmod>2020-07-18T06:45:00.227Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/10/13/system/%E4%BF%AE%E6%94%B9ubuntu%E4%B8%8B%E7%9A%84dns/</loc>
+    
+    <lastmod>2020-07-18T06:41:56.639Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/01/15/system/git-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</loc>
+    
+    <lastmod>2020-07-18T06:41:53.593Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/09/02/sourceCode/okhttp%E8%A7%A3%E6%9E%90/</loc>
+    
+    <lastmod>2020-07-18T06:41:48.963Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/11/12/sourceCode/LinkedHashMap%E5%AE%9E%E7%8E%B0LRUCache/</loc>
+    
+    <lastmod>2020-07-18T06:41:44.427Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/09/02/sourceCode/imageLoader%E8%A7%A3%E6%9E%90/</loc>
+    
+    <lastmod>2020-07-18T06:41:40.492Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/08/19/sourceCode/gilde%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/</loc>
+    
+    <lastmod>2020-07-18T06:41:34.419Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/08/28/review/android%E9%9D%A2%E8%AF%95%E5%87%86%E5%A4%87/</loc>
+    
+    <lastmod>2020-07-18T06:41:24.027Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/07/30/reprint/%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC%E6%90%AD%E5%BB%BASS(R)/</loc>
+    
+    <lastmod>2020-07-18T06:41:08.879Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/08/07/reprint/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%E2%80%94%E2%80%94%E6%A6%82%E8%A6%81/</loc>
+    
+    <lastmod>2020-07-18T06:41:05.178Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/08/22/reprint/WebView%E7%BC%93%E5%AD%98%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%92%8C%E5%BA%94%E7%94%A8/</loc>
+    
+    <lastmod>2020-07-18T06:41:01.869Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/11/12/other/%E9%9A%8F%E4%BE%BF/</loc>
+    
+    <lastmod>2020-07-18T06:40:57.629Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/10/19/other/%E8%B5%84%E6%BA%90%E7%BD%91%E7%AB%99%E6%95%B4%E7%90%86/</loc>
+    
+    <lastmod>2020-07-18T06:40:49.994Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2020/07/08/kotlin/kotlin-%E4%B8%AD%E7%9A%84%E6%8B%93%E5%B1%95%E5%87%BD%E6%95%B0/</loc>
+    
+    <lastmod>2020-07-18T06:40:36.917Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2020/06/06/kotlin/Kotlin%20%E4%B8%AD%E7%9A%84%20trim%20%E5%92%8C%20Java%20%E4%B8%AD%20trim/</loc>
+    
+    <lastmod>2020-07-18T06:40:25.841Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/11/12/java/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%B1%BB%E5%8A%A0%E8%BD%BD%E9%98%B6%E6%AE%B5/</loc>
+    
+    <lastmod>2020-07-18T06:40:09.823Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/09/06/java/java%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
+    
+    <lastmod>2020-07-18T06:39:53.069Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B/</loc>
+    
+    <lastmod>2020-07-18T06:39:47.616Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84/</loc>
+    
+    <lastmod>2020-07-18T06:39:41.508Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/08/07/java/java%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</loc>
+    
+    <lastmod>2020-07-18T06:39:36.448Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2020/05/17/java/hashMap%E8%AF%A6%E8%A7%A3/</loc>
+    
+    <lastmod>2020-07-18T06:39:30.376Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/10/14/java/Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84--%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88%E4%B8%80%EF%BC%89/</loc>
+    
+    <lastmod>2020-07-18T06:39:04.374Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/11/28/backEnd/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A1%AB%E5%9D%91/</loc>
+    
+    <lastmod>2020-07-18T06:38:56.076Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/10/23/backEnd/intellij-IDEA-%E9%85%8D%E7%BD%AEhadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
+    
+    <lastmod>2020-07-18T06:38:47.850Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/10/24/backEnd/hdfs%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</loc>
+    
+    <lastmod>2020-07-18T06:38:41.211Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/10/17/backEnd/hadoop%E5%AE%89%E8%A3%85/</loc>
+    
+    <lastmod>2020-07-18T06:38:11.058Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/09/27/backEnd/elasticsearch%E5%85%A5%E9%97%A8/</loc>
+    
+    <lastmod>2020-07-18T06:38:02.614Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/11/06/backEnd/centos%E4%B8%8B%E5%AE%89%E8%A3%85elasticSeach/</loc>
+    
+    <lastmod>2020-07-18T06:37:49.387Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2020/07/11/android/android%20%E4%B8%AD%E7%9A%84%20textView%20%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B/</loc>
+    
+    <lastmod>2020-07-18T06:37:33.663Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2017/10/12/android/%E4%BD%BF%E7%94%A8retrofit%E6%9F%A5%E8%AF%A2elasticsearch/</loc>
+    
+    <lastmod>2020-07-18T06:36:07.309Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/04/13/android/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/</loc>
+    
+    <lastmod>2020-07-18T06:35:54.500Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/07/27/android/%E6%82%AC%E6%B5%AE%E7%AA%97%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93/</loc>
+    
+    <lastmod>2020-07-18T06:35:48.701Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/08/04/android/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E6%98%BE%E7%A4%BA%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87%E5%B9%B6%E6%B7%BB%E5%8A%A0%E8%BE%B9%E6%A1%86/</loc>
+    
+    <lastmod>2020-07-18T06:35:41.306Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/08/02/android/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E8%A3%81%E5%89%AA%E6%88%90%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87/</loc>
+    
+    <lastmod>2020-07-18T06:35:34.555Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/01/11/android/sdk-%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D/</loc>
+    
+    <lastmod>2020-07-18T06:35:11.812Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/07/20/android/PopupWindow%20%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B/</loc>
+    
+    <lastmod>2020-07-18T06:34:17.479Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/07/09/android/LayoutParams%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2020-07-18T06:34:02.357Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/01/12/android/gradle%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2020-07-18T06:33:53.431Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/</loc>
+    
+    <lastmod>2020-07-18T06:33:47.009Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/03/17/android/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/</loc>
+    
+    <lastmod>2020-07-18T06:33:36.169Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/08/26/android/android%E4%B8%AD%E7%9A%84%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/</loc>
+    
+    <lastmod>2020-07-18T06:33:22.713Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://reoger.tk/2018/07/10/android/android%E4%B8%ADSupport%20Annotation%20Lobrary%20%E6%B3%A8%E8%A7%A3/</loc>
+    
+    <lastmod>2020-07-18T06:33:16.162Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://reoger.tk/schedule/index.html</loc>
     
     <lastmod>2020-07-18T06:17:16.806Z</lastmod>
@@ -19,279 +327,6 @@
     <loc>http://reoger.tk/categories/index.html</loc>
     
     <lastmod>2020-07-18T06:15:08.981Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/07/30/reprint/%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC%E6%90%AD%E5%BB%BASS(R)/</loc>
-    
-    <lastmod>2020-07-18T05:50:26.122Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/08/22/reprint/WebView%E7%BC%93%E5%AD%98%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%92%8C%E5%BA%94%E7%94%A8/</loc>
-    
-    <lastmod>2020-07-18T05:50:22.303Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/08/07/reprint/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%E2%80%94%E2%80%94%E6%A6%82%E8%A6%81/</loc>
-    
-    <lastmod>2020-07-18T05:50:17.650Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/10/13/system/%E4%BF%AE%E6%94%B9ubuntu%E4%B8%8B%E7%9A%84dns/</loc>
-    
-    <lastmod>2020-07-18T05:49:17.819Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/01/15/system/git-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</loc>
-    
-    <lastmod>2020-07-18T05:48:11.792Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/09/02/sourceCode/okhttp%E8%A7%A3%E6%9E%90/</loc>
-    
-    <lastmod>2020-07-18T05:47:55.666Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/11/12/sourceCode/LinkedHashMap%E5%AE%9E%E7%8E%B0LRUCache/</loc>
-    
-    <lastmod>2020-07-18T05:47:52.189Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/09/02/sourceCode/imageLoader%E8%A7%A3%E6%9E%90/</loc>
-    
-    <lastmod>2020-07-18T05:47:21.778Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/08/19/sourceCode/gilde%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/</loc>
-    
-    <lastmod>2020-07-18T05:47:14.659Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/08/02/android/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E8%A3%81%E5%89%AA%E6%88%90%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87/</loc>
-    
-    <lastmod>2020-07-18T05:46:00.154Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/08/04/android/%E8%87%AA%E5%AE%9A%E4%B9%89View%E4%B9%8B%E5%B0%86%E5%9B%BE%E7%89%87%E6%98%BE%E7%A4%BA%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87%E5%B9%B6%E6%B7%BB%E5%8A%A0%E8%BE%B9%E6%A1%86/</loc>
-    
-    <lastmod>2020-07-18T05:45:48.896Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/07/27/android/%E6%82%AC%E6%B5%AE%E7%AA%97%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93/</loc>
-    
-    <lastmod>2020-07-18T05:45:27.938Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/04/13/android/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/</loc>
-    
-    <lastmod>2020-07-18T05:45:18.851Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/10/12/android/%E4%BD%BF%E7%94%A8retrofit%E6%9F%A5%E8%AF%A2elasticsearch/</loc>
-    
-    <lastmod>2020-07-18T05:45:10.382Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/01/11/android/sdk-%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D/</loc>
-    
-    <lastmod>2020-07-18T05:44:58.286Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/07/20/android/PopupWindow%20%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B/</loc>
-    
-    <lastmod>2020-07-18T05:44:53.800Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/07/09/android/LayoutParams%E4%BD%BF%E7%94%A8/</loc>
-    
-    <lastmod>2020-07-18T05:44:35.228Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/01/12/android/gradle%E5%9F%BA%E7%A1%80/</loc>
-    
-    <lastmod>2020-07-18T05:44:22.183Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/</loc>
-    
-    <lastmod>2020-07-18T05:44:16.174Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/08/28/review/android%E9%9D%A2%E8%AF%95%E5%87%86%E5%A4%87/</loc>
-    
-    <lastmod>2020-07-18T05:44:01.766Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/03/17/android/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/</loc>
-    
-    <lastmod>2020-07-18T05:42:50.438Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/01/17/android/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/</loc>
-    
-    <lastmod>2020-07-18T05:42:42.113Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/08/31/android/Android%20%E6%8F%92%E4%BB%B6%E5%8C%96%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%E2%80%94%E2%80%94%E6%8F%92%E4%BB%B6%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/</loc>
-    
-    <lastmod>2020-07-18T05:41:37.964Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/11/28/backEnd/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A1%AB%E5%9D%91/</loc>
-    
-    <lastmod>2020-07-18T05:41:09.654Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/10/23/backEnd/intellij-IDEA-%E9%85%8D%E7%BD%AEhadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
-    
-    <lastmod>2020-07-18T05:40:59.866Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/10/24/backEnd/hdfs%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</loc>
-    
-    <lastmod>2020-07-18T05:40:51.859Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/10/17/backEnd/hadoop%E5%AE%89%E8%A3%85/</loc>
-    
-    <lastmod>2020-07-18T05:40:47.340Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/09/27/backEnd/elasticsearch%E5%85%A5%E9%97%A8/</loc>
-    
-    <lastmod>2020-07-18T05:40:44.044Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/11/06/backEnd/centos%E4%B8%8B%E5%AE%89%E8%A3%85elasticSeach/</loc>
-    
-    <lastmod>2020-07-18T05:40:37.947Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2020/05/17/java/hashMap%E8%AF%A6%E8%A7%A3/</loc>
-    
-    <lastmod>2020-07-18T05:40:15.275Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/08/07/java/java%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</loc>
-    
-    <lastmod>2020-07-18T05:40:00.176Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84/</loc>
-    
-    <lastmod>2020-07-18T05:39:41.626Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B/</loc>
-    
-    <lastmod>2020-07-18T05:39:29.552Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/09/06/java/java%E7%9F%A5%E8%AF%86%E7%82%B9/</loc>
-    
-    <lastmod>2020-07-18T05:38:32.534Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2020/07/08/kotlin/kotlin-%E4%B8%AD%E7%9A%84%E6%8B%93%E5%B1%95%E5%87%BD%E6%95%B0/</loc>
-    
-    <lastmod>2020-07-18T05:38:13.988Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2020/06/06/kotlin/Kotlin%20%E4%B8%AD%E7%9A%84%20trim%20%E5%92%8C%20Java%20%E4%B8%AD%20trim/</loc>
-    
-    <lastmod>2020-07-18T05:37:51.267Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2020/07/12/android/android%20%E4%B8%AD%E7%9A%84%20Unsafe%20%E7%B1%BB/</loc>
-    
-    <lastmod>2020-07-14T11:17:54.024Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2020/07/11/android/android%20%E4%B8%AD%E7%9A%84%20textView%20%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B/</loc>
-    
-    <lastmod>2020-07-11T14:41:50.900Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/10/14/java/Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84--%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88%E4%B8%80%EF%BC%89/</loc>
-    
-    <lastmod>2020-06-06T09:33:47.623Z</lastmod>
     
   </url>
   
@@ -327,27 +362,6 @@
     <loc>http://reoger.tk/2018/07/11/algorithm/%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/</loc>
     
     <lastmod>2020-04-12T15:13:50.985Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/11/12/other/%E9%9A%8F%E4%BE%BF/</loc>
-    
-    <lastmod>2020-04-12T15:13:35.731Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2017/10/19/other/%E8%B5%84%E6%BA%90%E7%BD%91%E7%AB%99%E6%95%B4%E7%90%86/</loc>
-    
-    <lastmod>2020-04-12T15:12:45.753Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/11/12/java/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%B1%BB%E5%8A%A0%E8%BD%BD%E9%98%B6%E6%AE%B5/</loc>
-    
-    <lastmod>2020-04-12T15:12:01.051Z</lastmod>
     
   </url>
   
@@ -418,20 +432,6 @@
     <loc>http://reoger.tk/2018/11/13/algorithm/Nim%E6%B8%B8%E6%88%8F/</loc>
     
     <lastmod>2020-04-12T15:04:33.942Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/08/26/android/android%E4%B8%AD%E7%9A%84%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/</loc>
-    
-    <lastmod>2020-04-12T14:55:09.430Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://reoger.tk/2018/07/10/android/android%E4%B8%ADSupport%20Annotation%20Lobrary%20%E6%B3%A8%E8%A7%A3/</loc>
-    
-    <lastmod>2020-04-12T14:54:54.941Z</lastmod>
     
   </url>
   
