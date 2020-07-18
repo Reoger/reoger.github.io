@@ -178,6 +178,305 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/04/13/android/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/04/13/android/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/" class="post-title-link" itemprop="url">判断当前view是否显示</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-04-13 22:34:53" itemprop="dateCreated datePublished" datetime="2018-04-13T22:34:53+08:00">2018-04-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-18 13:45:18" itemprop="dateModified" datetime="2020-07-18T13:45:18+08:00">2020-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近有一个这样的需求，需要知道某个view的展示率，但是这个view嵌套在一个滑动布局中，在当前view已经被添加到滑动布局的前提下，该view也不一定会展示，可能会出现的情况如下所示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2178834-a3e2d70d30d522f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="可能存在的情况.png"></p>
+<p>那么，我们怎么判断当前的view是否展示了呢？</p>
+<p>我的实现思路如下：</p>
+<ol>
+<li>首先，在添加view的时候，判断当前view是否展示，如果展示，直接上报即可。如果没有展示，而是如图所示的情况，那就存储一个sp的值，用于表示当前的view没有上报。</li>
+<li>在滑动布局中，进行滑动监听。在滑动的过程中，判断当前的view是否上报，在没有上报的情况下，继续判断view是否显示，如果在混动过程中view显示了，就上报view显示了，并存储一个sp的值，用于表示当前的view已经上报了。</li>
+</ol>
+<p>上面的语言用代码表示为：<br>在添加view的逻辑中，用如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;addView代表该view被添加到当前布局了</span><br><span class="line">  if (addView()) &#123;</span><br><span class="line">&#x2F;&#x2F;parentView 即滑动布局</span><br><span class="line">            parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void onGlobalLayout() &#123;</span><br><span class="line">                    parentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);</span><br><span class="line">&#x2F;&#x2F;这里是判断当前布局是否可见</span><br><span class="line">                    if (CustomMainScrollView.checkIsVisible(mContext, parentView)) &#123;</span><br><span class="line">                        reportSkinShareCard(gamemaster_app_cardshow_new.OP_VISIBLE, false);</span><br><span class="line">                    &#125;else&#123;</span><br><span class="line">                        &#x2F;&#x2F;设置状态为未上报</span><br><span class="line">PreferencesUtils.getInstance().putBoolean(HAS_REPORT_SHOW_SKIN_THEME_CARD, false);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>然后在滑动布局中，监听滚动事件，调用下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> private void reportSkinThemeCard(Context context, View skinThemeView) &#123;</span><br><span class="line">        boolean hasReport &#x3D; PreferencesUtils.getInstance().getBoolean(HAS_REPORT_SHOW_SKIN_THEME_CARD, false);</span><br><span class="line"></span><br><span class="line">        if (!hasReport &amp;&amp; checkIsVisible(context, skinThemeView) &amp;&amp; mSkinThemeView.getChildCount() !&#x3D; 0 ) &#123;</span><br><span class="line">            byte  cardStyle &#x3D; AbTestLogicManager.isSkinWithImageTestValue()?gamemaster_app_cardshow_new.CARD_TYPE_SKIN_WITH_IMAGE:gamemaster_app_cardshow_new.CRAD_SKIN_WITH_TEXT;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; todo 在这里进行上报操作</span><br><span class="line">            PreferencesUtils.getInstance().putBoolean(PreferenceConstants.HAS_REPORT_SHOW_SKIN_THEME_CARD, true);</span><br><span class="line">&#x2F;&#x2F;最后，更新状态，避免重复上报</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在补充一个检查当前view是否显示的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static Boolean checkIsVisible(Context context, View view) &#123;</span><br><span class="line">        int screenWidth &#x3D; getScreenMetrics(context).x;</span><br><span class="line">        int screenHeight &#x3D; getScreenMetrics(context).y;</span><br><span class="line">        Rect rect &#x3D; new Rect(0, 0, screenWidth, screenHeight);</span><br><span class="line">        int[] location &#x3D; new int[2];</span><br><span class="line">        view.getLocationInWindow(location);</span><br><span class="line">        if (view.getLocalVisibleRect(rect)) &#123;</span><br><span class="line">            return true;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/03/17/android/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/03/17/android/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">android中的类加载</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-17 21:21:33" itemprop="dateCreated datePublished" datetime="2018-03-17T21:21:33+08:00">2018-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-18 13:42:50" itemprop="dateModified" datetime="2020-07-18T13:42:50+08:00">2020-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>主要介绍几个知识点：</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://www.jianshu.com/p/3afa47e9112e" target="_blank" rel="noopener">https://www.jianshu.com/p/3afa47e9112e</a></li>
+<li>&lt;…&gt;</li>
+</ul>
+<h1 id="java中常用的classLoader"><a href="#java中常用的classLoader" class="headerlink" title="java中常用的classLoader"></a>java中常用的<code>classLoader</code></h1><p>说到android中的<code>classLoader</code>，就不能不先说说java中的<code>classLoader</code>是什么。<br>所谓classLoader就是负责将编译好的class文件加载到指定位置的实现类。具体来说，我们编写java代码时，需要将其编译成.class文件，最终运行时就需要将这些class文件加载到内存才能运行，而加载这些class文件的方法就可以成为classLoader。<br>在java中常用的classLoader有以下三种：</p>
+<h2 id="Bootstrap-Classloder"><a href="#Bootstrap-Classloder" class="headerlink" title="Bootstrap Classloder"></a>Bootstrap Classloder</h2><p> 这个类加载使用C++语言实现，是虚拟机自身的一部分。他是三个类加载器中最顶层的加载类，主要负责加载%JAVA_HOME%/lib下的核心类或者jar加载到内存中。（值得注意的是，Bootstrao Loader被设计成只能加载包名为java、javax、sun等开头的类.）</p>
+<h2 id="Extention-Classloder"><a href="#Extention-Classloder" class="headerlink" title="Extention Classloder"></a>Extention Classloder</h2><p>扩展类的加载器，由java语言实现，主要负载加载<code>%JAVA_HOME%/lib/ext</code>目录下的类库，或者是系统指定的类库。</p>
+<h2 id="AppClassloader"><a href="#AppClassloader" class="headerlink" title="AppClassloader"></a>AppClassloader</h2><p> 主要负责加载系统类路径或者指定路径下的类库。<br>以上三种是java中定义的ClassLoader。</p>
+<h1 id="下面介绍android中常用的类加载器。"><a href="#下面介绍android中常用的类加载器。" class="headerlink" title="下面介绍android中常用的类加载器。"></a>下面介绍android中常用的类加载器。</h1><h2 id="classLoader"><a href="#classLoader" class="headerlink" title="classLoader"></a>classLoader</h2><p>所有的classLoader的基类，他是一个抽象类，所有的<code>classLoader</code>最终都会继承自他，我们如果需要自定义classLoader也需要直接或者间接的继承他，并实现其中的<code>findClass</code>方法，并通过<code>defineClass</code>创建一个类实例。自定义类加载的示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class NetworkClassLoader extends ClassLoader &#123;</span><br><span class="line">        String host;</span><br><span class="line">         int port;</span><br><span class="line"></span><br><span class="line">         public Class findClass(String name) &#123;</span><br><span class="line">             byte[] b &#x3D; loadClassData(name);</span><br><span class="line">             return defineClass(name, b, 0, b.length);</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         private byte[] loadClassData(String name) &#123;</span><br><span class="line">             &#x2F;&#x2F; load the class data from the connection</span><br><span class="line">             &#x2F;&#x2F;省略</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="BaseDexClassLoader"><a href="#BaseDexClassLoader" class="headerlink" title="BaseDexClassLoader"></a>BaseDexClassLoader</h2><p>BaseDexClassLoader继承自ClassLoader，只是对其进行了进一步的封装，并没有实现，他有两个直接的子类<code>PathClassLoader</code>和<code>DexClassLoader</code>。<br>简单介绍一下他的构造函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public BaseDexClassLoader(String dexPath, File optimizedDirectory, String librarySearchPath, ClassLoader parent) &#123;</span><br><span class="line">  &#x2F;&#x2F;dexPath 代表目标类所在的apk、DEX或者JAR文件的路径</span><br><span class="line">  &#x2F;&#x2F;optimizedDirectory用于指定解压出来的dex文件存放的路径</span><br><span class="line">  &#x2F;&#x2F;librarySearchPath用于指定类中所使用的C&#x2F;C++库存放的路径</span><br><span class="line">  &#x2F;&#x2F;parent 用于指定该加载器的父加载器，一般为当前执行类的加载器</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于BaseDexClassLoader还有一点要补充的是，由于dex文件被包含在APK或者jar文件中，因此在加载目标类之前需要先从APK或者jar文件中加压处dex文件，optimizedDirectory即为指定解压出来的dex文件存放的路径，这也是对apk中dex根据平台ODEX优化的过程。</p>
+<h2 id="DexClassLoader"><a href="#DexClassLoader" class="headerlink" title="DexClassLoader"></a>DexClassLoader</h2><p>DexClassLoader用于加载包含dex的JAR或者APK文件，但是他不能加载jar或者apk文件。他最终加载的都是dex文件，虽然他是从.jar或者.zip，.apk等结尾的文件中加载，但是他们最终都会生成一个对应的dex文件，他操作的还是dex文件。DexClassLoader继承自BaseDexClassLoader，原理如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class DexClassLoader extends BaseDexClassLoader &#123;</span><br><span class="line">    public DexClassLoader(String dexPath, String optimizedDirectory,</span><br><span class="line">            String libraryPath, ClassLoader parent) &#123;</span><br><span class="line">        super(dexPath, new File(optimizedDirectory), libraryPath, parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由代码不能看出，DexClassLoader只是简单的对BaseDexClassLoader进行了一层封装，并且指定了<code>optimizedDirectory</code>的路径为一个新的文件路径，DexClassLoader通过指定自己的optimizedDirectory，所以它可以加载外部的dex，因为这个dex会被复制到内部路径的optimizedDirectory。<br><strong>所以，DexClassLoader一般用来作为动态加载的加载器。</strong></p>
+<h2 id="PathClassLoader"><a href="#PathClassLoader" class="headerlink" title="PathClassLoader"></a>PathClassLoader</h2><p>PathClassLoader也是继承自BaseDexClassLoader，他主要用于加载apk，一般应用于加载android的系统类和app应用的类。他的实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class PathClassLoader extends BaseDexClassLoader &#123;</span><br><span class="line">    public PathClassLoader(String dexPath, ClassLoader parent) &#123;</span><br><span class="line">        super(dexPath, null, null, parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public PathClassLoader(String dexPath, String libraryPath,</span><br><span class="line">            ClassLoader parent) &#123;</span><br><span class="line">        super(dexPath, null, libraryPath, parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，PathClassLoader将optimizedDirectory置为null，而optimizedDirectory是用来指定apk或者jar解压出来的dex存放的位置，如果optimizedDirectory为null，则使用其默认路径/data/dalvik-cache，因此无法加载外部的apk的dex，只能加载内部的dex，这些大都是存在系统中已经安装过的apk里面的。</p>
+<h2 id="URLClassLoader"><a href="#URLClassLoader" class="headerlink" title="URLClassLoader"></a>URLClassLoader</h2><p>URLClassLoader只能加载jar文件，但是dalvik虚拟机不能识别jar，所以在android中无法使用这个加载器。</p>
+<h2 id="InMemoryDexClassLoader"><a href="#InMemoryDexClassLoader" class="headerlink" title="InMemoryDexClassLoader"></a>InMemoryDexClassLoader</h2><p>InMemoryDexClassLoader也是继承自BeseDexClassLoader，是API26新增的加载器，用于加载内存中的dex文件。</p>
+<h2 id="DelegateLastClassLoader"><a href="#DelegateLastClassLoader" class="headerlink" title="DelegateLastClassLoader"></a>DelegateLastClassLoader</h2><p>DelegateLastClassLoader继承自PathClassLoader，是API27新增的加载器，用于指定最后的查找策略，查找顺序如下：先判断自己是否加载此类，然后在判断此类的加载器是否加载过此类，最后委托给指定的父加载器。</p>
+<h1 id="classloader的双亲委托模型"><a href="#classloader的双亲委托模型" class="headerlink" title="classloader的双亲委托模型"></a><code>classloader</code>的双亲委托模型</h1><p>classLoader双亲委托模型，当要加载某个类时，先判断自己是否有加载过此类，如果自己没有加在过此类的话，进而判断父类是否加载过，如果某个父类加在过这个类的话，就直接返回，不重复加载。如果一直到顶级父类都没有加载此类的话，这个加载任务就会分发下来，最后用当前类加载器去加载该类。</p>
+<h1 id="类加载机制实现热修复方案"><a href="#类加载机制实现热修复方案" class="headerlink" title="类加载机制实现热修复方案"></a>类加载机制实现热修复方案</h1><p>通过使用dexClassloader动态修改加载dex的顺序即可达到热修复的目的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">AOP 编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-18 20:22:12" itemprop="dateCreated datePublished" datetime="2018-01-18T20:22:12+08:00">2018-01-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-18 13:44:16" itemprop="dateModified" datetime="2020-07-18T13:44:16+08:00">2020-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://www.jianshu.com/p/9fb07b2596f7" target="_blank" rel="noopener">Android AOP面向切面编程详解</a></li>
+<li><a href="http://blog.csdn.net/innost/article/details/49387395" target="_blank" rel="noopener">深入理解Android之AOP</a></li>
+<li><a href="http://blog.csdn.net/autfish/article/details/51184405" target="_blank" rel="noopener">http://blog.csdn.net/autfish/article/details/51184405</a></li>
+</ul>
+<hr>
+<h1 id="AOP-基本思想"><a href="#AOP-基本思想" class="headerlink" title="AOP 基本思想"></a>AOP 基本思想</h1><p>刚接触编程的时候，一般先接触的c语言这类的OOP（Procedure Oriented，即面向过程）语言，面相过程是一种以过程为中心的编程思想。这些都是以什么正在发生为主要目标进行编程，就是分析出解决问题所需要的步骤，然后用函数把这些步骤一步一步实现，使用的时候一个一个依次调用就可以了。</p>
+<p>然后，我们就会学到另一种更符合我们思维方式的一种思想，OOP（Object-Oriented Programming，即面向过程程序设计）语言，面向过程其实是最为实际的一种思考方式，就算是面向对象的方法也是含有面向过程的思想。可以说面向过程是一种基础的方法。它考虑的是实际地实现。一般的面向过程是从上往下步步求精，所以面向过程最重要的是模块化的思想方法。对比面向过程，面向对象的方法主要是把事物给对象化，对象包括属性与行为。当程序规模不是很大时，面向过程的方法还会体现出一种优势。因为程序的流程很清楚，按着模块与函数的方法可以很好的组织。<br>但是，在重复代码很多，需要重复利用的情况下，面相对象程序设计也显得很鸡肋，必要每次都主动去调用该方法，而且有特殊需求的时候还不能去需改写好的方法，因为这可能会造成其他其他调用该方法的地方出现问题。</p>
+<p>这个时候AOP就出现了。AOP是Aspect Oriented Programming的缩写，即『面向切面编程』。它和我们平时接触到的OOP都是编程的不同思想，OOP，即『面向对象编程』，它提倡的是将功能模块化，对象化，而AOP的思想，则不太一样，它提倡的是针对同一类问题的统一处理，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。</p>
+<p>最后总结成一句话就是：<br><strong>在运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。</strong></p>
+<h1 id="编程实践"><a href="#编程实践" class="headerlink" title="编程实践"></a>编程实践</h1><p>讲了思想，我们通过具体的例子来进行说明。我们实现为方法自动添加log日志，不同于以前的主动调用，我们通过Aspect来实现AOP注入。</p>
+<p>项目代码托管：<a href="https://github.com/Reoger/AOPTest" target="_blank" rel="noopener">https://github.com/Reoger/AOPTest</a></p>
+<p>首先是配置：<code>app</code>下的<code>build.gradle</code>文件，配置类似如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: &#39;com.android.application&#39;</span><br><span class="line">import org.aspectj.bridge.IMessage</span><br><span class="line">import org.aspectj.bridge.MessageHandler</span><br><span class="line">import org.aspectj.tools.ajc.Main</span><br><span class="line"></span><br><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        mavenCentral()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath &#39;org.aspectj:aspectjtools:1.8.9&#39;</span><br><span class="line">        classpath &#39;org.aspectj:aspectjweaver:1.8.9&#39;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line">final def log &#x3D; project.logger</span><br><span class="line">final def variants &#x3D; project.android.applicationVariants</span><br><span class="line">variants.all &#123; variant -&gt;</span><br><span class="line">    if (!variant.buildType.isDebuggable()) &#123;</span><br><span class="line">        log.debug(&quot;Skipping non-debuggable build type &#39;$&#123;variant.buildType.name&#125;&#39;.&quot;)</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    JavaCompile javaCompile &#x3D; variant.javaCompile</span><br><span class="line">    javaCompile.doLast &#123;</span><br><span class="line">        String[] args &#x3D; [&quot;-showWeaveInfo&quot;,</span><br><span class="line">                         &quot;-1.8&quot;,</span><br><span class="line">                         &quot;-inpath&quot;, javaCompile.destinationDir.toString(),</span><br><span class="line">                         &quot;-aspectpath&quot;, javaCompile.classpath.asPath,</span><br><span class="line">                         &quot;-d&quot;, javaCompile.destinationDir.toString(),</span><br><span class="line">                         &quot;-classpath&quot;, javaCompile.classpath.asPath,</span><br><span class="line">                         &quot;-bootclasspath&quot;, project.android.bootClasspath.join(File.pathSeparator)]</span><br><span class="line">        log.debug &quot;ajc args: &quot; + Arrays.toString(args)</span><br><span class="line"></span><br><span class="line">        MessageHandler handler &#x3D; new MessageHandler(true);</span><br><span class="line">        new Main().run(args, handler);</span><br><span class="line">        for (IMessage message : handler.getMessages(null, true)) &#123;</span><br><span class="line">            switch (message.getKind()) &#123;</span><br><span class="line">                case IMessage.ABORT:</span><br><span class="line">                case IMessage.ERROR:</span><br><span class="line">                case IMessage.FAIL:</span><br><span class="line">                    log.error message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.WARNING:</span><br><span class="line">                    log.warn message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.INFO:</span><br><span class="line">                    log.info message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.DEBUG:</span><br><span class="line">                    log.debug message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion 25</span><br><span class="line">    buildToolsVersion &#39;25.0.0&#39;</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId &quot;com.example.cm.aoptest&quot;</span><br><span class="line">        minSdkVersion 20</span><br><span class="line">        targetSdkVersion 25</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0&quot;</span><br><span class="line">        testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&#39;proguard-android.txt&#39;), &#39;proguard-rules.pro&#39;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    compile fileTree(include: [&#39;*.jar&#39;], dir: &#39;libs&#39;)</span><br><span class="line">    androidTestCompile(&#39;com.android.support.test.espresso:espresso-core:2.2.2&#39;, &#123;</span><br><span class="line">        exclude group: &#39;com.android.support&#39;, module: &#39;support-annotations&#39;</span><br><span class="line">    &#125;)</span><br><span class="line">    compile &#39;com.android.support:appcompat-v7:25.3.1&#39;</span><br><span class="line">    compile &#39;com.android.support.constraint:constraint-layout:1.0.2&#39;</span><br><span class="line">    compile &#39;org.aspectj:aspectjrt:1.8.9&#39;</span><br><span class="line">    testCompile &#39;junit:junit:4.12&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后就是实现我们的要实现的注入的log方法，<code>AspectLogTest.java</code>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import org.aspectj.lang.JoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.Aspect;</span><br><span class="line">import org.aspectj.lang.annotation.Before;</span><br><span class="line">import org.aspectj.lang.annotation.Pointcut;</span><br><span class="line">import org.aspectj.lang.reflect.MethodSignature;</span><br><span class="line"></span><br><span class="line">import java.lang.annotation.ElementType;</span><br><span class="line">import java.lang.annotation.Retention;</span><br><span class="line">import java.lang.annotation.RetentionPolicy;</span><br><span class="line">import java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * Created by CM on 2018&#x2F;1&#x2F;18.</span><br><span class="line"> *</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Aspect</span><br><span class="line">public class AspectLogTest &#123;</span><br><span class="line"></span><br><span class="line">    @Target(ElementType.METHOD) &#x2F;&#x2F;可以注解在方法 上</span><br><span class="line">    @Retention(RetentionPolicy.RUNTIME) &#x2F;&#x2F;运行时（执行时）存在</span><br><span class="line">    public @interface AspectLog &#123;</span><br><span class="line">        String value();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    final static String TAG &#x3D; &quot;TAG&quot;;</span><br><span class="line"></span><br><span class="line">    @Pointcut(&quot;execution(@com.example.cm.aoptest.log.AspectLogTest.AspectLog * *(..))&quot;)</span><br><span class="line">    public void logForActivity()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Before(&quot;logForActivity()&quot;)</span><br><span class="line">    public Object doRealLog(JoinPoint joinPoint)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            MethodSignature methodSignature &#x3D; (MethodSignature) joinPoint.getSignature();</span><br><span class="line">            AspectLog aspectJAnnotation &#x3D; methodSignature.getMethod().getAnnotation(AspectLog.class);</span><br><span class="line">            String log &#x3D; aspectJAnnotation.value();</span><br><span class="line">            Log.d(TAG, &quot;doRealLog: 打印日志&quot;+log);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>写好了接口，我们来实现自动注入代码，这里我们还是需要借助注解来实现。如果我们向打印<code>onCreate()</code>、<code>onStart()</code>等方法的中的信息，我们在<code>MainActivity</code>中这么写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@AspectLogTest.AspectLog(value &#x3D; &quot;来自OnStop的日志信息&quot;)</span><br><span class="line">@Override</span><br><span class="line">protected void onStop() &#123;</span><br><span class="line">    super.onStop();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@AspectLogTest.AspectLog(value &#x3D; &quot;来自OnPause的日志信息&quot;)</span><br><span class="line">@Override</span><br><span class="line">protected void onPause() &#123;</span><br><span class="line">    super.onPause();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@AspectLogTest.AspectLog(value &#x3D; &quot;来自OnCreate的日志信息&quot;)</span><br><span class="line">@Override</span><br><span class="line">protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">    super.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就实现这里自动log功能。<br>当然，从这个例子看起来好像和自己手动写<code>Log.d()</code>没有区别，只是用注解的方式调用而已。但是这里仅仅是为了展示他的功能，真正使用的时候我们可以通过他们来实现复杂的控制。</p>
+<p>介绍一下Aspect常见的注解。</p>
+<ul>
+<li><strong>@Aspect</strong> 把当前类标识为一个切面供容器读取</li>
+<li><strong>@Before</strong> 表示一个前置增强方法</li>
+<li><strong>@AfterReturning</strong> 表示一个后置增强方法</li>
+<li><strong>@AfterThrowing</strong> 异常抛出增强</li>
+<li><strong>@After</strong> final增强，不管是抛出异常或是正常退出都会执行</li>
+<li><strong>@Around</strong> 环绕增强，先执行注入的方法，只有返回对应现场才能执行被注入的方法。</li>
+<li><strong>@DeclareParents</strong> 引介增强</li>
+</ul>
+<p>介绍一下<code>execution</code>切点函数，其定义为<code>execution([方法修饰符] [返回类型] 方法名 参数 [异常模式])</code><br>在上例中，我们的<code>execution</code>函数为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execution(@com.example.cm.aoptest.log.AspectLogTest.AspectLog * *(..))</span><br></pre></td></tr></table></figure>
+<p>注意这里的方法名需要添加包名，*表示匹配任意字符，..表示匹配任意字符，可以匹配任意多个元素。<br>+必须跟在类名后面，表示类本身和继承或扩展制定类的所有类。</p>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ul>
+<li><strong>PointCut 切入点</strong>：想要动态添加代码的连接点</li>
+<li><strong>Advice 通知</strong> ：向切点中注入代码实现方法</li>
+<li><strong>Aspect 切面</strong> ：切入点和通知的集合。</li>
+<li><strong>Joint Point 连接点</strong>：所有目标方法都是连接点</li>
+<li><strong>Weaving 编织</strong> 将切面代码注入到目标中，并生成代码混合到.class的过程。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/17/algorithm/android-%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7%E7%AF%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -616,7 +915,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:54:34" itemprop="dateModified" datetime="2020-04-12T22:54:34+08:00">2020-04-12</time>
+                <time title="修改时间：2020-07-18 13:42:42" itemprop="dateModified" datetime="2020-07-18T13:42:42+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -624,7 +923,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
                 </span>
             </span>
 
@@ -1023,7 +1322,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:52:56" itemprop="dateModified" datetime="2020-04-12T22:52:56+08:00">2020-04-12</time>
+                <time title="修改时间：2020-07-18 13:48:11" itemprop="dateModified" datetime="2020-07-18T13:48:11+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1031,7 +1330,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
+                  <a href="/categories/system/" itemprop="url" rel="index"><span itemprop="name">system</span></a>
                 </span>
             </span>
 
@@ -1112,7 +1411,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:57:37" itemprop="dateModified" datetime="2020-04-12T22:57:37+08:00">2020-04-12</time>
+                <time title="修改时间：2020-07-18 13:44:22" itemprop="dateModified" datetime="2020-07-18T13:44:22+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1120,7 +1419,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
                 </span>
             </span>
 
@@ -1273,7 +1572,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:05:59" itemprop="dateModified" datetime="2020-04-12T23:05:59+08:00">2020-04-12</time>
+                <time title="修改时间：2020-07-18 13:44:58" itemprop="dateModified" datetime="2020-07-18T13:44:58+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1281,7 +1580,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
                 </span>
             </span>
 
@@ -1406,7 +1705,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:03:36" itemprop="dateModified" datetime="2020-04-12T23:03:36+08:00">2020-04-12</time>
+                <time title="修改时间：2020-07-18 13:41:09" itemprop="dateModified" datetime="2020-07-18T13:41:09+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1414,7 +1713,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9D%82%E7%83%A9/" itemprop="url" rel="index"><span itemprop="name">杂烩</span></a>
+                  <a href="/categories/backEnd/" itemprop="url" rel="index"><span itemprop="name">backEnd</span></a>
                 </span>
             </span>
 
@@ -1561,7 +1860,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:56:24" itemprop="dateModified" datetime="2020-04-12T22:56:24+08:00">2020-04-12</time>
+                <time title="修改时间：2020-07-18 13:40:37" itemprop="dateModified" datetime="2020-07-18T13:40:37+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1569,7 +1868,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9D%82%E7%83%A9/" itemprop="url" rel="index"><span itemprop="name">杂烩</span></a>
+                  <a href="/categories/backEnd/" itemprop="url" rel="index"><span itemprop="name">backEnd</span></a>
                 </span>
             </span>
 
@@ -1672,406 +1971,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2017/10/24/backEnd/hdfs%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/10/24/backEnd/hdfs%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">hdfs基本操作</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-10-24 09:42:01" itemprop="dateCreated datePublished" datetime="2017-10-24T09:42:01+08:00">2017-10-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:57:53" itemprop="dateModified" datetime="2020-04-12T22:57:53+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">后端学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>HDFS（Hadoop Distributed File System）是Hadoop分布式计算中的数据存储系统，是基于流数据模式访问和处理超大文件的需求而开发的。</p>
-</blockquote>
-<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>下面介绍几个hdfs文件系统中几个常见的概念：</p>
-<ol>
-<li>Block<br>HDFS中的存储单元是每个数据块block，HDFS默认的最基本的存储单位是64M的数据块。</li>
-<li>NameNode<br>元数据节点，该节点用来管理文件系统中的命名空间。</li>
-<li>DataNode<br>数据节点，是HDFS真正存储数据的地方。</li>
-<li>Secondary NameNode<br>从元数据节点，从元数据节点并不是NameNode出现问题时候的备用节点，它的主要功能是周期性的将NameNode中的namespace image和edit log合并，以防log文件过大。</li>
-<li>edit log<br>修改日志，用于记录hdfs中文件的相关操作日志。</li>
-</ol>
-<h1 id="命令操作"><a href="#命令操作" class="headerlink" title="命令操作"></a>命令操作</h1><p>我们可以通过hadoop命令来实现文件的基本操作，包括添创建、删除目录，上传下载文件操作。</p>
-<h2 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h2><p> 我们可以通过下面的命令来创建一个input目录。<br> <code>hadoop fs -mkdir hdfs://localhost:9000/input</code><br> 这里的<code>hdfs://localhost:9000</code>表示的是本地的hdfs系统，如果是本地的hdsf系统，我们其实可以省略，我们上面的命令可以简写成：<br> <code>hadoop fs -mkdir /input</code><br>当然，如果是远程的hadfs系统，我们就需要标注hdfs地址了，例如<code>hdfs://http://172.22.66.245:9099</code>，想知道hdfs开放的是那个端口，直接直接访问<code>http://localhost:50070/dfshealth.html#tab-overview</code>查看开放端口。<br>综上，我们在远程hdfs系统上创建的一个名为input目录的命令如下：<br><code>hadoop fs -mkdir hdfs://172.22.66.245:9090/input</code></p>
-<h2 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h2><p>上传文件的也很简单，基本的格式为<code>hadoop fs -put localFile hdfsFileDir</code><br>其中的<code>localFile</code>代表要上传的文件，<code>hdfsFileDir</code>代表要上传的到hdfs文件系统的目录。<br>例如，我要将D盘根目录下的keseh.txt上传到hdsf文件系统的<code>input</code>目录下，完整的命令如下：<br><code>hadoop fs -put D:\keshe.txt hdfs://localhost:9000/input</code><br>当然，因为是本地的hdfs系统，故hdfs可以省略，即可以简写成：<br><code>hadoop fs -put D:\keshe.txt /input</code><br>当然远程hdfs系统，这个hdfs就不能省略了，示例命令如下：<br><code>hadoop fs -put D:\keshe.txt hdfs://172.22.66.245:9090/input</code></p>
-<h2 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h2><p>下载文件的基本格式为<code>hadoop fs -get hdfsFile localFileDir</code>，其中的<code>hdfsFile</code>表示的是hdfs系统中的文件，<code>localFileDir</code>表示要下载的到本地的目录。<br>这里就直接给出示例命令了.<br>从本地的hadfs系统获取，<code>hadoop fs -get hdfs://localhost:9000/input/keshe.txt F:\</code></p>
-<p>远程的hdfs系统获取：<code>hadoop fs -get hdfs://172.22.66.245:9090/input/keshe.txt F:\</code></p>
-<h2 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h2><p>删除文件的格式为<code>hadoop fs -rm hdfsFile</code>或者是<code>hadoop fs -rm -r hdfsFile</code>。<br>每次可以删除多个文件或者目录。例如，删除远程hdfs文件的命令为：<br><code>hadoop fs -rm  hdfs://172.22.66.245:9090/input/keshe.txt</code></p>
-<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><p>以上的操作都比较简单，在简单记录一下hadoop中的基本命令。</p>
-<table>
-<thead>
-<tr>
-<th align="center">命令</th>
-<th align="center">格式</th>
-<th>作用</th>
-<th>实例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">ls</td>
-<td align="center">hadoop fs -ls /&lt; hdfs dir&gt;</td>
-<td>列出hadfs文件系统中某个目录下的文件</td>
-<td>hadoop fs -ls hdfs://localhost:9000/input</td>
-</tr>
-<tr>
-<td align="center">put</td>
-<td align="center">hadoop fs -put &lt; local file &gt; &lt; hdfs dir &gt;</td>
-<td>上传文件或者目录到hdfs系统中指定目录中</td>
-<td>hadoop fs -put D:\keshe.txt hdfs://localhost:9000/input</td>
-</tr>
-<tr>
-<td align="center">get</td>
-<td align="center">hadoop fs -get &lt; hdfs file &gt; &lt; local file or dir&gt;</td>
-<td>下载hdfs文件系统中的文件或者目录</td>
-<td>hadoop fs -get hdfsFile localFileDir</td>
-</tr>
-<tr>
-<td align="center">moveFromLocal</td>
-<td align="center">hadoop fs -moveFromLocal  &lt; local src &gt; … &lt; hdfs dst &gt;</td>
-<td>类似于将本地文件剪切到hdfs文件系统中</td>
-<td>hadoop fs -moveFromLocal D:\keshe.txt   hdfs://localhost:9000/input</td>
-</tr>
-<tr>
-<td align="center">copyFromLocal</td>
-<td align="center">hadoop fs -copyFromLocal  &lt; local src &gt; … &lt; hdfs dst &gt;</td>
-<td>类似于将文件从本地复制到hdfs文件系统中</td>
-<td>hadoop fs -copyFromLocal D:\keshe.txt   hdfs://localhost:9000/input</td>
-</tr>
-<tr>
-<td align="center">mkdir</td>
-<td align="center">hadoop fs -mkdir &lt; hdfs path&gt;</td>
-<td>在hdfs文件系统中创建目录</td>
-<td>hadoop fs -mkdir hdfs://localhost:9000/input</td>
-</tr>
-<tr>
-<td align="center">rm</td>
-<td align="center">hadoop fs -rm &lt; hdfs file &gt; …</td>
-<td>删除hdfs文件目录中的文件</td>
-<td>hadoop fs -rm  hdfs://localhost:9000/input/keshe.txt</td>
-</tr>
-<tr>
-<td align="center">cp</td>
-<td align="center">hadoop fs -cp  &lt; hdfs file &gt;  &lt; hdfs file &gt;</td>
-<td>复制hdfs文件或者福文件夹</td>
-<td>hadoop fs -cp   hdfs://localhost:9000/input/keshe.txt   hdfs://localhost:9000/input/user</td>
-</tr>
-<tr>
-<td align="center">mv</td>
-<td align="center">hadoop fs -mv &lt; hdfs file &gt;  &lt; hdfs file &gt;</td>
-<td>移动文件，也可以当着重命名来使用</td>
-<td>hadoop fs -cp  hdfs://localhost:9000/input/keshe.txt  hdfs://localhost:9000/haha.txt</td>
-</tr>
-<tr>
-<td align="center">count</td>
-<td align="center">hadoop fs -count &lt; hdfs path &gt;</td>
-<td>统计hdfs对应路径下的相关信息,显示为目录个数，文件个数，文件总计大小，输入路径</td>
-<td>hadoop fs -count  hdfs://localhost:9000/input</td>
-</tr>
-<tr>
-<td align="center">du</td>
-<td align="center">hadoop fs -du &lt; hdsf path&gt;</td>
-<td>显示hdfs对应路径下每个文件夹和文件的大小</td>
-<td>hadoop fs -du  hdfs://localhost:9000/input</td>
-</tr>
-<tr>
-<td align="center">text</td>
-<td align="center">hadoop fs -text &lt; hdsf file&gt;</td>
-<td>将文本文件或某些格式的非文本文件通过文本格式输出</td>
-<td>hadoop fs -text  hdfs://localhost:9000/input/haha.txt</td>
-</tr>
-</tbody></table>
-<p>暂时先记录这么多了，下面我们用代码实现基本的文件操作。</p>
-<h1 id="用代码实现"><a href="#用代码实现" class="headerlink" title="用代码实现"></a>用代码实现</h1><p>在真是实现之前，是需要我们提前好代码开发环境的，至于如何搭建，参照前面上一篇博客，这里不再展开。</p>
-<h2 id="查看所有目录下的文件"><a href="#查看所有目录下的文件" class="headerlink" title="查看所有目录下的文件"></a>查看所有目录下的文件</h2><p>我们先来看如何查看hdfs文件指定目录下所有的文件信息，即相当于ls命令的。<br>下面就是主要实现，我们住需要在main方法中调用就可以打印出hdfs文件系统中input目录下所有的文件和目录信息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">private static void  ListItem()&#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        Configuration config &#x3D; new Configuration();</span><br><span class="line">        Path dfs &#x3D; new Path(&quot;hdfs:&#x2F;&#x2F;172.22.66.245:9090&#x2F;input&quot;);</span><br><span class="line">        FileSystem fileSystem &#x3D; dfs.getFileSystem(config);</span><br><span class="line">        FileStatus[] status &#x3D; fileSystem.listStatus(dfs);</span><br><span class="line">        for (int i &#x3D; 0; i &lt; status.length; i++) &#123;</span><br><span class="line">            System.out.println(status[i].getPath().toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="上传文件-1"><a href="#上传文件-1" class="headerlink" title="上传文件"></a>上传文件</h2><p>代码很简单，直接上代码了,upFile方法实现了将本地D盘根目录下的2017-09-25_093127.jpg图片上传到hdfs文件系统中的input文件夹下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private static void upFile()&#123;</span><br><span class="line">    try&#123;</span><br><span class="line">        Configuration conf &#x3D; new Configuration();</span><br><span class="line">        Path path &#x3D; new Path(&quot;hdfs:&#x2F;&#x2F;172.22.66.245:9090&#x2F;input&quot;);</span><br><span class="line">        Path localPath &#x3D; new Path(&quot;D:\\2017-09-25_093127.jpg&quot;);</span><br><span class="line">        FileSystem fs &#x3D; path.getFileSystem(conf);</span><br><span class="line">        fs.copyFromLocalFile(localPath,path);</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="下载文件-1"><a href="#下载文件-1" class="headerlink" title="下载文件"></a>下载文件</h2><p>下载文件比较坑的一点就是，我们需要先创建一个这样的文件，然后以流的形式传入到填充到这个文件中去，例如下面的示例代码就是将hdfs文件系统中的haha.txt文件的内容写到D盘根目录下的hello.txt文件中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">private static void downFile()&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            Configuration conf &#x3D; new Configuration();</span><br><span class="line">            Path path &#x3D; new Path(&quot;hdfs:&#x2F;&#x2F;172.22.66.245:9090&#x2F;input&#x2F;haha.txt&quot;);</span><br><span class="line">            FileSystem fs &#x3D; path.getFileSystem(conf);</span><br><span class="line">            FSDataInputStream open &#x3D; fs.open(path);</span><br><span class="line">            OutputStream output &#x3D; new FileOutputStream(&quot;D:&#x2F;&#x2F;hello.txt&quot;);</span><br><span class="line">            IOUtils.copyBytes(open,output,4096,true);</span><br><span class="line"></span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
-<li><a href="https://segmentfault.com/a/1190000002672666" target="_blank" rel="noopener">hadoop HDFS常用文件操作命令</a></li>
-<li><a href="http://blog.csdn.net/zh521zh/article/details/51784450" target="_blank" rel="noopener">HDFS中的基础概念</a></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2017/10/19/other/%E8%B5%84%E6%BA%90%E7%BD%91%E7%AB%99%E6%95%B4%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/10/19/other/%E8%B5%84%E6%BA%90%E7%BD%91%E7%AB%99%E6%95%B4%E7%90%86/" class="post-title-link" itemprop="url">资源网站整理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-10-19 20:19:29" itemprop="dateCreated datePublished" datetime="2017-10-19T20:19:29+08:00">2017-10-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:12:45" itemprop="dateModified" datetime="2020-04-12T23:12:45+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9D%82%E7%83%A9/" itemprop="url" rel="index"><span itemprop="name">杂烩</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>不知不觉，四年的下来，还是收集整理了不少的网站，在此统一整理一下，以免以后遗忘。</p>
-<h1 id="UI素材类"><a href="#UI素材类" class="headerlink" title="UI素材类"></a>UI素材类</h1><p>在这里记录的是比较常用的图片网站</p>
-<h2 id="精美图片"><a href="#精美图片" class="headerlink" title="精美图片"></a>精美图片</h2><p>以下网站是我认为比较好的图片资源网站，更多的图片资源网站，可以参考<a href="https://www.zhihu.com/question/19619335" target="_blank" rel="noopener">知乎的讨论</a>。下面就介绍几个我认为比较好的图片素材网站（更多的是免费）</p>
-<h3 id="Pixabay-com"><a href="#Pixabay-com" class="headerlink" title="Pixabay.com"></a><a href="https://pixabay.com/" target="_blank" rel="noopener">Pixabay.com</a></h3><p><strong>Pixabay有可在任何地方使用的免费图片和视频</strong></br><br><a href="https://pixabay.com/" target="_blank" rel="noopener">https://pixabay.com/</a></br><br>Pixabay是一个充满活力的创意社区，分享免费的图片和视频。所有的内容都是在Creative Commons CC0下发布的，这使得它们可以安全的使用，而无需为创作者署名——即使是出于商业目的。<br><img src="https://cdn.pixabay.com/photo/2017/08/26/03/16/mid-finger-2682074_960_720.jpg" alt=""><br>强力推荐，图片又多有好看！重要的是还不要钱，貌似也不用梯子。</p>
-<h3 id="Pexels"><a href="#Pexels" class="headerlink" title="Pexels"></a><a href="https://www.pexels.com/" target="_blank" rel="noopener">Pexels</a></h3><p>Pexels 是一个和pixabay 类似的免费高清图片网站。<a href="https://www.pexels.com/" target="_blank" rel="noopener">https://www.pexels.com/</a><br>打开它的主页，中间一个输入框，下面会精选出搜索最热门的关键词、图片，还有免费提供的博主专栏。<br>你还可以将自己的图片上传至Pexels，分享给更多的人使用，你可以根据颜色搜索，它同时也提供了电脑客户端。<br>你可以个人和商业引用，甚至可以重新分发，它遵循CC0 协议。<br><img src="http://ovec6nnof.bkt.clouddn.com/PEXSLS%E7%95%8C%E9%9D%A2.jpg" alt="Pexels界面"></p>
-<h3 id="摄图网"><a href="#摄图网" class="headerlink" title="摄图网"></a><a href="http://699pic.com/" target="_blank" rel="noopener">摄图网</a></h3><p><strong>1373737张高清图片免费下载</strong></br><a href="http://699pic.com/" target="_blank" rel="noopener">http://699pic.com/</a><br>100%正版，可商用，免费下载，精品更新；<br>摄图网上的图片还是比较多的，而且质量也比较可以，可以算的上国内比较好的图片资源网站；<br><img src="http://ovec6nnof.bkt.clouddn.com/%E6%91%84%E5%9B%BE%E7%BD%91%E7%95%8C%E9%9D%A2.jpg" alt="摄图网"></p>
-<h3 id="Shutterstock"><a href="#Shutterstock" class="headerlink" title="Shutterstock"></a><a href="https://www.shutterstock.com/" target="_blank" rel="noopener">Shutterstock</a></h3><p>Shutterstock <a href="https://www.shutterstock.com/" target="_blank" rel="noopener">https://www.shutterstock.com/</a> 是一家全球技术公司，创建了一个最大、最具活力的双向市场供创意专业人士授权内容，这些内容包括图片、视频和音乐，以及推动创意过程的创新工具。<br>公司已扩展其产品组合，现在包括 Bigstock（以价值为导向的库存媒体机构）、PremiumBeat（特选免版税音乐库）、Rex Features（为全球媒体提供最好的编辑图片源）和 WebDAM（基于云的企业数字资产管理平台），同时创建了 Offset（高端图片精选）。<br><img src="http://ovec6nnof.bkt.clouddn.com/Shutterstock%E7%95%8C%E9%9D%A2.png" alt="Shutterstock"></p>
-<h3 id="Everypixel"><a href="#Everypixel" class="headerlink" title="Everypixel"></a><a href="https://everypixel.com/" target="_blank" rel="noopener">Everypixel</a></h3><p>Everypixel <a href="https://everypixel.com/" target="_blank" rel="noopener">https://everypixel.com/</a>是一个 强大的搜索引擎索引 51付费和免费图片的网站，允许用户通过搜索 海量数据库的秒照片。它汇集多家网络素材源，并且利用AI 技术自动移除那些不太好看的内容。<br>它还有很多筛选功能，你可以选择图片来源的网站，图片类型，还可以筛选不同颜色。<br>最重要的是还可以筛选免费的照片。</p>
-<h3 id="千图网"><a href="#千图网" class="headerlink" title="千图网"></a><a href="http://www.58pic.com/" target="_blank" rel="noopener">千图网</a></h3><p>千图网<a href="http://www.58pic.com/" target="_blank" rel="noopener">http://www.58pic.com/</a>经过4年的素材积累和数据沉淀，千图网搭建了一个以创意作品库为核心，围绕着设计人群及泛办公人群提供优质创意服务的共享平台。服务内容涵盖了平面广告、电商淘宝、装饰装修、网页UI、产品工业7大主流设计服务，以及PPT模板、Excel模板、文库模板、高清配图、视频音频5大办公人群常用服务，共计60多项细分服务。<br><img src="http://ovec6nnof.bkt.clouddn.com/%E5%8D%83%E5%9B%BE%E7%BD%91%E7%95%8C%E9%9D%A2.png" alt="千图网"></p>
-<h3 id="别样网"><a href="#别样网" class="headerlink" title="别样网"></a><a href="http://www.ssyer.com/" target="_blank" rel="noopener">别样网</a></h3><p>别样网<a href="http://www.ssyer.com/" target="_blank" rel="noopener">http://www.ssyer.com/</a>是一个国内的图片分享网站，和pixabay一样都是免版权和免授权使用的。图片大部分都经过后期处理，风景、人物、小清新各种风格应有尽有。</br><br>优点：图片清晰度高，富有美感，网站加载速度快。</br><br>缺点：图片数量偏少，没有搜索功能。</br><br><img src="http://ovec6nnof.bkt.clouddn.com/%E5%88%AB%E6%A0%B7%E7%BD%91.jpg" alt="别样网"></p>
-<h2 id="海量图标"><a href="#海量图标" class="headerlink" title="海量图标"></a>海量图标</h2><h3 id="iconfont"><a href="#iconfont" class="headerlink" title="iconfont"></a><a href="http://iconfont.cn/" target="_blank" rel="noopener">iconfont</a></h3><p>阿里妈妈MUX倾力打造的矢量图标管理、交流平台<a href="http://iconfont.cn/" target="_blank" rel="noopener">http://iconfont.cn/</a>。<br>设计师将图标上传到Iconfont平台，用户可以自定义下载多种格式的icon，平台也可将图标转换为字体，便于前端工程师自由调整与调用。<br><img src="http://ovec6nnof.bkt.clouddn.com/iconfont%E7%95%8C%E9%9D%A2.jpg" alt="iconfont"></p>
-<h3 id="Icons8"><a href="#Icons8" class="headerlink" title="Icons8"></a><a href="https://zh.icons8.com/" target="_blank" rel="noopener">Icons8</a></h3><p>Icons8 <a href="https://zh.icons8.com/" target="_blank" rel="noopener">https://zh.icons8.com/</a> 是一个提供免费iOS、Windows、Android的平面化设计图案为主的搜索引擎，目前提供近4万个素材资源，数量非常丰富，同时网站也提供各种格式，各种尺寸和配色，让使用者也能自定义制作。<br><img src="http://ovec6nnof.bkt.clouddn.com/icons8%E7%95%8C%E9%9D%A2.jpg" alt="Icons8"></p>
-<h3 id="easyIcon"><a href="#easyIcon" class="headerlink" title="easyIcon"></a><a href="http://www.easyicon.net/" target="_blank" rel="noopener">easyIcon</a></h3><p>提供超过四十六万个PNG、ICO、ICNS格式图标搜索、图标下载服务。<a href="http://www.easyicon.net/" target="_blank" rel="noopener">http://www.easyicon.net/</a><br><img src="http://ovec6nnof.bkt.clouddn.com/easyicon%E7%95%8C%E9%9D%A2.jpg" alt="easyIcon"></p>
-<h3 id="material-design-icon"><a href="#material-design-icon" class="headerlink" title="material design icon"></a><a href="https://material.io/icons/" target="_blank" rel="noopener">material design icon</a></h3><p>相信android开发者于这个网站会比较熟悉，没错，他就是material icons。<a href="https://material.io/icons/" target="_blank" rel="noopener">https://material.io/icons/</a><br><img src="http://ovec6nnof.bkt.clouddn.com/materical%20io%E7%95%8C%E9%9D%A2.jpg" alt="material"></p>
-<h3 id="iconmonstr"><a href="#iconmonstr" class="headerlink" title="iconmonstr"></a><a href="http://iconmonstr.com" target="_blank" rel="noopener">iconmonstr</a></h3><p>有时候我们的设计仅需要简简单单的勾勒创作即可，不需要繁杂的效果与艳丽的颜色搭配！今天给大家介绍这么一个朴实、朴素的图标素材网站 iconmonstr ，该网站的图标素材提供的格式分为PNG、SVG格式。<a href="http://iconmonstr.com" target="_blank" rel="noopener">http://iconmonstr.com</a><br><img src="https://pic.brushes8.com/uploads/2013/02/112545.jpg" alt="iconmonstr界面"></p>
-<h3 id="fontawesome"><a href="#fontawesome" class="headerlink" title="fontawesome"></a><a href="http://www.fontawesome.com.cn/" target="_blank" rel="noopener">fontawesome</a></h3><p>一套绝佳的图标字体库和CSS框架,为您提供可缩放的矢量图标，您可以使用CSS所提供的所有特性对它们进行更改，包括：大小、颜色、阴影或者其它任何支持的效果。<a href="http://www.fontawesome.com.cn/" target="_blank" rel="noopener">http://www.fontawesome.com.cn/</a><br><img src="http://ovec6nnof.bkt.clouddn.com/fontawesome%E7%95%8C%E9%9D%A2.jpg" alt="fontawesome"></p>
-<h3 id="ionicons"><a href="#ionicons" class="headerlink" title="ionicons"></a><a href="http://ionicons.com/" target="_blank" rel="noopener">ionicons</a></h3><p>iOnicons是一个提供免费ICON图标素材的站点，同时还提供CDN加速服务，该图标集采用 MIT 许可证，用sass来开发，前端网页设计师们可在商业应用中使用，设计出最佳的网页模版。<a href="http://ionicons.com/" target="_blank" rel="noopener">http://ionicons.com/</a></br><br><img src="http://www.egouz.com/uploadfile/2016/0219/20160219090352108.jpg" alt="ss"></p>
-<h2 id="创新设计"><a href="#创新设计" class="headerlink" title="创新设计"></a>创新设计</h2><h3 id="lofter"><a href="#lofter" class="headerlink" title="lofter"></a><a href="http://www.lofter.com/" target="_blank" rel="noopener">lofter</a></h3><p>LOFTER汇聚了数百万的摄影、胶片玩家，绘画及动漫爱好者，并不断衍生出更多的兴趣圈子，无论是设计、<br>艺术、科技、时尚、旅行、读书、电影评论都有精彩的人与内容不断产出。<a href="http://www.lofter.com/" target="_blank" rel="noopener">http://www.lofter.com/</a><br><img src="http://ovec6nnof.bkt.clouddn.com/lofter%E5%81%87%E9%9D%A2.jpg" alt="lofter"></p>
-<h3 id="Ui中国"><a href="#Ui中国" class="headerlink" title="Ui中国"></a><a href="http://www.ui.cn/" target="_blank" rel="noopener">Ui中国</a></h3><p>UI中国<a href="http://www.ui.cn/" target="_blank" rel="noopener">http://www.ui.cn/</a>，前身为iconfans.com。是专业的界面设计师交流、学习、展示平台。同时也是中国最大的UI设计师聚集地，会员均为一线UI设计师，覆盖主流互联网公司。我们希望借助互联网的力量打造国内最专业的UI设计平台，为UI设计师做最好的服务，提高UI设计行业价值！<br>前身iconfans.com，自2008年发展至今已有6年积累。历年来，iconfans曾经组织会员参与过一系列的国内外的设计竞赛，并取得了优异成绩。每年举办一届行业聚会。在我们的会员中赢得了口碑。不断的推出一些会员活动、曾经与小米、百度、腾讯、新浪、搜狐、锤子科技（Smartisan ）、360桌面、点点网、搜狗、华为等知名互联网公司和企业合作活动。<br>未来，UI中国，将继续以UI设计师为中心，为UI设计师做最好的服务，提高UI设计行业价值！</p>
-<h3 id="前端里"><a href="#前端里" class="headerlink" title="前端里"></a><a href="http://www.yyyweb.com/" target="_blank" rel="noopener">前端里</a></h3><p>前端里<a href="http://www.yyyweb.com/" target="_blank" rel="noopener">http://www.yyyweb.com/</a>专注 Web 开发技术，分享最前沿的 Web 开发教程、资源和和素材，是面向程序开发人员和设计师的学习交流平台。<br><img src="http://ovec6nnof.bkt.clouddn.com/%E5%89%8D%E7%AB%AF%E9%87%8C%E7%95%8C%E9%9D%A2.jpg" alt="前端里"></p>
-<h2 id="通用模板"><a href="#通用模板" class="headerlink" title="通用模板"></a>通用模板</h2><h3 id="优品PPT"><a href="#优品PPT" class="headerlink" title="优品PPT"></a><a href="http://www.ypppt.com/" target="_blank" rel="noopener">优品PPT</a></h3><p>一个有情怀的免费PPT模板下载网站！<a href="http://www.ypppt.com/" target="_blank" rel="noopener">http://www.ypppt.com/</a><br><img src="http://ovec6nnof.bkt.clouddn.com/%E4%BC%98%E5%93%81ppt%E7%95%8C%E9%9D%A2.jpg" alt="优品PPT"></p>
-<h1 id="学习资料类"><a href="#学习资料类" class="headerlink" title="学习资料类"></a>学习资料类</h1><h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><h3 id="CSDN"><a href="#CSDN" class="headerlink" title="CSDN"></a><a href="http://blog.csdn.net/" target="_blank" rel="noopener">CSDN</a></h3><p>CSDN <a href="https://www.csdn.net/" target="_blank" rel="noopener">https://www.csdn.net/</a> (Chinese Software Developer Network) 创立于1999年，是中国最大的IT社区和服务平台，为中国的软件开发者和IT从业者提供知识传播、职业发展、软件开发等全生命周期服务，满足他们在职业发展中学习及共享知识和信息、建立职业发展社交圈、通过软件开发实现技术商业化等刚性需求。拥有超过3000万注册会员（其中活跃会员800万）、50万注册企业及合作伙伴。</p>
-<p>旗下拥有：全球最大中文IT技术社区：csdn、权威IT专业技术期刊：《程序员》杂志、IT人力资源服务：科锐福克斯、IT技术学习平台：乐知教育、代码托管+社交编程平台：code、移动开发工具和服务聚合平台：mobilehub、IT专属求职网站：job、中文软件外包和项目交易平台：csto、程序员深度交流社区：iteye、中国最大技术管理者平台：CTO俱乐部、云计算产业人士沙龙：云计算俱乐部、面向移动开发者的技术组织：移动开发者俱乐部、面向全国大学生的技术组织：高校俱乐部。</p>
-<h3 id="简书"><a href="#简书" class="headerlink" title="简书"></a><a href="http://www.jianshu.com/" target="_blank" rel="noopener">简书</a></h3><p>简书<a href="http://www.jianshu.com/" target="_blank" rel="noopener">http://www.jianshu.com/</a>  是一个创作社区，任何人均可以在其上进行创作。用户在简书上面可以方便的创作自己的作品，互相交流。简书成为国内优质原创内容输出平台。</p>
-<h3 id="博客园"><a href="#博客园" class="headerlink" title="博客园"></a><a href="https://www.cnblogs.com/" target="_blank" rel="noopener">博客园</a></h3><p>一个IT技术人员想为IT技术人员们提供一个纯净的技术交流空间，博客园很长时间只有一个不能再简单的博客，有近四年，博客园仅靠一个人几年工作的积蓄在维持，互联网浪潮的此起彼伏，“博客”从耀眼的明星成为平民，这些似乎都与博客园无关，博客园一步一个脚印地走着自己的路，傻傻地对每个用户注册进行人工审批、对首页内容宁缺毋滥、对不合适的广告拒之门外，傻傻地对用户体验关怀备至，对盈利模式冷若冰霜。<br>访问链接： <a href="https://www.cnblogs.com/" target="_blank" rel="noopener">https://www.cnblogs.com/</a></p>
-<h3 id="掘金"><a href="#掘金" class="headerlink" title="掘金"></a><a href="https://juejin.im/" target="_blank" rel="noopener">掘金</a></h3><p>掘金技术 <a href="https://juejin.im/" target="_blank" rel="noopener">https://juejin.im/</a> 社区是中国质量最高的技术分享社区，邀请稀土用户作为 Co-Editor 来分享优质的技术干货，从前端到后端开发，从设计到产品，让每一个掘金用户都能挖掘到有价值的干货。</p>
-<h2 id="网上视频学习"><a href="#网上视频学习" class="headerlink" title="网上视频学习"></a>网上视频学习</h2><h3 id="慕课网"><a href="#慕课网" class="headerlink" title="慕课网"></a><a href="http://www.imooc.com/" target="_blank" rel="noopener">慕课网</a></h3><p>程序员的梦工厂&lt;(<a href="http://www.imooc.com/&gt;，源于国外，Massive（大规模）Open（开放）Online（在线）Course（课程）。提供大量优质的免费教程，也提供职业路径学习，收费的项目实战。" target="_blank" rel="noopener">http://www.imooc.com/&gt;，源于国外，Massive（大规模）Open（开放）Online（在线）Course（课程）。提供大量优质的免费教程，也提供职业路径学习，收费的项目实战。</a></p>
-<h3 id="极客学院"><a href="#极客学院" class="headerlink" title="极客学院"></a><a href="http://ke.jikexueyuan.com/" target="_blank" rel="noopener">极客学院</a></h3><p>极客学院<a href="http://www.jikexueyuan.com/" target="_blank" rel="noopener">http://www.jikexueyuan.com/</a>  是中国android开发在线学习平台，汇集了几十名国内顶尖的有多年项目和实战经验的Android开发授课大师，精心制作了上千个高质量视频教程，涵盖了Android开发学习的基础入门、中级进阶，高级提升、项目实战开发等专业的android开发课程。<br>极客学院背后是一支疯狂喜欢编程，狂热开发移动app的超有活力团队。他们希望通过最新的，高质量的，专业实战的在线开发课程打破传统的编程学习模式，以新一代的编程学习模式帮助开发者更快更好的学习Android开发，帮助开发者通过技术实现自己的理想。<br>作为国内最大IT职业在线教育平台，极客学院一直致力于“让学习更有效”，帮助IT从业者在最短的时间内获得最多的知识，技能得到最快的提升。目前，极客学院已拥有60多万IT从业者用户。</p>
-<h3 id="网易云课堂"><a href="#网易云课堂" class="headerlink" title="网易云课堂"></a><a href="http://study.163.com/" target="_blank" rel="noopener">网易云课堂</a></h3><p>网易云课堂&lt;(<a href="http://study.163.com/&gt;，是网易公司打造的在线实用技能学习平台，该平台于2012年12月底正式上线，主要为学习者提供海量、优质的课程，用户可以根据自身的学习程度，自主安排学习进度。" target="_blank" rel="noopener">http://study.163.com/&gt;，是网易公司打造的在线实用技能学习平台，该平台于2012年12月底正式上线，主要为学习者提供海量、优质的课程，用户可以根据自身的学习程度，自主安排学习进度。</a><br>网易云课堂立足于实用性的要求，网易云课堂与多家教育、培训机构建立合作，课程数量已达4100+，课时总数超50000,涵盖实用软件、IT与互联网、外语学习、生活家居、兴趣爱好、职场技能、金融管理、考试认证、中小学、亲子教育等十余大门类。</p>
-<h3 id="麦子学院"><a href="#麦子学院" class="headerlink" title="麦子学院"></a><a href="http://www.maiziedu.com/" target="_blank" rel="noopener">麦子学院</a></h3><p>麦子学院<a href="http://www.maiziedu.com/" target="_blank" rel="noopener">http://www.maiziedu.com/</a>，国内第一家在美国建立商务中心的IT在线教育机构，目前已与美国知名教育公司取得合作，未来将源源不断向国内输出大量高质量教育资源<br>前身麦可网，2014年，麦可网完成千万级A轮融资，并更名为”麦子学院“，同时通过“麦子圈”IT职业实名社交圈——提供包括企业招聘对接，猎头，项目外包，经验分享，职业交友等一系列增值服务。<br>做在线职业教育示范学院，将教育和课程做到极致。除了提供高质量的课程学习之外，也提供包括就业推荐，职业交友，项目外包，创业服务等全面的增值服务，并且线上线下结合，移动设备和传统网络相结合，打造IT职业教育的一个完整生态链。<br>以高端IT技术型人才培养及服务为核心，探索及倡导技术交流创新模式。提供的不仅仅是技能培养，而是务实的职业导向。</p>
-<h3 id="中国大学Mooc"><a href="#中国大学Mooc" class="headerlink" title="中国大学Mooc"></a><a href="http://www.icourse163.org/" target="_blank" rel="noopener">中国大学Mooc</a></h3><p>中国mooc <a href="http://www.icourse163.org/" target="_blank" rel="noopener">http://www.icourse163.org/</a>,汇集名校名师的优秀课程，让我们可以通过网络的方式来学习优质的免费课程！大赞，有点免费大学的感觉~</p>
-<h3 id="开课吧"><a href="#开课吧" class="headerlink" title="开课吧"></a><a href="http://www.kaikeba.com/" target="_blank" rel="noopener">开课吧</a></h3><p>开课吧<a href="http://www.kaikeba.com/" target="_blank" rel="noopener">http://www.kaikeba.com/</a> 是指作为慧科教育的重要成员企业，开课吧是中文泛IT在线教育平台，传承了慧科教育专注前沿科技、创新人才培养模式的基因，并积极探索在线教育模式创新。<br>开课吧集在线课程的创意、设计、前期拍摄、后期制作、 综合运营为一体，专注于移动开发、云计算、互联网营销等八大类泛IT课程，不断面向个人、高校和企事业单位提供在线产品研发咨询服务、在线课程制作服务、MOOC 平台服务、导学服务和认证服务等综合在线教育解决方案。</p>
-<h3 id="计蒜客"><a href="#计蒜客" class="headerlink" title="计蒜客"></a><a href="http://www.jisuanke.com/" target="_blank" rel="noopener">计蒜客</a></h3><p>计蒜客 <a href="http://www.jisuanke.com/" target="_blank" rel="noopener">http://www.jisuanke.com/</a> 为弥合工业界、学术界对于优秀计算机人才的缺口而诞生，致力于为全国乃至全球希望投身计算机领域的人才提供高性价比的学习机会，培养快速学习、拥抱变化、敢于发现的优秀工程师与学术精英。大部分是收费的。</p>
-<h3 id="实验楼"><a href="#实验楼" class="headerlink" title="实验楼"></a><a href="https://www.shiyanlou.com/" target="_blank" rel="noopener">实验楼</a></h3><p>实验楼 <a href="https://www.shiyanlou.com/" target="_blank" rel="noopener">https://www.shiyanlou.com/</a> 是国内领先的IT技术实训平台，采用创新的“在线实验”学习模式，为学生及在职程序员提供编程、运维、测试、云计算、大数据、数据库等最新的IT技术实践课程。<br>实验楼建设初衷是帮助学习者通过动手实践收获知识，同时体会实验精神。德国教育学家斯普朗格说：“教育的最终目的不是传授已有的东西，而是要把人的创造力量诱导出来”，实验楼设计理念也是如此：从实践切入，依靠交互性、操作性更强的课程，理论学习+动手实践共同激发你的创造力。</p>
-<h3 id="腾讯课堂"><a href="#腾讯课堂" class="headerlink" title="腾讯课堂"></a><a href="https://ke.qq.com/" target="_blank" rel="noopener">腾讯课堂</a></h3><p>腾讯课堂 <a href="https://ke.qq.com/" target="_blank" rel="noopener">https://ke.qq.com/</a> 是腾讯推出的专业在线教育平台，聚合了优质教育机构和教师的海量课程资源。作为开放式的平台，腾讯课堂计划帮助线下教育机构入驻，共同探索在线教育新模式，这无形中又为在线教育O2O增添了几分热度。</p>
-<p>腾讯课堂凭借QQ客户端的优势，实现在线即时互动教学；并利用QQ积累多年的音视频能力，提供流畅、高音质的课程直播效果；同时支持PPT演示、屏幕分享等多样化的授课模式，还为教师提供白板、提问等能力。 腾讯创建在线教育平台—腾讯课堂，改善了中国教育资源分布和发展不均的现状，依托互联网，打破地域的限制，让每个立志学习，有梦想的人，都能接受优秀老师的指导和教学；同时希望给优秀的机构及教师一个展示的平台。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2017/10/17/backEnd/hadoop%E5%AE%89%E8%A3%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/10/17/backEnd/hadoop%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">hadoop入门基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-10-17 19:34:05" itemprop="dateCreated datePublished" datetime="2017-10-17T19:34:05+08:00">2017-10-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:57:47" itemprop="dateModified" datetime="2020-04-12T22:57:47+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">后端学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p><a href="http://hadoop.apache.org/" target="_blank" rel="noopener">Apache Hadoop</a>是一个在商业硬件大型集群上运行应用程序的框架。Hadoop框架为应用程序提供透明的可靠性和数据运动。Hadoop实现了一个名为<a href="https://wiki.apache.org/hadoop/HadoopMapReduce" target="_blank" rel="noopener">Map / Reduce</a>的计算范例，其中应用程序分为许多小的工作片段，每个工作片段都可以在集群中的任何节点上执行或重新执行。此外，它还提供了一种在计算节点上存储数据的分布式文件系统（<a href="https://wiki.apache.org/hadoop/DFS" target="_blank" rel="noopener">HDFS</a>），可在集群中提供非常高的聚合带宽。两者的<a href="https://wiki.apache.org/hadoop/MapReduce" target="_blank" rel="noopener">MapReduce</a>和Hadoop分布式文件系统的设计使得节点故障是由框架自动处理。</p>
-</blockquote>
-<h1 id="hadoop功能与优势"><a href="#hadoop功能与优势" class="headerlink" title="hadoop功能与优势"></a>hadoop功能与优势</h1><p>hadoop是什么我们前面已经介绍过了，下面我们主要介绍他的几个核心部分：</p>
-<ol>
-<li>HDFS：分布式文件系统，存储海量的数据</li>
-<li>MapReduce：并行处理框架，实现任务分解和调度。<br>我们一般用hadoop来搭建大型数据仓库、PB级数据的存储、处理、分析、统计等业务。</li>
-<li>Common: 一组分布式文件系统和通用I/O的组建(序列化、java RPC和持久化数据结构)</li>
-<li>Pig: 一种数据流语言和运行环境，用以检索非常大的数据集。pig运行在MapRedyce和HdFS集群上。</li>
-<li>HBase： 一个分布式、按列存储数据库。Hbase使用HDFS作为底层储存，同时支持MapReduce的批量式计算和点查询（随机读取）。</li>
-<li>ZooKeeper：一个分布式、可用性高的协调服务。ZooKeeper提供分布式锁之类的基本服务，用于构建分布式应用。</li>
-<li>sqoop： 在数据库和HDFS之间高校传输数据的工具。</li>
-</ol>
-<p>hadoop的优势：</p>
-<ol>
-<li>高扩展</li>
-<li>低成本</li>
-<li>成熟的生态圈</li>
-</ol>
-<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
-<li><a href="https://www.iwwenbo.com/hadoop-installation-on-windows-without-cygwin/" target="_blank" rel="noopener">在windows平台下安装hadoop</a></li>
-<li><a href="http://blog.csdn.net/wen3011/article/details/54907731" target="_blank" rel="noopener">安装环境JAVA_HOME is incorrectly set问题解决</a></li>
-<li><a href="http://www.voidcn.com/article/p-gdpjxbxw-bz.html" target="_blank" rel="noopener">windows下hadoop本地开发环境的搭建</a></li>
-<li><a href="http://www.linuxidc.com/Linux/2016-08/134131p2.htm" target="_blank" rel="noopener">可以会用到的环境搭建资料</a></li>
-<li><a href="http://www.imooc.com/video/7642" target="_blank" rel="noopener">imooc上的hadoop视屏学习资料</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2137,17 +2040,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">11</span>
-        <span class="site-state-item-name">分类</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">32</span>
-        <span class="site-state-item-name">标签</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

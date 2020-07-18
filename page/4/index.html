@@ -178,6 +178,279 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/20/android/PopupWindow%20%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/20/android/PopupWindow%20%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B/" class="post-title-link" itemprop="url">PopupWindow 使用实例</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-20 22:44:55" itemprop="dateCreated datePublished" datetime="2018-07-20T22:44:55+08:00">2018-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-18 13:44:53" itemprop="dateModified" datetime="2020-07-18T13:44:53+08:00">2020-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="PopupWindow-使用实例"><a href="#PopupWindow-使用实例" class="headerlink" title="PopupWindow 使用实例"></a>PopupWindow 使用实例</h1><p><code>popupWindows</code>是一个弹出框的界面载体，类似于<code>AlertDialog</code>，但它比<code>AlertDialog</code>更加灵活，能更加精确的指定其所在的位置。<br>下面记录一下自定义popupWindows的使用。</p>
+<h1 id="自定会CustomPopup，继承自PopupWindow"><a href="#自定会CustomPopup，继承自PopupWindow" class="headerlink" title="自定会CustomPopup，继承自PopupWindow"></a>自定会<code>CustomPopup</code>，继承自<code>PopupWindow</code></h1><p>具体代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class CustomPopup extends PopupWindow &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; PopupWindow中控件点击事件回调接口</span><br><span class="line">    private IPopuWindowListener mOnClickListener;</span><br><span class="line">    &#x2F;&#x2F;PopupWindow布局文件中的Button</span><br><span class="line">    private Button alarm_pop_btn;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * @param s</span><br><span class="line">     * @description 构造方法</span><br><span class="line">     * @author ldm</span><br><span class="line">     * @time 2016&#x2F;9&#x2F;30 9:14</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public CustomPopup(Context mContext, int width, int height, IPopuWindowListener listener) &#123;</span><br><span class="line">        super(mContext);</span><br><span class="line"></span><br><span class="line">        this.mOnClickListener &#x3D; listener;</span><br><span class="line">        &#x2F;&#x2F;获取布局文件</span><br><span class="line">        View mContentView &#x3D; LayoutInflater.from(mContext).inflate(R.layout.popupwindow_layout, null);</span><br><span class="line">        &#x2F;&#x2F;设置布局</span><br><span class="line">        setContentView(mContentView);</span><br><span class="line">        &#x2F;&#x2F; 设置弹窗的宽度和高度</span><br><span class="line">&#x2F;&#x2F;        setWidth(width);</span><br><span class="line">&#x2F;&#x2F;        setHeight(height);</span><br><span class="line">        setWidth(WindowManager.LayoutParams.MATCH_PARENT);</span><br><span class="line">        setHeight(WindowManager.LayoutParams.WRAP_CONTENT);</span><br><span class="line">        &#x2F;&#x2F;设置能否获取到焦点</span><br><span class="line">        setFocusable(false);</span><br><span class="line">        &#x2F;&#x2F;设置PopupWindow进入和退出时的动画效果</span><br><span class="line">        setAnimationStyle(R.style.MyPopupWindow);</span><br><span class="line">        setTouchable(true); &#x2F;&#x2F; 默认是true，设置为false，所有touch事件无响应，而被PopupWindow覆盖的Activity部分会响应点击</span><br><span class="line">        &#x2F;&#x2F; 设置弹窗外可点击,此时点击PopupWindow外的范围，Popupwindow不会消失</span><br><span class="line">        setOutsideTouchable(false);</span><br><span class="line">        &#x2F;&#x2F;外部是否可以点击，设置Drawable原因可以参考：http:&#x2F;&#x2F;blog.csdn.net&#x2F;harvic880925&#x2F;article&#x2F;details&#x2F;49278705</span><br><span class="line">        setBackgroundDrawable(new BitmapDrawable());</span><br><span class="line">        &#x2F;&#x2F; 设置弹窗的布局界面</span><br><span class="line">        initUI();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 初始化弹窗列表</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private void initUI() &#123;</span><br><span class="line">        &#x2F;&#x2F;获取到按钮</span><br><span class="line">        alarm_pop_btn &#x3D; (Button) getContentView().findViewById(R.id.alarm_pop_btn);</span><br><span class="line">        &#x2F;&#x2F;设置按钮点击事件</span><br><span class="line">        alarm_pop_btn.setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onClick(View view) &#123;</span><br><span class="line">                if (null !&#x3D; mOnClickListener) &#123;</span><br><span class="line">                    mOnClickListener.dispose();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 显示弹窗列表界面</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void show(View view) &#123;</span><br><span class="line">        int[] location &#x3D; new int[2];</span><br><span class="line">        view.getLocationOnScreen(location);</span><br><span class="line">        &#x2F;&#x2F;Gravity.BOTTOM设置在view下方，还可以根据location来设置PopupWindowj显示的位置</span><br><span class="line">        int x &#x3D; location[0];</span><br><span class="line">        int y &#x3D; location[1];</span><br><span class="line">        showAtLocation(view, Gravity.BOTTOM, x, y);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * @param null</span><br><span class="line">     * @author ldm</span><br><span class="line">     * @description 点击事件回调处理接口</span><br><span class="line">     * @time 2016&#x2F;7&#x2F;29 15:30</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public interface IPopuWindowListener &#123;</span><br><span class="line">        void dispose();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="xml资源文件"><a href="#xml资源文件" class="headerlink" title="xml资源文件"></a>xml资源文件</h1><p>布局资源文件：<code>popupwindow_layout.xml</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:android&#x3D;&quot;http:&#x2F;&#x2F;schemas.android.com&#x2F;apk&#x2F;res&#x2F;android&quot;</span><br><span class="line">    android:layout_width&#x3D;&quot;match_parent&quot;</span><br><span class="line">    android:layout_height&#x3D;&quot;wrap_content&quot;</span><br><span class="line">    android:orientation&#x3D;&quot;vertical&quot;</span><br><span class="line">    android:background&#x3D;&quot;#ffffff&quot;</span><br><span class="line">    android:padding&#x3D;&quot;20dp&quot; &gt;</span><br><span class="line"></span><br><span class="line">    &lt;Button</span><br><span class="line">        android:layout_width&#x3D;&quot;match_parent&quot;</span><br><span class="line">        android:layout_height&#x3D;&quot;wrap_content&quot;</span><br><span class="line">        android:clickable&#x3D;&quot;true&quot;</span><br><span class="line">        android:gravity&#x3D;&quot;center&quot;</span><br><span class="line">        android:textColor&#x3D;&quot;@android:color&#x2F;holo_orange_dark&quot;</span><br><span class="line">        android:id&#x3D;&quot;@+id&#x2F;alarm_pop_btn&quot;</span><br><span class="line">        android:text&#x3D;&quot;确定&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:layout_marginTop&#x3D;&quot;20dp&quot;</span><br><span class="line">        android:layout_width&#x3D;&quot;match_parent&quot;</span><br><span class="line">        android:layout_height&#x3D;&quot;wrap_content&quot;</span><br><span class="line">        android:layout_marginBottom&#x3D;&quot;10dp&quot;</span><br><span class="line">        android:clickable&#x3D;&quot;true&quot;</span><br><span class="line">        android:gravity&#x3D;&quot;center&quot;</span><br><span class="line">        android:text&#x3D;&quot;取消&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+<p>类型资源文件<code>styles</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name&#x3D;&quot;MyPopupWindow&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;item name&#x3D;&quot;android:windowEnterAnimation&quot;&gt;@anim&#x2F;pop_in&lt;&#x2F;item&gt;</span><br><span class="line">      &lt;item name&#x3D;&quot;android:windowExitAnimation&quot;&gt;@anim&#x2F;pop_out&lt;&#x2F;item&gt;</span><br><span class="line">  &lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+<p>动画资源文件<code>pop_in</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;set xmlns:android&#x3D;&quot;http:&#x2F;&#x2F;schemas.android.com&#x2F;apk&#x2F;res&#x2F;android&quot;&gt;</span><br><span class="line">    &lt;scale</span><br><span class="line">        android:duration&#x3D;&quot;200&quot;</span><br><span class="line">        android:fromXScale&#x3D;&quot;0&quot;</span><br><span class="line">        android:fromYScale&#x3D;&quot;0&quot;</span><br><span class="line">        android:pivotX&#x3D;&quot;50%&quot;</span><br><span class="line">        android:pivotY&#x3D;&quot;50%&quot;</span><br><span class="line">        android:toXScale&#x3D;&quot;0.8&quot;</span><br><span class="line">        android:toYScale&#x3D;&quot;0.5&quot; &#x2F;&gt;</span><br><span class="line">    &lt;alpha</span><br><span class="line">        android:duration&#x3D;&quot;200&quot;</span><br><span class="line">        android:fromAlpha&#x3D;&quot;0.0&quot;</span><br><span class="line">        android:toAlpha&#x3D;&quot;1.0&quot; &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;set&gt;</span><br></pre></td></tr></table></figure>
+<p>动画资源文件和<code>pop_out</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;set xmlns:android&#x3D;&quot;http:&#x2F;&#x2F;schemas.android.com&#x2F;apk&#x2F;res&#x2F;android&quot;&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;scale</span><br><span class="line">        android:fromXScale&#x3D;&quot;0.8&quot;</span><br><span class="line">        android:fromYScale&#x3D;&quot;0.5&quot;</span><br><span class="line">        android:pivotX&#x3D;&quot;50%&quot;</span><br><span class="line">        android:pivotY&#x3D;&quot;50%&quot;</span><br><span class="line">        android:toXScale&#x3D;&quot;0&quot;</span><br><span class="line">        android:toYScale&#x3D;&quot;0&quot;</span><br><span class="line">        android:duration&#x3D;&quot;200&quot;&#x2F;&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;alpha</span><br><span class="line">        android:duration&#x3D;&quot;200&quot;</span><br><span class="line">        android:fromAlpha&#x3D;&quot;1.0&quot;</span><br><span class="line">        android:toAlpha&#x3D;&quot;0.0&quot;&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;set&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="在activity中进行调用"><a href="#在activity中进行调用" class="headerlink" title="在activity中进行调用"></a>在activity中进行调用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class MainActivity extends AppCompatActivity implements CustomPopup.IPopuWindowListener &#123;</span><br><span class="line"></span><br><span class="line">    private CustomPopup alarmPopup;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public void testPopupWindow2(View view)&#123;</span><br><span class="line">        &#x2F;&#x2F;初始化PopupWindow这里通过数据200来设置PopupWindow高度</span><br><span class="line">        alarmPopup&#x3D;new CustomPopup(MainActivity.this, ViewGroup.LayoutParams.MATCH_PARENT, 200, this);&#x2F;&#x2F;这里的this是指当前Activity实现了PopupWindow中IPopuWindowListener接口</span><br><span class="line">        &#x2F;&#x2F;弹出PopupWindow</span><br><span class="line">        alarmPopup.show(view);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void dispose() &#123;</span><br><span class="line">        if (alarmPopup.isShowing()) &#123;</span><br><span class="line">            alarmPopup.dismiss();&#x2F;&#x2F;关闭PopupWindow</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>end</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="https://blog.csdn.net/harvic880925/article/details/49272285" target="_blank" rel="noopener">https://blog.csdn.net/harvic880925/article/details/49272285</a></li>
+<li><a href="https://blog.csdn.net/true100/article/details/52785496" target="_blank" rel="noopener">https://blog.csdn.net/true100/article/details/52785496</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/18/algorithm/%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/18/algorithm/%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F/" class="post-title-link" itemprop="url">旋转图像</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-18 00:00:48" itemprop="dateCreated datePublished" datetime="2018-07-18T00:00:48+08:00">2018-07-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:14:03" itemprop="dateModified" datetime="2020-04-12T23:14:03+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="48-旋转图像-Rotate-Image"><a href="#48-旋转图像-Rotate-Image" class="headerlink" title="48. 旋转图像(Rotate Image)"></a><a href="https://leetcode-cn.com/problems/rotate-image/description/" target="_blank" rel="noopener">48. 旋转图像(Rotate Image)</a></h3><p>题目难度： <strong>中等</strong></p>
+<p>给定一个 <em>n _× _n</em> 的二维矩阵表示一个图像。</p>
+<p>将图像顺时针旋转 90 度。</p>
+<p><strong>说明：</strong></p>
+<p>你必须在旋转图像，这意味着你需要直接修改输入的二维矩阵。<strong>请不要</strong>使用另一个矩阵来旋转图像。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">给定 **matrix** &#x3D; </span><br><span class="line">[</span><br><span class="line">  [1,2,3],</span><br><span class="line">  [4,5,6],</span><br><span class="line">  [7,8,9]</span><br><span class="line">],</span><br><span class="line"></span><br><span class="line">**原地**旋转输入矩阵，使其变为:</span><br><span class="line">[</span><br><span class="line">  [7,4,1],</span><br><span class="line">  [8,5,2],</span><br><span class="line">  [9,6,3]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">给定 **matrix** &#x3D;</span><br><span class="line">[</span><br><span class="line">  [ 5, 1, 9,11],</span><br><span class="line">  [ 2, 4, 8,10],</span><br><span class="line">  [13, 3, 6, 7],</span><br><span class="line">  [15,14,12,16]</span><br><span class="line">], </span><br><span class="line"></span><br><span class="line">**原地**旋转输入矩阵，使其变为:</span><br><span class="line">[</span><br><span class="line">  [15,13, 2, 5],</span><br><span class="line">  [14, 3, 4, 1],</span><br><span class="line">  [12, 6, 8, 9],</span><br><span class="line">  [16, 7,10,11]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><h4 id="思路一"><a href="#思路一" class="headerlink" title="思路一"></a>思路一</h4><p>先上线交换，再斜角交换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">例如，原数组</span><br><span class="line">[</span><br><span class="line">  [1,2,3],</span><br><span class="line">  [4,5,6],</span><br><span class="line">  [7,8,9]</span><br><span class="line">],</span><br><span class="line"></span><br><span class="line">上下替换后：</span><br><span class="line">[</span><br><span class="line">  [7,8,9],</span><br><span class="line">  [4,5,6],</span><br><span class="line">  [1,2,3]</span><br><span class="line">],</span><br><span class="line">然后再斜角替换:</span><br><span class="line">[</span><br><span class="line">  [7,4,1],</span><br><span class="line">  [8,5,2],</span><br><span class="line">  [9,6,3]</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<p>实现代码。<br>Language: <strong>Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rotate</span><span class="params">(<span class="keyword">int</span>[][] matrix)</span> </span>&#123;</span><br><span class="line">         <span class="keyword">int</span> len = matrix.length;</span><br><span class="line">        <span class="comment">//上下反转</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len/<span class="number">2</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;len;j++)&#123;</span><br><span class="line">               <span class="keyword">int</span> temp = matrix[i][j];</span><br><span class="line">                matrix[i][j] = matrix[len-i-<span class="number">1</span>][j];</span><br><span class="line">                matrix[len-i-<span class="number">1</span>][j] = temp;</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//斜角反转</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;len;j++)&#123;</span><br><span class="line">                <span class="keyword">int</span> temp = matrix[i][j];</span><br><span class="line">                 matrix[i][j] =  matrix[j][i];</span><br><span class="line">                matrix[j][i] =  temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="思路二："><a href="#思路二：" class="headerlink" title="思路二："></a>思路二：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public void rotate(int[][] matrix) &#123;</span><br><span class="line">        int N &#x3D; matrix.length;</span><br><span class="line">        int M, row, col, nextRow, nextCol, now, next, offset;</span><br><span class="line">        for (int i &#x3D; 0; i &lt; N &#x2F; 2; i++) &#123;  &#x2F;&#x2F;圈数</span><br><span class="line">            M &#x3D; (i + 1) * 2 + (N &amp; 1);</span><br><span class="line">            for (int j &#x3D; 0; j &lt; M - 1; j++) &#123;  &#x2F;&#x2F;该圈的长度</span><br><span class="line">                offset &#x3D; N &#x2F; 2 - i - 1;</span><br><span class="line">                row &#x3D; 0;</span><br><span class="line">                col &#x3D; j;</span><br><span class="line">                now &#x3D; matrix[+offset][col + offset];</span><br><span class="line">                for (int k &#x3D; 0; k &lt; 4; k++) &#123;   &#x2F;&#x2F;换4个</span><br><span class="line">                    nextRow &#x3D; col;</span><br><span class="line">                    nextCol &#x3D; M - 1 - row;</span><br><span class="line">                    next &#x3D; matrix[nextRow + offset][nextCol + offset];</span><br><span class="line">                    matrix[nextRow + offset][nextCol + offset] &#x3D; now;</span><br><span class="line">                    now &#x3D; next;</span><br><span class="line">                    row &#x3D; nextRow;</span><br><span class="line">                    col &#x3D; nextCol;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/14/algorithm/%E7%A7%BB%E5%8A%A8%E9%9B%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/14/algorithm/%E7%A7%BB%E5%8A%A8%E9%9B%B6/" class="post-title-link" itemprop="url">移动零</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-14 17:22:48" itemprop="dateCreated datePublished" datetime="2018-07-14T17:22:48+08:00">2018-07-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:14:09" itemprop="dateModified" datetime="2020-04-12T23:14:09+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="283-移动零-Move-Zeroes"><a href="#283-移动零-Move-Zeroes" class="headerlink" title="283. 移动零(Move Zeroes)"></a><a href="https://leetcode-cn.com/problems/move-zeroes/description/" target="_blank" rel="noopener">283. 移动零(Move Zeroes)</a></h3><p>题目难度： <strong>简单</strong></p>
+<p>给定一个数组 <code>nums</code>，编写一个函数将所有 <code>0</code> 移动到数组的末尾，同时保持非零元素的相对顺序。</p>
+<p><strong>示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">**输入:** &#96;[0,1,0,3,12]&#96;</span><br><span class="line">**输出:** &#96;[1,3,12,0,0]&#96;</span><br></pre></td></tr></table></figure>
+
+<p><strong>说明</strong>:</p>
+<ol>
+<li>必须在原数组上操作，不能拷贝额外的数组。</li>
+<li>尽量减少操作次数。</li>
+</ol>
+<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><h3 id="解题思路："><a href="#解题思路：" class="headerlink" title="解题思路："></a>解题思路：</h3><h4 id="暴力解法。"><a href="#暴力解法。" class="headerlink" title="暴力解法。"></a>暴力解法。</h4><p>从后往前遍历，当发现有0时，就其移动到最后，这个移动最后并不是仅仅将这个0和最后一个数字对调，而是将这个0之后所有的数字都往前挪一位。此法简单，暴力，时间复杂度较高，但是容易想到。代码如下：<br>Language: <strong>Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">moveZeroes</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=nums.length-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] == <span class="number">0</span>)&#123;</span><br><span class="line">                move(nums,i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">move</span><span class="params">(<span class="keyword">int</span>[] nums,<span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=target;i&lt;nums.length-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            nums[i] = nums[i+<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        nums[nums.length-<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="将0过滤掉"><a href="#将0过滤掉" class="headerlink" title="将0过滤掉"></a>将0过滤掉</h4><p>从0开始遍历数组，维护一个指针pos用于表示当前非零数组的位置，维护一个指针i用于表示当前数组遍历的位置。<br>以<code>[0,1,0,3,12]</code>为例，进行说明。<br>从0开始遍历数组，发现第一个数字为0，此时pos不做任何改变，仍然为0。<br>第二个数字为1，此时有<code>nums[pos] = nums[i]</code> 即<code>nums[0] = nums[1]</code>，且<code>pos++</code>,即此时pos=1;<br>到第三个数字又为0，此时又不做任何改变。<br>到第四个数字的时候，我们即又<code>num[1] = num[3]</code>,且<code>pos++</code> ，即此时pos = 2.<br>如此我们就通过pos指针将数组中的0过滤掉了，最后我们添加相应的0到数组后面即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public void moveZeroes(int[] nums) &#123;</span><br><span class="line">        int pos &#x3D; 0;</span><br><span class="line">        for(int i &#x3D; 0; i &lt; nums.length; i++)&#123;</span><br><span class="line">            if(nums[i] !&#x3D; 0)&#123;</span><br><span class="line">                nums[pos]&#x3D; nums[i];</span><br><span class="line">                pos++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        for(;pos&lt;nums.length; pos++)&#123;</span><br><span class="line">            nums[pos] &#x3D; 0;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/07/13/algorithm/%E5%8A%A0%E4%B8%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -768,7 +1041,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:02:57" itemprop="dateModified" datetime="2020-04-12T23:02:57+08:00">2020-04-12</time>
+                <time title="修改时间：2020-07-18 13:44:35" itemprop="dateModified" datetime="2020-07-18T13:44:35+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -925,309 +1198,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/04/13/android/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/04/13/android/%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Dview%E6%98%AF%E5%90%A6%E6%98%BE%E7%A4%BA/" class="post-title-link" itemprop="url">判断当前view是否显示</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-04-13 22:34:53" itemprop="dateCreated datePublished" datetime="2018-04-13T22:34:53+08:00">2018-04-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:10:47" itemprop="dateModified" datetime="2020-04-12T23:10:47+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近有一个这样的需求，需要知道某个view的展示率，但是这个view嵌套在一个滑动布局中，在当前view已经被添加到滑动布局的前提下，该view也不一定会展示，可能会出现的情况如下所示：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/2178834-a3e2d70d30d522f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="可能存在的情况.png"></p>
-<p>那么，我们怎么判断当前的view是否展示了呢？</p>
-<p>我的实现思路如下：</p>
-<ol>
-<li>首先，在添加view的时候，判断当前view是否展示，如果展示，直接上报即可。如果没有展示，而是如图所示的情况，那就存储一个sp的值，用于表示当前的view没有上报。</li>
-<li>在滑动布局中，进行滑动监听。在滑动的过程中，判断当前的view是否上报，在没有上报的情况下，继续判断view是否显示，如果在混动过程中view显示了，就上报view显示了，并存储一个sp的值，用于表示当前的view已经上报了。</li>
-</ol>
-<p>上面的语言用代码表示为：<br>在添加view的逻辑中，用如下代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;addView代表该view被添加到当前布局了</span><br><span class="line">  if (addView()) &#123;</span><br><span class="line">&#x2F;&#x2F;parentView 即滑动布局</span><br><span class="line">            parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void onGlobalLayout() &#123;</span><br><span class="line">                    parentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);</span><br><span class="line">&#x2F;&#x2F;这里是判断当前布局是否可见</span><br><span class="line">                    if (CustomMainScrollView.checkIsVisible(mContext, parentView)) &#123;</span><br><span class="line">                        reportSkinShareCard(gamemaster_app_cardshow_new.OP_VISIBLE, false);</span><br><span class="line">                    &#125;else&#123;</span><br><span class="line">                        &#x2F;&#x2F;设置状态为未上报</span><br><span class="line">PreferencesUtils.getInstance().putBoolean(HAS_REPORT_SHOW_SKIN_THEME_CARD, false);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>然后在滑动布局中，监听滚动事件，调用下面的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> private void reportSkinThemeCard(Context context, View skinThemeView) &#123;</span><br><span class="line">        boolean hasReport &#x3D; PreferencesUtils.getInstance().getBoolean(HAS_REPORT_SHOW_SKIN_THEME_CARD, false);</span><br><span class="line"></span><br><span class="line">        if (!hasReport &amp;&amp; checkIsVisible(context, skinThemeView) &amp;&amp; mSkinThemeView.getChildCount() !&#x3D; 0 ) &#123;</span><br><span class="line">            byte  cardStyle &#x3D; AbTestLogicManager.isSkinWithImageTestValue()?gamemaster_app_cardshow_new.CARD_TYPE_SKIN_WITH_IMAGE:gamemaster_app_cardshow_new.CRAD_SKIN_WITH_TEXT;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; todo 在这里进行上报操作</span><br><span class="line">            PreferencesUtils.getInstance().putBoolean(PreferenceConstants.HAS_REPORT_SHOW_SKIN_THEME_CARD, true);</span><br><span class="line">&#x2F;&#x2F;最后，更新状态，避免重复上报</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>在补充一个检查当前view是否显示的方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static Boolean checkIsVisible(Context context, View view) &#123;</span><br><span class="line">        int screenWidth &#x3D; getScreenMetrics(context).x;</span><br><span class="line">        int screenHeight &#x3D; getScreenMetrics(context).y;</span><br><span class="line">        Rect rect &#x3D; new Rect(0, 0, screenWidth, screenHeight);</span><br><span class="line">        int[] location &#x3D; new int[2];</span><br><span class="line">        view.getLocationInWindow(location);</span><br><span class="line">        if (view.getLocalVisibleRect(rect)) &#123;</span><br><span class="line">            return true;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/03/17/android/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/03/17/android/android%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">android中的类加载</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-17 21:21:33" itemprop="dateCreated datePublished" datetime="2018-03-17T21:21:33+08:00">2018-03-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:55:21" itemprop="dateModified" datetime="2020-04-12T22:55:21+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>主要介绍几个知识点：</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
-<li><a href="https://www.jianshu.com/p/3afa47e9112e" target="_blank" rel="noopener">https://www.jianshu.com/p/3afa47e9112e</a></li>
-<li>&lt;…&gt;</li>
-</ul>
-<h1 id="java中常用的classLoader"><a href="#java中常用的classLoader" class="headerlink" title="java中常用的classLoader"></a>java中常用的<code>classLoader</code></h1><p>说到android中的<code>classLoader</code>，就不能不先说说java中的<code>classLoader</code>是什么。<br>所谓classLoader就是负责将编译好的class文件加载到指定位置的实现类。具体来说，我们编写java代码时，需要将其编译成.class文件，最终运行时就需要将这些class文件加载到内存才能运行，而加载这些class文件的方法就可以成为classLoader。<br>在java中常用的classLoader有以下三种：</p>
-<h2 id="Bootstrap-Classloder"><a href="#Bootstrap-Classloder" class="headerlink" title="Bootstrap Classloder"></a>Bootstrap Classloder</h2><p> 这个类加载使用C++语言实现，是虚拟机自身的一部分。他是三个类加载器中最顶层的加载类，主要负责加载%JAVA_HOME%/lib下的核心类或者jar加载到内存中。（值得注意的是，Bootstrao Loader被设计成只能加载包名为java、javax、sun等开头的类.）</p>
-<h2 id="Extention-Classloder"><a href="#Extention-Classloder" class="headerlink" title="Extention Classloder"></a>Extention Classloder</h2><p>扩展类的加载器，由java语言实现，主要负载加载<code>%JAVA_HOME%/lib/ext</code>目录下的类库，或者是系统指定的类库。</p>
-<h2 id="AppClassloader"><a href="#AppClassloader" class="headerlink" title="AppClassloader"></a>AppClassloader</h2><p> 主要负责加载系统类路径或者指定路径下的类库。<br>以上三种是java中定义的ClassLoader。</p>
-<h1 id="下面介绍android中常用的类加载器。"><a href="#下面介绍android中常用的类加载器。" class="headerlink" title="下面介绍android中常用的类加载器。"></a>下面介绍android中常用的类加载器。</h1><h2 id="classLoader"><a href="#classLoader" class="headerlink" title="classLoader"></a>classLoader</h2><p>所有的classLoader的基类，他是一个抽象类，所有的<code>classLoader</code>最终都会继承自他，我们如果需要自定义classLoader也需要直接或者间接的继承他，并实现其中的<code>findClass</code>方法，并通过<code>defineClass</code>创建一个类实例。自定义类加载的示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class NetworkClassLoader extends ClassLoader &#123;</span><br><span class="line">        String host;</span><br><span class="line">         int port;</span><br><span class="line"></span><br><span class="line">         public Class findClass(String name) &#123;</span><br><span class="line">             byte[] b &#x3D; loadClassData(name);</span><br><span class="line">             return defineClass(name, b, 0, b.length);</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         private byte[] loadClassData(String name) &#123;</span><br><span class="line">             &#x2F;&#x2F; load the class data from the connection</span><br><span class="line">             &#x2F;&#x2F;省略</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="BaseDexClassLoader"><a href="#BaseDexClassLoader" class="headerlink" title="BaseDexClassLoader"></a>BaseDexClassLoader</h2><p>BaseDexClassLoader继承自ClassLoader，只是对其进行了进一步的封装，并没有实现，他有两个直接的子类<code>PathClassLoader</code>和<code>DexClassLoader</code>。<br>简单介绍一下他的构造函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public BaseDexClassLoader(String dexPath, File optimizedDirectory, String librarySearchPath, ClassLoader parent) &#123;</span><br><span class="line">  &#x2F;&#x2F;dexPath 代表目标类所在的apk、DEX或者JAR文件的路径</span><br><span class="line">  &#x2F;&#x2F;optimizedDirectory用于指定解压出来的dex文件存放的路径</span><br><span class="line">  &#x2F;&#x2F;librarySearchPath用于指定类中所使用的C&#x2F;C++库存放的路径</span><br><span class="line">  &#x2F;&#x2F;parent 用于指定该加载器的父加载器，一般为当前执行类的加载器</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>关于BaseDexClassLoader还有一点要补充的是，由于dex文件被包含在APK或者jar文件中，因此在加载目标类之前需要先从APK或者jar文件中加压处dex文件，optimizedDirectory即为指定解压出来的dex文件存放的路径，这也是对apk中dex根据平台ODEX优化的过程。</p>
-<h2 id="DexClassLoader"><a href="#DexClassLoader" class="headerlink" title="DexClassLoader"></a>DexClassLoader</h2><p>DexClassLoader用于加载包含dex的JAR或者APK文件，但是他不能加载jar或者apk文件。他最终加载的都是dex文件，虽然他是从.jar或者.zip，.apk等结尾的文件中加载，但是他们最终都会生成一个对应的dex文件，他操作的还是dex文件。DexClassLoader继承自BaseDexClassLoader，原理如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class DexClassLoader extends BaseDexClassLoader &#123;</span><br><span class="line">    public DexClassLoader(String dexPath, String optimizedDirectory,</span><br><span class="line">            String libraryPath, ClassLoader parent) &#123;</span><br><span class="line">        super(dexPath, new File(optimizedDirectory), libraryPath, parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>由代码不能看出，DexClassLoader只是简单的对BaseDexClassLoader进行了一层封装，并且指定了<code>optimizedDirectory</code>的路径为一个新的文件路径，DexClassLoader通过指定自己的optimizedDirectory，所以它可以加载外部的dex，因为这个dex会被复制到内部路径的optimizedDirectory。<br><strong>所以，DexClassLoader一般用来作为动态加载的加载器。</strong></p>
-<h2 id="PathClassLoader"><a href="#PathClassLoader" class="headerlink" title="PathClassLoader"></a>PathClassLoader</h2><p>PathClassLoader也是继承自BaseDexClassLoader，他主要用于加载apk，一般应用于加载android的系统类和app应用的类。他的实现如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class PathClassLoader extends BaseDexClassLoader &#123;</span><br><span class="line">    public PathClassLoader(String dexPath, ClassLoader parent) &#123;</span><br><span class="line">        super(dexPath, null, null, parent);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public PathClassLoader(String dexPath, String libraryPath,</span><br><span class="line">            ClassLoader parent) &#123;</span><br><span class="line">        super(dexPath, null, libraryPath, parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，PathClassLoader将optimizedDirectory置为null，而optimizedDirectory是用来指定apk或者jar解压出来的dex存放的位置，如果optimizedDirectory为null，则使用其默认路径/data/dalvik-cache，因此无法加载外部的apk的dex，只能加载内部的dex，这些大都是存在系统中已经安装过的apk里面的。</p>
-<h2 id="URLClassLoader"><a href="#URLClassLoader" class="headerlink" title="URLClassLoader"></a>URLClassLoader</h2><p>URLClassLoader只能加载jar文件，但是dalvik虚拟机不能识别jar，所以在android中无法使用这个加载器。</p>
-<h2 id="InMemoryDexClassLoader"><a href="#InMemoryDexClassLoader" class="headerlink" title="InMemoryDexClassLoader"></a>InMemoryDexClassLoader</h2><p>InMemoryDexClassLoader也是继承自BeseDexClassLoader，是API26新增的加载器，用于加载内存中的dex文件。</p>
-<h2 id="DelegateLastClassLoader"><a href="#DelegateLastClassLoader" class="headerlink" title="DelegateLastClassLoader"></a>DelegateLastClassLoader</h2><p>DelegateLastClassLoader继承自PathClassLoader，是API27新增的加载器，用于指定最后的查找策略，查找顺序如下：先判断自己是否加载此类，然后在判断此类的加载器是否加载过此类，最后委托给指定的父加载器。</p>
-<h1 id="classloader的双亲委托模型"><a href="#classloader的双亲委托模型" class="headerlink" title="classloader的双亲委托模型"></a><code>classloader</code>的双亲委托模型</h1><p>classLoader双亲委托模型，当要加载某个类时，先判断自己是否有加载过此类，如果自己没有加在过此类的话，进而判断父类是否加载过，如果某个父类加在过这个类的话，就直接返回，不重复加载。如果一直到顶级父类都没有加载此类的话，这个加载任务就会分发下来，最后用当前类加载器去加载该类。</p>
-<h1 id="类加载机制实现热修复方案"><a href="#类加载机制实现热修复方案" class="headerlink" title="类加载机制实现热修复方案"></a>类加载机制实现热修复方案</h1><p>通过使用dexClassloader动态修改加载dex的顺序即可达到热修复的目的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/01/18/android/AOP-%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">AOP 编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-01-18 20:22:12" itemprop="dateCreated datePublished" datetime="2018-01-18T20:22:12+08:00">2018-01-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:56:07" itemprop="dateModified" datetime="2020-04-12T22:56:07+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">实习日记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
-<li><a href="https://www.jianshu.com/p/9fb07b2596f7" target="_blank" rel="noopener">Android AOP面向切面编程详解</a></li>
-<li><a href="http://blog.csdn.net/innost/article/details/49387395" target="_blank" rel="noopener">深入理解Android之AOP</a></li>
-<li><a href="http://blog.csdn.net/autfish/article/details/51184405" target="_blank" rel="noopener">http://blog.csdn.net/autfish/article/details/51184405</a></li>
-</ul>
-<hr>
-<h1 id="AOP-基本思想"><a href="#AOP-基本思想" class="headerlink" title="AOP 基本思想"></a>AOP 基本思想</h1><p>刚接触编程的时候，一般先接触的c语言这类的OOP（Procedure Oriented，即面向过程）语言，面相过程是一种以过程为中心的编程思想。这些都是以什么正在发生为主要目标进行编程，就是分析出解决问题所需要的步骤，然后用函数把这些步骤一步一步实现，使用的时候一个一个依次调用就可以了。</p>
-<p>然后，我们就会学到另一种更符合我们思维方式的一种思想，OOP（Object-Oriented Programming，即面向过程程序设计）语言，面向过程其实是最为实际的一种思考方式，就算是面向对象的方法也是含有面向过程的思想。可以说面向过程是一种基础的方法。它考虑的是实际地实现。一般的面向过程是从上往下步步求精，所以面向过程最重要的是模块化的思想方法。对比面向过程，面向对象的方法主要是把事物给对象化，对象包括属性与行为。当程序规模不是很大时，面向过程的方法还会体现出一种优势。因为程序的流程很清楚，按着模块与函数的方法可以很好的组织。<br>但是，在重复代码很多，需要重复利用的情况下，面相对象程序设计也显得很鸡肋，必要每次都主动去调用该方法，而且有特殊需求的时候还不能去需改写好的方法，因为这可能会造成其他其他调用该方法的地方出现问题。</p>
-<p>这个时候AOP就出现了。AOP是Aspect Oriented Programming的缩写，即『面向切面编程』。它和我们平时接触到的OOP都是编程的不同思想，OOP，即『面向对象编程』，它提倡的是将功能模块化，对象化，而AOP的思想，则不太一样，它提倡的是针对同一类问题的统一处理，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。</p>
-<p>最后总结成一句话就是：<br><strong>在运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。</strong></p>
-<h1 id="编程实践"><a href="#编程实践" class="headerlink" title="编程实践"></a>编程实践</h1><p>讲了思想，我们通过具体的例子来进行说明。我们实现为方法自动添加log日志，不同于以前的主动调用，我们通过Aspect来实现AOP注入。</p>
-<p>项目代码托管：<a href="https://github.com/Reoger/AOPTest" target="_blank" rel="noopener">https://github.com/Reoger/AOPTest</a></p>
-<p>首先是配置：<code>app</code>下的<code>build.gradle</code>文件，配置类似如下代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: &#39;com.android.application&#39;</span><br><span class="line">import org.aspectj.bridge.IMessage</span><br><span class="line">import org.aspectj.bridge.MessageHandler</span><br><span class="line">import org.aspectj.tools.ajc.Main</span><br><span class="line"></span><br><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        mavenCentral()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath &#39;org.aspectj:aspectjtools:1.8.9&#39;</span><br><span class="line">        classpath &#39;org.aspectj:aspectjweaver:1.8.9&#39;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line">final def log &#x3D; project.logger</span><br><span class="line">final def variants &#x3D; project.android.applicationVariants</span><br><span class="line">variants.all &#123; variant -&gt;</span><br><span class="line">    if (!variant.buildType.isDebuggable()) &#123;</span><br><span class="line">        log.debug(&quot;Skipping non-debuggable build type &#39;$&#123;variant.buildType.name&#125;&#39;.&quot;)</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    JavaCompile javaCompile &#x3D; variant.javaCompile</span><br><span class="line">    javaCompile.doLast &#123;</span><br><span class="line">        String[] args &#x3D; [&quot;-showWeaveInfo&quot;,</span><br><span class="line">                         &quot;-1.8&quot;,</span><br><span class="line">                         &quot;-inpath&quot;, javaCompile.destinationDir.toString(),</span><br><span class="line">                         &quot;-aspectpath&quot;, javaCompile.classpath.asPath,</span><br><span class="line">                         &quot;-d&quot;, javaCompile.destinationDir.toString(),</span><br><span class="line">                         &quot;-classpath&quot;, javaCompile.classpath.asPath,</span><br><span class="line">                         &quot;-bootclasspath&quot;, project.android.bootClasspath.join(File.pathSeparator)]</span><br><span class="line">        log.debug &quot;ajc args: &quot; + Arrays.toString(args)</span><br><span class="line"></span><br><span class="line">        MessageHandler handler &#x3D; new MessageHandler(true);</span><br><span class="line">        new Main().run(args, handler);</span><br><span class="line">        for (IMessage message : handler.getMessages(null, true)) &#123;</span><br><span class="line">            switch (message.getKind()) &#123;</span><br><span class="line">                case IMessage.ABORT:</span><br><span class="line">                case IMessage.ERROR:</span><br><span class="line">                case IMessage.FAIL:</span><br><span class="line">                    log.error message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.WARNING:</span><br><span class="line">                    log.warn message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.INFO:</span><br><span class="line">                    log.info message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.DEBUG:</span><br><span class="line">                    log.debug message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion 25</span><br><span class="line">    buildToolsVersion &#39;25.0.0&#39;</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId &quot;com.example.cm.aoptest&quot;</span><br><span class="line">        minSdkVersion 20</span><br><span class="line">        targetSdkVersion 25</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0&quot;</span><br><span class="line">        testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&#39;proguard-android.txt&#39;), &#39;proguard-rules.pro&#39;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    compile fileTree(include: [&#39;*.jar&#39;], dir: &#39;libs&#39;)</span><br><span class="line">    androidTestCompile(&#39;com.android.support.test.espresso:espresso-core:2.2.2&#39;, &#123;</span><br><span class="line">        exclude group: &#39;com.android.support&#39;, module: &#39;support-annotations&#39;</span><br><span class="line">    &#125;)</span><br><span class="line">    compile &#39;com.android.support:appcompat-v7:25.3.1&#39;</span><br><span class="line">    compile &#39;com.android.support.constraint:constraint-layout:1.0.2&#39;</span><br><span class="line">    compile &#39;org.aspectj:aspectjrt:1.8.9&#39;</span><br><span class="line">    testCompile &#39;junit:junit:4.12&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>然后就是实现我们的要实现的注入的log方法，<code>AspectLogTest.java</code>代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import org.aspectj.lang.JoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.Aspect;</span><br><span class="line">import org.aspectj.lang.annotation.Before;</span><br><span class="line">import org.aspectj.lang.annotation.Pointcut;</span><br><span class="line">import org.aspectj.lang.reflect.MethodSignature;</span><br><span class="line"></span><br><span class="line">import java.lang.annotation.ElementType;</span><br><span class="line">import java.lang.annotation.Retention;</span><br><span class="line">import java.lang.annotation.RetentionPolicy;</span><br><span class="line">import java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * Created by CM on 2018&#x2F;1&#x2F;18.</span><br><span class="line"> *</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Aspect</span><br><span class="line">public class AspectLogTest &#123;</span><br><span class="line"></span><br><span class="line">    @Target(ElementType.METHOD) &#x2F;&#x2F;可以注解在方法 上</span><br><span class="line">    @Retention(RetentionPolicy.RUNTIME) &#x2F;&#x2F;运行时（执行时）存在</span><br><span class="line">    public @interface AspectLog &#123;</span><br><span class="line">        String value();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    final static String TAG &#x3D; &quot;TAG&quot;;</span><br><span class="line"></span><br><span class="line">    @Pointcut(&quot;execution(@com.example.cm.aoptest.log.AspectLogTest.AspectLog * *(..))&quot;)</span><br><span class="line">    public void logForActivity()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Before(&quot;logForActivity()&quot;)</span><br><span class="line">    public Object doRealLog(JoinPoint joinPoint)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            MethodSignature methodSignature &#x3D; (MethodSignature) joinPoint.getSignature();</span><br><span class="line">            AspectLog aspectJAnnotation &#x3D; methodSignature.getMethod().getAnnotation(AspectLog.class);</span><br><span class="line">            String log &#x3D; aspectJAnnotation.value();</span><br><span class="line">            Log.d(TAG, &quot;doRealLog: 打印日志&quot;+log);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>写好了接口，我们来实现自动注入代码，这里我们还是需要借助注解来实现。如果我们向打印<code>onCreate()</code>、<code>onStart()</code>等方法的中的信息，我们在<code>MainActivity</code>中这么写。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@AspectLogTest.AspectLog(value &#x3D; &quot;来自OnStop的日志信息&quot;)</span><br><span class="line">@Override</span><br><span class="line">protected void onStop() &#123;</span><br><span class="line">    super.onStop();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@AspectLogTest.AspectLog(value &#x3D; &quot;来自OnPause的日志信息&quot;)</span><br><span class="line">@Override</span><br><span class="line">protected void onPause() &#123;</span><br><span class="line">    super.onPause();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@AspectLogTest.AspectLog(value &#x3D; &quot;来自OnCreate的日志信息&quot;)</span><br><span class="line">@Override</span><br><span class="line">protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">    super.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后就实现这里自动log功能。<br>当然，从这个例子看起来好像和自己手动写<code>Log.d()</code>没有区别，只是用注解的方式调用而已。但是这里仅仅是为了展示他的功能，真正使用的时候我们可以通过他们来实现复杂的控制。</p>
-<p>介绍一下Aspect常见的注解。</p>
-<ul>
-<li><strong>@Aspect</strong> 把当前类标识为一个切面供容器读取</li>
-<li><strong>@Before</strong> 表示一个前置增强方法</li>
-<li><strong>@AfterReturning</strong> 表示一个后置增强方法</li>
-<li><strong>@AfterThrowing</strong> 异常抛出增强</li>
-<li><strong>@After</strong> final增强，不管是抛出异常或是正常退出都会执行</li>
-<li><strong>@Around</strong> 环绕增强，先执行注入的方法，只有返回对应现场才能执行被注入的方法。</li>
-<li><strong>@DeclareParents</strong> 引介增强</li>
-</ul>
-<p>介绍一下<code>execution</code>切点函数，其定义为<code>execution([方法修饰符] [返回类型] 方法名 参数 [异常模式])</code><br>在上例中，我们的<code>execution</code>函数为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execution(@com.example.cm.aoptest.log.AspectLogTest.AspectLog * *(..))</span><br></pre></td></tr></table></figure>
-<p>注意这里的方法名需要添加包名，*表示匹配任意字符，..表示匹配任意字符，可以匹配任意多个元素。<br>+必须跟在类名后面，表示类本身和继承或扩展制定类的所有类。</p>
-<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><ul>
-<li><strong>PointCut 切入点</strong>：想要动态添加代码的连接点</li>
-<li><strong>Advice 通知</strong> ：向切点中注入代码实现方法</li>
-<li><strong>Aspect 切面</strong> ：切入点和通知的集合。</li>
-<li><strong>Joint Point 连接点</strong>：所有目标方法都是连接点</li>
-<li><strong>Weaving 编织</strong> 将切面代码注入到目标中，并生成代码混合到.class的过程。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1293,17 +1267,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">11</span>
-        <span class="site-state-item-name">分类</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">32</span>
-        <span class="site-state-item-name">标签</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

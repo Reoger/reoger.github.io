@@ -178,6 +178,301 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/11/12/sourceCode/LinkedHashMap%E5%AE%9E%E7%8E%B0LRUCache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/12/sourceCode/LinkedHashMap%E5%AE%9E%E7%8E%B0LRUCache/" class="post-title-link" itemprop="url">LinkedHashMap实现LRUCache</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-12 23:14:55" itemprop="dateCreated datePublished" datetime="2018-11-12T23:14:55+08:00">2018-11-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-18 13:47:52" itemprop="dateModified" datetime="2020-07-18T13:47:52+08:00">2020-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/sourceCode/" itemprop="url" rel="index"><span itemprop="name">sourceCode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LinkedHashMap实现LRUCache"><a href="#LinkedHashMap实现LRUCache" class="headerlink" title="LinkedHashMap实现LRUCache"></a>LinkedHashMap实现LRUCache</h1><hr>
+<h2 id="LinkedHashMap实现原理"><a href="#LinkedHashMap实现原理" class="headerlink" title="LinkedHashMap实现原理"></a>LinkedHashMap实现原理</h2><p>简单介绍一下LinkedHasMap的实现原理，针对JDK 8.0，在不同的版本上其实现可能有所区别。</p>
+<h2 id="原理概括"><a href="#原理概括" class="headerlink" title="原理概括"></a>原理概括</h2><p><code>LinkedHasMap</code>就是基于<code>HashMap</code>，通过维护一个双向链表，达到在使用<code>HashMap</code>存储的情况下，记录其顺序。<br><code>linkedHashMap</code>结构图的示意图如图所示：<br><img src="https://images2015.cnblogs.com/blog/249993/201612/249993-20161215143120620-1544337380.png" alt="linkedHashMap结构图"></p>
+<p>水平所限，本篇不会把所有的实现都呈现出来，只对其其中的几个关键性的方法函数进行解析。</p>
+<h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><p>其构造方法主要有三个，只介绍其中的一个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public LinkedHashMap(int initialCapacity,</span><br><span class="line">                      float loadFactor,</span><br><span class="line">                      boolean accessOrder) &#123;</span><br><span class="line">     super(initialCapacity, loadFactor);</span><br><span class="line">     this.accessOrder &#x3D; accessOrder;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>initialCapacity</code>表示初始的长度，<code>loadFactor</code>表示加载因子,<code>accessOrder</code>表示访问顺序，当其值为<code>true</code>时，表示当前的<code>LinkedHashMap</code>的顺序由访问数据时决定，即数据访问之后就会将这个数据放在<code>LinkedHashMap</code>数据项的前面来，而<code>accessOrder</code>为false时，则表示数据的访问数据由插入时就决定好了。</p>
+<h2 id="put方法"><a href="#put方法" class="headerlink" title="put方法"></a>put方法</h2><p>往<code>LinkedHashMap</code>里面添加数据的方法就是通过<code>put</code>方法实现，在jdk 8.0中<code>LinkedHashMap</code>并没有自己实现<code>put</code>方法，而是由<code>HashMap</code>一同实现了。下面是具体的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">public V put(K key, V value) &#123;</span><br><span class="line">       return putVal(hash(key), key, value, false, true);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">final V putVal(int hash, K key, V value, boolean onlyIfAbsent,</span><br><span class="line">                  boolean evict) &#123;</span><br><span class="line">       Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;</span><br><span class="line">       if ((tab &#x3D; table) &#x3D;&#x3D; null || (n &#x3D; tab.length) &#x3D;&#x3D; 0)</span><br><span class="line">           n &#x3D; (tab &#x3D; resize()).length;</span><br><span class="line">       if ((p &#x3D; tab[i &#x3D; (n - 1) &amp; hash]) &#x3D;&#x3D; null)</span><br><span class="line">           tab[i] &#x3D; newNode(hash, key, value, null);</span><br><span class="line">       else &#123;</span><br><span class="line">           Node&lt;K,V&gt; e; K k;</span><br><span class="line">           if (p.hash &#x3D;&#x3D; hash &amp;&amp;</span><br><span class="line">               ((k &#x3D; p.key) &#x3D;&#x3D; key || (key !&#x3D; null &amp;&amp; key.equals(k))))</span><br><span class="line">               e &#x3D; p;</span><br><span class="line">           else if (p instanceof TreeNode)</span><br><span class="line">               e &#x3D; ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);</span><br><span class="line">           else &#123;</span><br><span class="line">               for (int binCount &#x3D; 0; ; ++binCount) &#123;</span><br><span class="line">                   if ((e &#x3D; p.next) &#x3D;&#x3D; null) &#123;</span><br><span class="line">                       p.next &#x3D; newNode(hash, key, value, null);</span><br><span class="line">                       if (binCount &gt;&#x3D; TREEIFY_THRESHOLD - 1) &#x2F;&#x2F; -1 for 1st</span><br><span class="line">                           treeifyBin(tab, hash);</span><br><span class="line">                       break;</span><br><span class="line">                   &#125;</span><br><span class="line">                   if (e.hash &#x3D;&#x3D; hash &amp;&amp;</span><br><span class="line">                       ((k &#x3D; e.key) &#x3D;&#x3D; key || (key !&#x3D; null &amp;&amp; key.equals(k))))</span><br><span class="line">                       break;</span><br><span class="line">                   p &#x3D; e;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           if (e !&#x3D; null) &#123; &#x2F;&#x2F; existing mapping for key</span><br><span class="line">               V oldValue &#x3D; e.value;</span><br><span class="line">               if (!onlyIfAbsent || oldValue &#x3D;&#x3D; null)</span><br><span class="line">                   e.value &#x3D; value;</span><br><span class="line">               afterNodeAccess(e);</span><br><span class="line">               return oldValue;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       ++modCount;</span><br><span class="line">       if (++size &gt; threshold)</span><br><span class="line">           resize();</span><br><span class="line">       afterNodeInsertion(evict);</span><br><span class="line">       return null;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码略长，长话短说，前面的大部分都是<code>hashMap</code>的实现，到了最后<code>afterNodeInsertion</code>，这个方法就是留给<code>LinkedHashMap</code>去实现其调换顺序的。我们直接看<code>LinkedHashMap</code>中这个方法的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void afterNodeInsertion(boolean evict) &#123; &#x2F;&#x2F; possibly remove eldest</span><br><span class="line">        LinkedHashMap.Entry&lt;K,V&gt; first;</span><br><span class="line">        if (evict &amp;&amp; (first &#x3D; head) !&#x3D; null &amp;&amp; removeEldestEntry(first)) &#123;</span><br><span class="line">            K key &#x3D; first.key;</span><br><span class="line">            removeNode(hash(key), key, null, false, true);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法主要实现在某些情况下，需要将老的数据移除掉，移除就是通过<code>removeNode</code>实现的，我们不往下继续看，只关注其条件。我们观察到 需要移除老数据的添加有三个.</p>
+<ol>
+<li>evict的boolean为true</li>
+<li>head ！= null</li>
+<li>removeEldestEntry(first) 返回true<br>其中，<code>evict</code>在调用时就是传入的值true,而<code>head</code>在<code>LinkedHashMap</code>中初始化并添加数据后，就不会为null了，所以这里需要直接移除老数据的关键条件就是<code>removeEldestEntry</code>这个方法了，而这个方法在<code>LinkedHashMap</code>的实现中默认是范围false的，即默认不用移除掉老的数据。那么当我们需要<code>LinkedHashMap</code>存储的数据达到一定量的时候，移除掉老数据就需要重写<code>removeEldestEntry</code>这个方法了。</li>
+</ol>
+<h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2><p>get的实现在<code>LinkedHashMap</code>重写了，实现也很简单，首先判断有没有这个key，如果有，在判断当前的<code>accessOrder</code>是不是为true，如果为true，则需要将顺序按照访问顺序调整一下，然后将数据返回回去。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public V get(Object key) &#123;</span><br><span class="line">       Node&lt;K,V&gt; e;</span><br><span class="line">       if ((e &#x3D; getNode(hash(key), key)) &#x3D;&#x3D; null)</span><br><span class="line">           return null;</span><br><span class="line">       if (accessOrder)</span><br><span class="line">           afterNodeAccess(e);</span><br><span class="line">       return e.value;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="利用HashMap实现LRUCache"><a href="#利用HashMap实现LRUCache" class="headerlink" title="利用HashMap实现LRUCache"></a>利用<code>HashMap</code>实现LRUCache</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">class LRUCache &#123;</span><br><span class="line">    </span><br><span class="line">    class Node &#123;</span><br><span class="line">        int key;</span><br><span class="line">        int value;</span><br><span class="line">        Node pre;</span><br><span class="line">        Node next;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private int capacity;</span><br><span class="line">    </span><br><span class="line">    private Node head, tail;</span><br><span class="line">    </span><br><span class="line">    private Map&lt;Integer, Node&gt; map &#x3D; null;</span><br><span class="line"></span><br><span class="line">    public LRUCache(int capacity) &#123;</span><br><span class="line">        this.capacity &#x3D; capacity;</span><br><span class="line">        map &#x3D; new HashMap&lt;&gt;(capacity);</span><br><span class="line">        head &#x3D; new Node();</span><br><span class="line">        tail &#x3D; new Node();</span><br><span class="line">        head.pre &#x3D; null;</span><br><span class="line">        head.next &#x3D; tail;</span><br><span class="line">        tail.pre &#x3D; head;</span><br><span class="line">        tail.next &#x3D; null;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public int get(int key) &#123;</span><br><span class="line">        Node node &#x3D; map.get(key);</span><br><span class="line">        if (node &#x3D;&#x3D; null) &#123;</span><br><span class="line">            return -1;</span><br><span class="line">        &#125;</span><br><span class="line">        moveToHead(node);</span><br><span class="line">        return node.value;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private void moveToHead(Node node) &#123;</span><br><span class="line">        removeNode(node);</span><br><span class="line">        addNode(node);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private void removeNode(Node node) &#123;</span><br><span class="line">        node.pre.next &#x3D; node.next;</span><br><span class="line">        node.next.pre &#x3D; node.pre;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private void addNode(Node node) &#123;</span><br><span class="line">        node.pre &#x3D; head;</span><br><span class="line">        node.next &#x3D; head.next;</span><br><span class="line">        head.next.pre &#x3D; node;</span><br><span class="line">        head.next &#x3D; node;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void put(int key, int value) &#123;</span><br><span class="line">        Node node &#x3D; map.get(key);</span><br><span class="line">        if (node &#x3D;&#x3D; null) &#123;</span><br><span class="line">            Node newNode &#x3D; new Node();</span><br><span class="line">            newNode.key &#x3D; key;</span><br><span class="line">            newNode.value &#x3D; value;</span><br><span class="line">            map.put(key, newNode);</span><br><span class="line">            addNode(newNode);</span><br><span class="line">            if (map.size() &gt; capacity) &#123;</span><br><span class="line">                Node tail &#x3D; popTail();</span><br><span class="line">                map.remove(tail.key);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            node.value &#x3D; value;</span><br><span class="line">            moveToHead(node);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private Node popTail() &#123;</span><br><span class="line">        Node node &#x3D; tail.pre;</span><br><span class="line">        removeNode(node);</span><br><span class="line">        return node;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/11/12/java/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%B1%BB%E5%8A%A0%E8%BD%BD%E9%98%B6%E6%AE%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/12/java/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%B1%BB%E5%8A%A0%E8%BD%BD%E9%98%B6%E6%AE%B5/" class="post-title-link" itemprop="url">虚拟机类加载阶段</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-12 00:23:48" itemprop="dateCreated datePublished" datetime="2018-11-12T00:23:48+08:00">2018-11-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:12:01" itemprop="dateModified" datetime="2020-04-12T23:12:01+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="虚拟机类加载阶段"><a href="#虚拟机类加载阶段" class="headerlink" title="虚拟机类加载阶段"></a>虚拟机类加载阶段</h1><hr>
+<p>类从被加载到虚拟机内存中开始，到卸载出内存为止，它的整个生命周期包括：加载(Loading)、验证(Verifcation)、准备(Preparation)、解析(Resolution)、初始化(Initiializtion)、使用(Using)和卸载(Unloading) 7个阶段。<br>下面简单介绍这7个阶段。</p>
+<h2 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h2><p>加载是类加载过程的一个阶段，加载阶段他需要完成以下3件事情：</p>
+<ol>
+<li>通过一个类的全限定名来获得定义此类的二进制字节流。</li>
+<li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。</li>
+<li>在内存中生成一个代表这个类的java.lang.Class对象，作为方法去的这个类的各种数据的访问入口。<br>在类的生命周期中，开发人员可控性最强的过程就是加载过程。我们可以通过控制类加载器和加载不同class文件，来实现对加载过程的控制。</li>
+</ol>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>为了保证程序的可执行和保证程序是无害的，虚拟机在类加载完了之后，有必要对其进行验证。当然，如果确保了类是安全可执行的，这一步也可以通过指定-X<br>验证阶段主要有四个验证动作：</p>
+<ol>
+<li>文件格式验证。<br> 主要验证文件格式是否符合要求，例如class文件是否以oxCAFEBAEF开头，版本号时候在有效范围内，常量池是否有不被支持的类型等等。</li>
+<li>元数据验证。<br> 这一步是对字节码描述的信息记性语义分析，保证其描述符合java语言规范。主要验证内容包括类是否有父类，是否继承了final类；是否不是抽象类，但没有实现其继承的接口或者抽象类的方法。</li>
+<li>字节码验证。<br> 这一步主要是验证数据流和控制流是合法的，是符合逻辑的。这一个主要验证的内容包括，方法体中的类型转换时有效的，跳转的方法是有效的等等。</li>
+<li>符号应用验证。<br> 最后一步是校验符号引用是否能转化成直接引用，为下一个阶段的解析做准备。这一步主要校验的内容包括符号应用中通过字符串描述的全限定名是否能找到对应的类；在指定类中是否存在符合房费的字段描述符已经加单名称所描述的方法和字段，符号引用中的类、字段、方法的访问性是否能被当前类访问等等。</li>
+</ol>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>准备阶段是正式为类变量分享内存并设置类变量初始值的阶段，这些变量所使用的内存都将在方法区中进行分配。值得注意的一点是，这里只对其类变量（被static修饰）进行内存申请并是初始化，而成员变量的内存申请和初始化则在类初始化的时候一同进行。<br>还有一点，这个只对类变量进行初始化，并不对应赋值，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static int value &#x3D; 123;</span><br></pre></td></tr></table></figure>
+<p>在准备之后，其初始化的值为0，而不是123，只有<code>staitc final</code>修饰的常亮才会在准备的时候指定值。例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static final int value &#x3D; 123;</span><br></pre></td></tr></table></figure>
+<p>在准备之后其值就是123了。</p>
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>解析阶段是虚拟机将常量池内的符号引用替换成直接引用的过程。解析主要包括三种：</p>
+<ol>
+<li>类或接口的解析。</li>
+<li>字段解析。</li>
+<li>类方法解析。</li>
+<li>接口方法解析。</li>
+</ol>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>类初始化是类加载过程的最后一步，在初始化阶段，才真正开始执行类中定义的java程序代码。<br>在初始化阶段，会对类变量赋程序给定的值。</p>
+<p><code>&lt;clinit&gt;</code> 方法是由编辑器自动收集类中所有类变量的赋值动作和静态语句块中的语句合并产生的，编辑器收集的顺序是由语句在源文件中出现的顺序所决定的，静态语句块中只能访问到定义在静态语句块之前的变量，定义在他之后的变量。在前面的静态语句快可以赋值，但是不能访问。</p>
+<hr>
+<p>end</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/11/04/algorithm/%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="reoger">
+      <meta itemprop="description" content="reoger">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="reoger的记录">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/04/algorithm/%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/" class="post-title-link" itemprop="url">括号生成</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-04 01:19:48" itemprop="dateCreated datePublished" datetime="2018-11-04T01:19:48+08:00">2018-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-12 23:13:57" itemprop="dateModified" datetime="2020-04-12T23:13:57+08:00">2020-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="括号生成"><a href="#括号生成" class="headerlink" title="括号生成"></a><a href="https://leetcode-cn.com/problems/generate-parentheses/" target="_blank" rel="noopener">括号生成</a></h3><p>难度 <strong>中等</strong></p>
+<p>给出 <em>n</em> 代表生成括号的对数，请你写出一个函数，使其能够生成所有可能的并且<strong>有效的</strong>括号组合。</p>
+<p>例如，给出 <em>n</em> =3，生成结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &quot;((()))&quot;,</span><br><span class="line">  &quot;(()())&quot;,</span><br><span class="line">  &quot;(())()&quot;,</span><br><span class="line">  &quot;()(())&quot;,</span><br><span class="line">  &quot;()()()&quot;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><p>Language: <strong>Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">generateParenthesis</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        traverse(res,<span class="string">""</span>, n, n);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">​</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">traverse</span><span class="params">(List&lt;String&gt; res,String single, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (left == <span class="number">0</span> &amp;&amp; right == <span class="number">0</span>)&#123;</span><br><span class="line">            res.add(single);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">if</span> (left &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            traverse(res, single+<span class="string">"("</span>, left - <span class="number">1</span> , right);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (right &gt; <span class="number">0</span> &amp;&amp; right &gt; left) &#123;</span><br><span class="line">            traverse(res, single+<span class="string">")"</span>, left, right - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h2><p>想一想这种生成括号的规则，其实隐含了一条信息：那就是始终左括号的数量要大于或等于右括号的数量。也就是说，剩余的左括号的数量要始终小于等于右括号。左括号只要有，就可以打印；而只有当剩余的右括号数量比左括号大时，才能打印右括号。为了方便理解，我现在假设n = 2，那么根据刚才我说的隐含信息，逻辑应该是这样的：</p>
+<ol>
+<li><p>肯定要先取一个左括号，此时左括号剩余的数量变为1，右括号剩余数量还是2</p>
+</li>
+<li><p>第二位取左括号也行，取右括号也行。如果取左括号，那么此时右括号剩余数量为2，左括号剩余数量为0，长成了这个样子”((“；如果取右括号，左右剩余数量都是1，长成这个样子”()”</p>
+</li>
+<li><p>第三位，如果剩余左括号没了，就只能跟进右括号了，连续两个，最终变成”(())”；而如果现在是”()”的，那么要先左后右，最终变成”()()”.</p>
+</li>
+</ol>
+<p>发现，每一步都有两种选择：左或者右，当然不一定都可行，如果可行，那么往后继续，不可行，终止。</p>
+<p>这是什么，二叉树。对于n = 2的情况，他的二叉树应该是这样的：<br><img src="https://img-blog.csdn.net/20160420095708833?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="二叉树"></p>
+<p>这棵二叉树表达的东西其实跟我刚才说的是一样的，而我们所要的结果就是这棵二叉树遍历所有路径的结果。由此，不妨先来回忆一下之前“二叉树的所有路径”这道题目（详见：点击打开链接）可以仿照这个方法来解决我们当前的问题。所不同的是，这里我们没有一棵已经给出的二叉树，但是，此处，我们相当于知道了这棵二叉树的左右节点是否为空的条件（就是一开始的隐含信息，左括号要始终大于等于右括号，也就是说剩余的左括号要始终小于等于剩余的右括号），以及不为空时，节点的值（左括号为”(“，右括号为”)”）。</p>
+<p>来源： &lt;<a href="https://blog.csdn.net/guoziqing506/article/details/51198069" target="_blank" rel="noopener">https://blog.csdn.net/guoziqing506/article/details/51198069</a> &gt;</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/11/01/algorithm/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -857,7 +1152,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:10:40" itemprop="dateModified" datetime="2020-04-12T23:10:40+08:00">2020-04-12</time>
+                <time title="修改时间：2020-07-18 13:49:17" itemprop="dateModified" datetime="2020-07-18T13:49:17+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -865,7 +1160,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9D%82%E7%83%A9/" itemprop="url" rel="index"><span itemprop="name">杂烩</span></a>
+                  <a href="/categories/system/" itemprop="url" rel="index"><span itemprop="name">system</span></a>
                 </span>
             </span>
 
@@ -1185,7 +1480,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:54:20" itemprop="dateModified" datetime="2020-04-12T22:54:20+08:00">2020-04-12</time>
+                <time title="修改时间：2020-07-18 13:41:37" itemprop="dateModified" datetime="2020-07-18T13:41:37+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1387,684 +1682,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/26/android/android%E4%B8%AD%E7%9A%84%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/08/26/android/android%E4%B8%AD%E7%9A%84%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">android中的测试</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-08-26 16:13:55" itemprop="dateCreated datePublished" datetime="2018-08-26T16:13:55+08:00">2018-08-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 22:55:09" itemprop="dateModified" datetime="2020-04-12T22:55:09+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h1><p>在日常的开发过程中，为了保证代码的质量和减少代码出错的机率，我们常常会通过单元测试来验证我们的代码。<br>本篇博客就是用来记录单元测试的用法，以免遗忘。</p>
-<h1 id="junit-工具类"><a href="#junit-工具类" class="headerlink" title="junit 工具类"></a>junit 工具类</h1><p>在android中编写单元测试的时候，用的最多的还是<code>junit 4</code>吧，在新版的android studio中，会默认添加依赖，如果是老项目，可能需要module在<code>build.gradle</code>中添加如下的依赖。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">testImplementation &#39;junit:junit:4.12&#39;</span><br></pre></td></tr></table></figure>
-<p>好了，环境准备完毕，然后就可以开始进行单元测试了。首先我们还是编写一个需要测试的类，简单起见就编写一个<code>a+b</code>的实现吧，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Utils &#123;</span><br><span class="line"></span><br><span class="line">    public int add(Integer a, Integer b) throws ParseException&#123;</span><br><span class="line">        if (a &#x3D;&#x3D; null || b&#x3D;&#x3D; null)&#123;</span><br><span class="line">            throw new  ParseException(&quot;param is null&quot;,0);</span><br><span class="line">        &#125;</span><br><span class="line">        return a + b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后，就可以编写单元测试了，在window环境下，直接按<code>ctrl+shift+T</code>即可快速创建一个单元测试。如图：<br><img src="http://ovec6nnof.bkt.clouddn.com/2018-08-27_200102.png" alt="图1"></p>
-<p>其中的注解我们稍后介绍，</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import org.junit.Test;</span><br><span class="line">import static org.junit.Assert.assertEquals;</span><br><span class="line"></span><br><span class="line">public class UtilsTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testAdd() throws Exception &#123;</span><br><span class="line">        Utils test &#x3D; new Utils();</span><br><span class="line">        assertEquals(3,test.add(1,3));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>例如我们可以编写一个这样的测试类，使用<code>@Test</code>标识这是一个测试，利用<code>assertEquals</code>来进行判断结果是否符合预期。<br><img src="http://ovec6nnof.bkt.clouddn.com/2018-08-27_200631.png" alt="图2"><br>很明显，这个测试并没有通过，因为1+3的结果明显不是3，但这是我们的预期的结果就错了，所以就需要更改预期为4，运行后发现测试通过。<br>下面简单介绍其他的注解和方法的使用。</p>
-<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><table>
-<thead>
-<tr>
-<th>注解名</th>
-<th>注解含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>@Test</td>
-<td>表示此方法为测试方法</td>
-</tr>
-<tr>
-<td>@Before</td>
-<td>在每个测试方法前执行，可做初始化操作</td>
-</tr>
-<tr>
-<td>@After</td>
-<td>在每个测试方法后执行，可做释放资源操作</td>
-</tr>
-<tr>
-<td>@Ignore</td>
-<td>忽略的测试方法</td>
-</tr>
-<tr>
-<td>@BeforeClass</td>
-<td>在类中所有方法前运行。此注解修饰的方法必须是static void</td>
-</tr>
-<tr>
-<td>@AfterClass</td>
-<td>在类中最后运行。此注解修饰的方法必须是static void</td>
-</tr>
-<tr>
-<td>@RunWith</td>
-<td>指定该测试类使用某个运行器</td>
-</tr>
-<tr>
-<td>@Parameters</td>
-<td>指定测试类的测试数据集合</td>
-</tr>
-<tr>
-<td>@Rule</td>
-<td>重新制定测试类中方法的行为</td>
-</tr>
-<tr>
-<td>@FixMethodOrder</td>
-<td>指定测试类中方法的执行顺序</td>
-</tr>
-</tbody></table>
-<p>在测试流程中，上述注解的方法执行的顺序为：<strong>@BeforeClass –&gt; @Before –&gt; @Test –&gt; @After –&gt; @AfterClass</strong><br>主语其他的非流程类的测试注解，<strong>@RunWith、@Parameters、@Rule、@FixMethodOrder</strong>，稍后会进一步介绍其用法。</p>
-<h3 id="使用-Parameters配置多组测试数据"><a href="#使用-Parameters配置多组测试数据" class="headerlink" title="使用@Parameters配置多组测试数据"></a>使用<code>@Parameters</code>配置多组测试数据</h3><p>在需要进行多组数据进行测试的时候，我们可能会这么写：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assertArrayEquals(new int[]&#123;3,5,9&#125;,new int[]&#123;test.add(1,2),test.add(2,3),test.add(4,5)&#125;);</span><br></pre></td></tr></table></figure>
-<p>是的，上述方式可以实现测试多组数据，我们甚至可以将他们分开一条一条的测试，以便于我们快速找到测试不通过的地方。但是有一种更优雅的方式，我们可以这么写：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(Parameterized.class)</span><br><span class="line">public class UtilsTest &#123;</span><br><span class="line">    public Point point;</span><br><span class="line"></span><br><span class="line">    public UtilsTest(Point point) &#123;</span><br><span class="line">       this.point &#x3D; point;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testAdd() throws Exception &#123;</span><br><span class="line">        Utils test &#x3D; new Utils();</span><br><span class="line">        assertEquals(point.x+point.y,test.add(point.x,point.y));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Parameterized.Parameters</span><br><span class="line">    public static Collection params()&#123;</span><br><span class="line">        return Arrays.asList(new Point(1,2),new Point(3,4),new Point(5,6));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，我们在<code>UtilsTest</code>，添加了注解<code>@RunWith(Parameterized.class)</code>，用于表示次测试类的参数是可变的，然后添加了一个有参的构造方法<code>public UtilsTest(Point point)</code>，用于接受可变的参数，最后使用<code>@Parameterized.Parameters</code> 来构造参数列表，如此我们的测试类就可以实现一次运行多个测试样例了。结果如下所示：<br><img src="http://ovec6nnof.bkt.clouddn.com/2018-08-27_205446.png" alt="图3"></p>
-<h3 id="测试抛出异常"><a href="#测试抛出异常" class="headerlink" title="测试抛出异常"></a>测试抛出异常</h3><p>当我们需要测试传入异常参数时，是否会如预想的一样抛出异常，这个时候我们就可以使用到<code>@test</code>注解中的<code>expected</code>属性，例如，我们还是测试上面的a+b,测试代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Test(expected &#x3D; ParseException.class)</span><br><span class="line">public void testAdd() throws Exception &#123;</span><br><span class="line">    Utils test &#x3D; new Utils();</span><br><span class="line">    assertEquals(5,test.add(null,5));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在测试类中，我们传入了<code>null</code>到<code>add</code>方法中，我们预想这种肯定会出现异常，所以我们在<code>Test</code>注解中添加了<code>expected</code>来捕获<code>ParseException</code>异常，如果捕获到这个异常，此时通过，如果没有捕获到这个异常，则这个测试方法会主动抛出<code>ParseException</code>异常，并说名测试不通过。</p>
-<h3 id="Assert类的主要用法"><a href="#Assert类的主要用法" class="headerlink" title="Assert类的主要用法"></a>Assert类的主要用法</h3><table>
-<thead>
-<tr>
-<th>方法名</th>
-<th>方法描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>assertEquals</td>
-<td>断言传入的预期值与实际值是相等的</td>
-</tr>
-<tr>
-<td>assertNotEquals</td>
-<td>断言传入的预期值与实际值是不相等的</td>
-</tr>
-<tr>
-<td>assertArrayEquals</td>
-<td>断言传入的预期数组与实际数组是相等的</td>
-</tr>
-<tr>
-<td>assertNull</td>
-<td>断言传入的对象是为空</td>
-</tr>
-<tr>
-<td>assertNotNull</td>
-<td>断言传入的对象是不为空</td>
-</tr>
-<tr>
-<td>assertTrue</td>
-<td>断言条件为真</td>
-</tr>
-<tr>
-<td>assertFalse</td>
-<td>断言条件为假</td>
-</tr>
-<tr>
-<td>assertSame</td>
-<td>断言两个对象引用同一个对象，相当于“==”</td>
-</tr>
-<tr>
-<td>assertNotSame</td>
-<td>断言两个对象引用不同的对象，相当于“!=”</td>
-</tr>
-<tr>
-<td>assertThat</td>
-<td>断言实际值是否满足指定的条件</td>
-</tr>
-</tbody></table>
-<h2 id="匹配器"><a href="#匹配器" class="headerlink" title="匹配器"></a>匹配器</h2><table>
-<thead>
-<tr>
-<th>匹配器</th>
-<th>说明</th>
-<th>例子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>is</td>
-<td>断言参数等于后面给出的匹配表达式</td>
-<td>assertThat(5, is (5));</td>
-</tr>
-<tr>
-<td>not</td>
-<td>断言参数不等于后面给出的匹配表达式</td>
-<td>assertThat(5, not(6));</td>
-</tr>
-<tr>
-<td>equalTo</td>
-<td>断言参数相等</td>
-<td>assertThat(30, equalTo(30));</td>
-</tr>
-<tr>
-<td>equalToIgnoringCase</td>
-<td>断言字符串相等忽略大小写</td>
-<td>assertThat(“Ab”, equalToIgnoringCase(“ab”));</td>
-</tr>
-<tr>
-<td>containsString</td>
-<td>断言字符串包含某字符串</td>
-<td>assertThat(“abc”, containsString(“bc”));</td>
-</tr>
-<tr>
-<td>startsWith</td>
-<td>断言字符串以某字符串开始</td>
-<td>assertThat(“abc”, startsWith(“a”));</td>
-</tr>
-<tr>
-<td>endsWith</td>
-<td>断言字符串以某字符串结束</td>
-<td>assertThat(“abc”, endsWith(“c”));</td>
-</tr>
-<tr>
-<td>nullValue</td>
-<td>断言参数的值为null</td>
-<td>assertThat(null, nullValue());</td>
-</tr>
-<tr>
-<td>notNullValue</td>
-<td>断言参数的值不为null</td>
-<td>assertThat(“abc”, notNullValue());</td>
-</tr>
-<tr>
-<td>greaterThan</td>
-<td>断言参数大于</td>
-<td>assertThat(4, greaterThan(3));</td>
-</tr>
-<tr>
-<td>lessThan</td>
-<td>断言参数小于</td>
-<td>assertThat(4, lessThan(6));</td>
-</tr>
-<tr>
-<td>greaterThanOrEqualTo</td>
-<td>断言参数大于等于</td>
-<td>assertThat(4, greaterThanOrEqualTo(3));</td>
-</tr>
-<tr>
-<td>lessThanOrEqualTo</td>
-<td>断言参数小于等于</td>
-<td>assertThat(4, lessThanOrEqualTo(6));</td>
-</tr>
-<tr>
-<td>closeTo</td>
-<td>断言浮点型数在某一范围内</td>
-<td>assertThat(4.0, closeTo(2.6, 4.3));</td>
-</tr>
-<tr>
-<td>allOf</td>
-<td>断言符合所有条件，相当于&amp;&amp;</td>
-<td>assertThat(4,allOf(greaterThan(3), lessThan(6)));</td>
-</tr>
-<tr>
-<td>anyOf</td>
-<td>断言符合某一条件，相当于或</td>
-<td>assertThat(4,anyOf(greaterThan(9), lessThan(6)));</td>
-</tr>
-<tr>
-<td>hasKey</td>
-<td>断言Map集合含有此键</td>
-<td>assertThat(map, hasKey(“key”));</td>
-</tr>
-<tr>
-<td>hasValue</td>
-<td>断言Map集合含有此值</td>
-<td>assertThat(map, hasValue(value));</td>
-</tr>
-<tr>
-<td>hasItem</td>
-<td>断言迭代对象含有此元素</td>
-<td>assertThat(list, hasItem(element));</td>
-</tr>
-</tbody></table>
-<h1 id="UI测试"><a href="#UI测试" class="headerlink" title="UI测试"></a>UI测试</h1><p>上述的单元测试虽然功能很强大，但是局限性也很大，比如不能测试UI相关的，不能测试与<code>Context</code>相关的方法。我们可以利用Ui测试来进行这方面的测试。<br>关于ui测试，请参考这篇<a href="https://juejin.im/post/5b66de2c6fb9a04fbd1b4725" target="_blank" rel="noopener">博客</a>，实在写的太好了。<br>关于android studio中的Ui测试，可以参考<a href="https://developer.android.com/studio/test/espresso-test-recorder" target="_blank" rel="noopener">官方文档</a>。<br>这里仅记录一下使用心得：</p>
-<h2 id="espresso必要的依赖"><a href="#espresso必要的依赖" class="headerlink" title="espresso必要的依赖"></a>espresso必要的依赖</h2><p>在<code>module</code>中的<code>build.gradle</code>中添加下面三条依赖：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">androidTestImplementation &#39;com.android.support.test:runner:1.0.2&#39;</span><br><span class="line">androidTestImplementation &#39;com.android.support.test:rules:1.0.2&#39;</span><br><span class="line">androidTestImplementation &#39;com.android.support.test.espresso:espresso-core:3.0.2&#39;</span><br></pre></td></tr></table></figure>
-<p>使用示例：<br>譬如在<code>MainActivity</code>中添加有一个如下的方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity extends AppCompatActivity  &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">    * 需要测试的方法,简单的调起浏览器打开baidu首页</span><br><span class="line">    **&#x2F;</span><br><span class="line">    public static void startActiviy(Context context)&#123;</span><br><span class="line">        Uri uri &#x3D; Uri.parse(&quot;http:&#x2F;&#x2F;wwww.baidu.com&quot;);</span><br><span class="line">        Intent t &#x3D; new Intent(Intent.ACTION_VIEW);</span><br><span class="line">        t.setData(uri);</span><br><span class="line">        t.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span><br><span class="line">        context.startActivity(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后，我们还是可以选择<code>ctrl+shift+T</code>来创建测试类，选择<code>android test</code>目录即可。<br>然后我们可以编写一个类似于这样类来进行测试：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Instrumented test, which will execute on an Android device.</span><br><span class="line"> *</span><br><span class="line"> * @see &lt;a href&#x3D;&quot;http:&#x2F;&#x2F;d.android.com&#x2F;tools&#x2F;testing&quot;&gt;Testing documentation&lt;&#x2F;a&gt;</span><br><span class="line"> *&#x2F;</span><br><span class="line">@RunWith(AndroidJUnit4.class)</span><br><span class="line">public class ExampleInstrumentedTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    public void useAppContext() throws Exception &#123;</span><br><span class="line">        &#x2F;&#x2F; Context of the app under test.</span><br><span class="line">        Context appContext &#x3D; InstrumentationRegistry.getTargetContext();</span><br><span class="line"></span><br><span class="line">        assertEquals(&quot;com.example.cm.testpulgin&quot;, appContext.getPackageName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testOpenUrl()&#123;</span><br><span class="line">        MainActivity.startActiviy(InstrumentationRegistry.getTargetContext());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void test1()&#123;</span><br><span class="line">        assertEquals(1,1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们选择运行，选择目标手机，即可在手机上实现测试。这里关键的一点是利用<code>InstrumentationRegistry.getTargetContext()</code>获取到了<code>Context</code>对象。<br>我们可以利用这个<code>Context</code>对象来测试与手机密切相关的一些属性了，前面的单元测试只能测试代码在jvm上是否运行正常，而到了这里我们就可以测试代码是否在手机上运行正常了。<br>譬如我们要测试一些用户的操作的行为是否符合预期，我们可以写一个类似于这样的测试类：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">@LargeTest</span><br><span class="line">@RunWith(AndroidJUnit4.class)</span><br><span class="line">public class MainActivityTest &#123;</span><br><span class="line"></span><br><span class="line">    @Rule</span><br><span class="line">    public ActivityTestRule&lt;MainActivity&gt; mActivityTestRule &#x3D; new ActivityTestRule&lt;&gt;(MainActivity.class);</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void mainActivityTest() &#123;</span><br><span class="line">        ViewInteraction button &#x3D; onView(</span><br><span class="line">                allOf(withId(R.id.but1),</span><br><span class="line">                        childAtPosition(</span><br><span class="line">                                childAtPosition(</span><br><span class="line">                                        withId(android.R.id.content),</span><br><span class="line">                                        0),</span><br><span class="line">                                0),</span><br><span class="line">                        isDisplayed()));</span><br><span class="line">        button.check(matches(isDisplayed()));</span><br><span class="line"></span><br><span class="line">        ViewInteraction appCompatButton &#x3D; onView(</span><br><span class="line">                allOf(withId(R.id.but1), withText(&quot;测试hook-ams&quot;),</span><br><span class="line">                        childAtPosition(</span><br><span class="line">                                childAtPosition(</span><br><span class="line">                                        withId(android.R.id.content),</span><br><span class="line">                                        0),</span><br><span class="line">                                0),</span><br><span class="line">                        isDisplayed()));</span><br><span class="line">        appCompatButton.perform(click());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static Matcher&lt;View&gt; childAtPosition(</span><br><span class="line">            final Matcher&lt;View&gt; parentMatcher, final int position) &#123;</span><br><span class="line"></span><br><span class="line">        return new TypeSafeMatcher&lt;View&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void describeTo(Description description) &#123;</span><br><span class="line">                description.appendText(&quot;Child at position &quot; + position + &quot; in parent &quot;);</span><br><span class="line">                parentMatcher.describeTo(description);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public boolean matchesSafely(View view) &#123;</span><br><span class="line">                ViewParent parent &#x3D; view.getParent();</span><br><span class="line">                return parent instanceof ViewGroup &amp;&amp; parentMatcher.matches(parent)</span><br><span class="line">                        &amp;&amp; view.equals(((ViewGroup) parent).getChildAt(position));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>对其中的一些方法进行简单说明：</p>
-<table>
-<thead>
-<tr>
-<th>方法名</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>click()</td>
-<td>点击view</td>
-</tr>
-<tr>
-<td>clearText()</td>
-<td>清除文本内容</td>
-</tr>
-<tr>
-<td>swipeLeft()</td>
-<td>从右往左滑</td>
-</tr>
-<tr>
-<td>swipeRight()</td>
-<td>从左往右滑</td>
-</tr>
-<tr>
-<td>swipeDown()</td>
-<td>从上往下滑</td>
-</tr>
-<tr>
-<td>swipeUp()</td>
-<td>从下往上滑</td>
-</tr>
-<tr>
-<td>click()</td>
-<td>点击view</td>
-</tr>
-<tr>
-<td>closeSoftKeyboard()</td>
-<td>关闭软键盘</td>
-</tr>
-<tr>
-<td>pressBack()</td>
-<td>按下物理返回键</td>
-</tr>
-<tr>
-<td>doubleClick()</td>
-<td>双击</td>
-</tr>
-<tr>
-<td>longClick()</td>
-<td>长按</td>
-</tr>
-<tr>
-<td>scrollTo()</td>
-<td>滚动</td>
-</tr>
-<tr>
-<td>replaceText()</td>
-<td>替换文本</td>
-</tr>
-<tr>
-<td>openLinkWithText()</td>
-<td>打开指定超链</td>
-</tr>
-</tbody></table>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
-<li><a href="https://blog.csdn.net/qq_17766199/article/details/78243176" target="_blank" rel="noopener">Android单元测试(一)：JUnit框架的使用</a></li>
-<li><a href="https://developer.android.com/studio/test/espresso-test-recorder" target="_blank" rel="noopener">使用 Espresso 测试记录器创建界面测试</a></li>
-<li><a href="https://developer.android.com/studio/test/#run_a_test" target="_blank" rel="noopener">测试应用</a></li>
-<li><a href="https://juejin.im/post/5b66de2c6fb9a04fbd1b4725" target="_blank" rel="noopener">解放双手 - Android 开发应该尝试的 UI 自动化测试</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/22/android/WebView%E7%BC%93%E5%AD%98%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%92%8C%E5%BA%94%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/08/22/android/WebView%E7%BC%93%E5%AD%98%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%92%8C%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">散记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-08-22 14:44:55" itemprop="dateCreated datePublished" datetime="2018-08-22T14:44:55+08:00">2018-08-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:06:09" itemprop="dateModified" datetime="2020-04-12T23:06:09+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%BD%AC%E8%BD%BD/" itemprop="url" rel="index"><span itemprop="name">转载</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="WebView缓存原理分析和应用"><a href="#WebView缓存原理分析和应用" class="headerlink" title="WebView缓存原理分析和应用"></a>WebView缓存原理分析和应用</h1><p>发表于 2017-05-13 | 分类于 <a href="http://unclechen.github.io/2017/05/13/WebView%E7%BC%93%E5%AD%98%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%92%8C%E5%BA%94%E7%94%A8/" target="_blank" rel="noopener">技术</a> |<a href="/2017/05/13/WebView缓存原理分析和应用/#comments"></a></p>
-<h1 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a><a href="#一、背景" title="一、背景"></a>一、背景</h1><p>现在的App开发，或多或少都会用到Hybrid模式，到了WebView这边，经常会加载一些js文件（例如和WebView用来Native通信的bridge.js），而这些js文件不会经常发生变化，所以我们希望js在WebView里面加载一次之后，如果js没有发生变化，下次就不用再发起网络请求去加载，从而减少流量和资源的占用。那么有什么方式可以达到这个目的呢？先得从WebView的缓存原理入手。</p>
-<h1 id="二、WebView的缓存类型"><a href="#二、WebView的缓存类型" class="headerlink" title="二、WebView的缓存类型"></a><a href="#二、WebView的缓存类型" title="二、WebView的缓存类型"></a>二、WebView的缓存类型</h1><p>WebView主要包括两类缓存，<strong>一类是浏览器自带的网页数据缓存</strong>，这是所有的浏览器都支持的、由HTTP协议定义的缓存；<strong>另一类是H5缓存</strong>，这是由web页面的开发者设置的，H5缓存主要包括了App Cache、DOM Storage、Local Storage、Web SQL Database 存储机制等，这里我们主要介绍App Cache来缓存js文件。</p>
-<h1 id="三、浏览器自带的网页数据缓存"><a href="#三、浏览器自带的网页数据缓存" class="headerlink" title="三、浏览器自带的网页数据缓存"></a><a href="#三、浏览器自带的网页数据缓存" title="三、浏览器自带的网页数据缓存"></a>三、浏览器自带的网页数据缓存</h1><h2 id="1-工作原理"><a href="#1-工作原理" class="headerlink" title="1.工作原理"></a><a href="#1-工作原理" title="1.工作原理"></a>1.工作原理</h2><p>浏览器缓存机制是通过HTTP协议Header里的Cache-Control（或Expires）和Last-Modified（或 Etag）等字段来控制文件缓存的机制。关于这几个字段的作用和浏览器的缓存更新机制，大家可以看看这两篇文章(<a href="http://bugly.qq.com/bbs/forum.php?mod=viewthread&tid=267" target="_blank" rel="noopener">H5 缓存机制浅析 移动端 Web 加载性能优化</a>，<a href="http://www.jianshu.com/p/5e7075f4875f" target="_blank" rel="noopener">Android：手把手教你构建 WebView 的缓存机制 &amp; 资源预加载方案</a>)，里面有详细的介绍。下面从我实际应用的角度，介绍一下通常会在HTTP协议中遇到的Header。</p>
-<p>这两个字段是<strong>接收响应时，浏览器决定文件是否需要被缓存；或者需要加载文件时，浏览器决定是否需要发出请求</strong>的字段。</p>
-<ul>
-<li><p><strong>Cache-Control:max-age=315360000，</strong>这表示缓存时长为315360000秒。如果315360000秒内需要再次请求这个文件，那么浏览器不会发出请求，直接使用本地的缓存的文件。这是HTTP/1.1标准中的字段。</p>
-</li>
-<li><p><strong>Expires: Thu, 31 Dec 2037 23:55:55 GMT，</strong>这表示这个文件的过期时间是2037年12月31日晚上23点55分55秒，在这个时间之前浏览器都不会再次发出请求去获取这个文件。这是HTTP/1.0中的字段，如果客户端和服务器时间不同步会导致缓存出现问题，因此才有了上面的Cache-Control，当它们同时出现在HTTP Response的Header中时，Cache-Control优先级更高。</p>
-</li>
-</ul>
-<p>下面两个字段是<strong>发起请求时，服务器决定文件是否需要更新</strong>的字段。</p>
-<ul>
-<li><p><strong>Last-Modified:Wed, 28 Sep 2016 09:24:35 GMT，</strong>这表示这个文件最后的修改时间是2016年9月28日9点24分35秒。这个字段对于浏览器来说，会在下次请求的时候，作为Request Header的If-Modified-Since字段带上。例如浏览器缓存的文件已经超过了Cache-Control（或者Expires），那么需要加载这个文件时，就会发出请求，请求的Header有一个字段为<code>If-Modified-Since：Wed, 28 Sep 2016 09:24:35 GMT</code>，服务器接收到请求后，会把文件的Last-Modified时间和这个时间对比，如果时间没变，那么浏览器将返回<code>304 Not Modified</code>给浏览器，且content-length肯定是0个字节。如果时间有变化，那么服务器会返回<code>200 OK</code>，并返回相应的内容给浏览器。</p>
-</li>
-<li><p><strong>ETag:”57eb8c5c-129”，</strong>这是文件的特征串。功能同上面的Last-Modified是一样的。只是在浏览器下次请求时，ETag是作为Request Header中的<code>If-None-Match:&quot;57eb8c5c-129&quot;</code>字段传到服务器。服务器和最新的文件特征串对比，如果相同那么返回<code>304 Not Modified</code>，不同则返回<code>200 OK</code>。当ETag和Last-Modified同时出现时，任何一个字段只要生效了，就认为文件是没有更新的。</p>
-</li>
-</ul>
-<h2 id="2-WebView如何设置才能支持上面的协议"><a href="#2-WebView如何设置才能支持上面的协议" class="headerlink" title="2.WebView如何设置才能支持上面的协议"></a><a href="#2-WebView如何设置才能支持上面的协议" title="2.WebView如何设置才能支持上面的协议"></a>2.WebView如何设置才能支持上面的协议</h2><p>由上面的介绍可知，只要是个主流的、合格的浏览器，都应该能够支持HTTP协议层面的这几个字段。这不是我们开发者可以修改的，也不是我们应该修改的配置。在Android上，我们的WebView也支持这几个字段。但是我们可以通过代码去<strong>设置WebView的Cache Mode</strong>，而使得协议生效或者无效。WebView有下面几个Cache Mode：</p>
-<ul>
-<li>LOAD_CACHE_ONLY: 不使用网络，只读取本地缓存数据。</li>
-<li>LOAD_DEFAULT: 根据cache-control决定是否从网络上取数据。</li>
-<li>LOAD_CACHE_NORMAL: API level 17中已经废弃，从API level 11开始作用同LOAD_DEFAULT模式</li>
-<li>LOAD_NO_CACHE: 不使用缓存，只从网络获取数据。</li>
-<li>LOAD_CACHE_ELSE_NETWORK，只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。本地没有缓存时才从网络上获取。</li>
-</ul>
-<p>设置WebView缓存的Cache Mode示例代码如下：</p>
-<p>1</p>
-<p>2</p>
-<p>WebSettings settings = webView.getSettings();</p>
-<p>settings.setCacheMode(WebSettings.LOAD_DEFAULT);</p>
-<p>网上很多人都说根据网络条件去选择Cache Mode，当有网络时，设置为LOAD_DEFAULT，当没有网络时设置为LOAD_CACHE_ELSE_NETWORK。但是在我的业务中，js文件的更新都是非覆盖式的更新，也就是时候每次改变js文件的时候，文件的url地址一定会发生变化，所以我希望浏览器能够缓存下来js，并且一直使用它，那么我就给它只设置为LOAD_CACHE_ELSE_NETWORK。当然如果你要是可以改js的cdn服务器的Cache-Control字段，那也行啊，用LOAD_DEFAULT就ok了。至于文件是应该采用覆盖式or非覆盖式的更新，不是我今天要讨论的内容，在web前端领域，这是一个可以聊聊的topic。</p>
-<blockquote>
-<p>关于iOS的WebView，我同事在实际测试的时候竟然发现，控制文件缓存的Response Header是Expires字段。。而且iOS无法针对整个WebView设置Cache Mode，只能针对每一个URLRequest去设置。。后续有机会要学习一下iOS那块的情况。</p>
-</blockquote>
-<h2 id="3-在手机里面的存储路径"><a href="#3-在手机里面的存储路径" class="headerlink" title="3.在手机里面的存储路径"></a><a href="#3-在手机里面的存储路径" title="3.在手机里面的存储路径"></a>3.在手机里面的存储路径</h2><p>浏览器默认缓存下来的文件是怎么被存储到了哪里呢？这个问题在接触到WebView以来，就一直是一个谜题。这次由于工作的需要，我特意root了两台手机，一台红米1（Android 4.4）和一台小米4c（Android 5.1），在root高系统版本（6.0和7.1）的两台Nexus都以失败告终之后，我决定还是先看看4.4和5.1系统上，WebView自带的缓存存到了哪里。</p>
-<p>首先，不用思考就知道，这些文件一定是在<strong>/data/data/包名/</strong>目录下，在我之前的一篇博客里面提到过，这是每一个应用自己的内部存储目录。</p>
-<p>接着，我们打开终端，使用adb连接手机，然后按照下面命令操作一下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 1.先进入shell</span><br><span class="line"></span><br><span class="line">adb shell</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 2.开启root账号 </span><br><span class="line"></span><br><span class="line">su</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 3.修改文件夹权限</span><br><span class="line"></span><br><span class="line">chmod 777 data&#x2F;data&#x2F;你的应用包名&#x2F;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 4.修改子文件夹的权限，因为Android命令行不支持向Linux那样的-R命令实现递归式的chmod。。。</span><br><span class="line"></span><br><span class="line">chmod 777 data&#x2F;data&#x2F;你的应用包名&#x2F;*</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 5.所以如果你对应用目录层级更深，你就要进一步地chmod。。。</span><br><span class="line"></span><br><span class="line">chmod 777 data&#x2F;data&#x2F;你的应用包名&#x2F;*&#x2F;*</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 6.直到终端里提示你说，no such file or directory时，说明chmod完了，所有的内部存储里面的文件夹和文件都可以看到了，如果大家有更好的方法请一定告诉我，多谢了~</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Android 4.4的目录：<code>/data/data/包名/app_webview/cache/</code>，如下图所示的第二个文件夹。</li>
-</ul>
-<p><a href="https://ww4.sinaimg.cn/large/006tNc79ly1ffjvarjyijj30jg05k0yr.jpg" target="_blank" rel="noopener"><img src="https://ww4.sinaimg.cn/large/006tNc79ly1ffjvarjyijj30jg05k0yr.jpg" alt="Android4.4系统WebView自带缓存路径"></a></p>
-<p>可能你注意到了，第一个文件夹是叫Application Cache，我们后面再说它。</p>
-<ul>
-<li>Android 5.1的目录：<code>/data/data/包名/cache/org.chromium.android_webview/</code>下面，如下图所示。</li>
-</ul>
-<p><a href="https://ww2.sinaimg.cn/large/006tNc79ly1ffjvztg93zj30jg0a247x.jpg" target="_blank" rel="noopener"><img src="https://ww2.sinaimg.cn/large/006tNc79ly1ffjvztg93zj30jg0a247x.jpg" alt=""></a></p>
-<p>但是在5.1系统上，<code>/data/data/包名/app_webview/</code>文件夹依然存在，只是4.4系统上面存储WebView自带缓存的<code>app_webview/cache</code>文件夹不再存在了（注意下App Cache目录还在），如下图所示。</p>
-<p><a href="https://ww3.sinaimg.cn/large/006tNc79ly1ffjw46ygoqj30jg06443v.jpg" target="_blank" rel="noopener"><img src="https://ww3.sinaimg.cn/large/006tNc79ly1ffjw46ygoqj30jg06443v.jpg" alt="Android5.1系统WebView自带缓存路径"></a></p>
-<p>综上所述，WebView自带的浏览器协议支持的缓存，在不同的系统版本上，位置是不一样的。也许除了我root过的4.4、5.1以外，其他版本系统的WebView自带缓存还可能存在于不同的目录里面。</p>
-<p>另外一个是关于<strong>缓存文件的存储格式和索引格式</strong>，在不同的手机上可能也有差别，因为之前看到网上的人都说有叫<strong>webview.db</strong>或者<strong>webviewCache.db</strong>的文件，这个文件呢，还不是在<code>app_webview/cache</code>或者<code>org.chromium.android_webview</code>下面，而是在<code>/data/data/包名/database/</code>里面。但是，我这两台root过的手机都没有看到这种文件，而且我把<code>/data/data/包名/</code>下面所有的db文件都打开看了，并没有发现有存储url记录的table。。</p>
-<p>实际上，以5.1系统为例，我看到了<code>/data/data/包名/cache/org.chromium.android_webview/</code>下面有叫<strong>index</strong>和<strong>/index-dir/the-real-index</strong>的文件，以及一堆名称为<strong>md5+下划线+数字</strong>的文件，上面的图中也可以看得到，这块的原理仍然有些疑问，也希望专业的大神可以解答一下。</p>
-<h1 id="四、H5的缓存"><a href="#四、H5的缓存" class="headerlink" title="四、H5的缓存"></a><a href="#四、H5的缓存" title="四、H5的缓存"></a>四、H5的缓存</h1><p>讲完了WebView自带的缓存，下面讲一下H5里面的App Cache。这个Cache是由开发Web页面的开发者控制的，而不是由Native去控制的，但是Native里面的WebView也需要我们做一下设置才能支持H5的这个特性。</p>
-<h2 id="1-工作原理-1"><a href="#1-工作原理-1" class="headerlink" title="1.工作原理"></a><a href="#1-工作原理-1" title="1.工作原理"></a>1.工作原理</h2><p>写Web页面代码时，指定manifest属性即可让页面使用App Cache。通常html页面代码会这么写：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;html manifest&#x3D;&quot;xxx.appcache&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
-<p>xxx.appcache文件用的是相对路径，这时appcache文件的路径是和页面一样的。也可以使用的绝对路径，但是域名要保持和页面一致。</p>
-<p>完整的xxx.appcache文件一般包括了3个section，基本格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">CACHE MANIFEST</span><br><span class="line"></span><br><span class="line">\# 2017-05-13 v1.0.0</span><br><span class="line"></span><br><span class="line">&#x2F;bridge.js</span><br><span class="line"></span><br><span class="line">NETWORK:</span><br><span class="line"></span><br><span class="line">*</span><br><span class="line"></span><br><span class="line">FALLBACK:</span><br><span class="line"></span><br><span class="line">&#x2F;404.html</span><br></pre></td></tr></table></figure>
-<ul>
-<li>CACHE MANIFEST下面文件就是要被浏览器缓存的文件</li>
-<li>NETWORK下面的文件就是要被加载的文件</li>
-<li>FALLBACK下面的文件是目标页面加载失败时的显示的页面</li>
-</ul>
-<p><strong>AppCache工作的原理：</strong>当一个设置了manifest文件的html页面被加载时，CACHE MANIFEST指定的文件就会被缓存到浏览器的App Cache目录下面。当下次加载这个页面时，会首先应用通过manifest已经缓存过的文件，然后发起一个加载xxx.appcache文件的请求到服务器，如果xxx.appcache文件没有被修改过，那么服务器会返回<code>304 Not Modified</code>给到浏览器，如果xxx.appcache文件被修改过，那么服务器会返回<code>200 OK</code>，并返回新的xxx.appcache文件的内容给浏览器，浏览器收到之后，再把新的xxx.appcache文件中指定的内容加载过来进行缓存。</p>
-<p>可以看到，AppCache缓存需要在每次加载页面时都发出一个xxx.appcache的请求去检查manifest文件是不是有更新（byte by byte）。根据这篇文章（<a href="http://bugly.qq.com/bbs/forum.php?mod=viewthread&tid=267" target="_blank" rel="noopener">H5 缓存机制浅析 移动端 Web 加载性能优化</a>）的介绍，AppCache有一些坑的地方，且官方已经不推荐使用了，但目前主流的浏览器依然是支持的。文章里主要提到下面这些坑：</p>
-<ul>
-<li>要更新缓存的文件，需要更新包含它的 manifest 文件，那怕只加一个空格。常用的方法，是修改 manifest 文件注释中的版本号。如：# 2012-02-21 v1.0.0</li>
-<li>被缓存的文件，浏览器是先使用，再通过检查 manifest 文件是否有更新来更新缓存文件。这样缓存文件可能用的不是最新的版本。</li>
-<li>在更新缓存过程中，如果有一个文件更新失败，则整个更新会失败。</li>
-<li>manifest 和引用它的HTML要在相同 HOST。</li>
-<li>manifest 文件中的文件列表，如果是相对路径，则是相对 manifest 文件的相对路径。</li>
-<li>manifest 也有可能更新出错，导致缓存文件更新失败。</li>
-<li>没有缓存的资源在已经缓存的 HTML 中不能加载，即使有网络。例如：[url=]<a href="http://appcache-demo.s3-website-us-east-1.amazonaws.com/without-network/[/url" target="_blank" rel="noopener">http://appcache-demo.s3-website-us-east-1.amazonaws.com/without-network/[/url</a>]</li>
-<li>manifest 文件本身不能被缓存，且 manifest 文件的更新使用的是浏览器缓存机制。所以 manifest 文件的 Cache-Control 缓存时间不能设置太长。</li>
-</ul>
-<h2 id="2-WebView如何设置才能支持AppCache"><a href="#2-WebView如何设置才能支持AppCache" class="headerlink" title="2.WebView如何设置才能支持AppCache"></a><a href="#2-WebView如何设置才能支持AppCache" title="2.WebView如何设置才能支持AppCache"></a>2.WebView如何设置才能支持AppCache</h2><p>WebView默认是没有开启AppCache支持的，需要添加下面这几行代码来设置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">WebSettings webSettings &#x3D; webView.getSettings();</span><br><span class="line"></span><br><span class="line">webSettings.setAppCacheEnabled(true);</span><br><span class="line"></span><br><span class="line">String cachePath &#x3D; getApplicationContext().getCacheDir().getPath(); &#x2F;&#x2F; 把内部私有缓存目录&#39;&#x2F;data&#x2F;data&#x2F;包名&#x2F;cache&#x2F;&#39;作为WebView的AppCache的存储路径</span><br><span class="line"></span><br><span class="line">webSettings.setAppCachePath(cachePath);</span><br><span class="line"></span><br><span class="line">webSettings.setAppCacheMaxSize(5 * 1024 * 1024);</span><br></pre></td></tr></table></figure>
-
-<p>注意：WebSettings的setAppCacheEnabled和setAppCachePath都必须要调用才行。</p>
-<h2 id="3-存储AppCache的路径"><a href="#3-存储AppCache的路径" class="headerlink" title="3.存储AppCache的路径"></a><a href="#3-存储AppCache的路径" title="3.存储AppCache的路径"></a>3.存储AppCache的路径</h2><p>按照Android SDK的API说明，setAppCachePath是可以用来设置AppCache路径的，但是我实际测试发现，不管你怎么设置这个路径，设置到应用自己的内部私有目录还是外部SD卡，都无法生效。AppCache缓存文件最终都会存到<code>/data/data/包名/app_webview/cache/Application Cache</code>这个文件夹下面，在上面的Android 4.4和5.1系统目录截图可以看得到，<strong>但是如果你不调用setAppCachePath方法，WebView将不会产生这个目录</strong>。这里有点让我觉得奇怪，我猜测可能从某一个系统版本开始，为了缓存文件的完整性和安全性考虑，SDK实现的时候就吧AppCache缓存目录设置到了内部私有存储。</p>
-<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a><a href="#五、总结" title="五、总结"></a>五、总结</h1><h2 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a><a href="#相同点" title="相同点"></a>相同点</h2><p>WebView自带的缓存和AppCache都是可以用来做文件级别的缓存的，基本上比较好地满足对于非覆盖式的js、css等文件更新。</p>
-<h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a><a href="#不同点" title="不同点"></a>不同点</h2><ul>
-<li>WebView自带的缓存是是协议层实现的（浏览器内核标准实现，开发者无法改变）；而AppCache是应用层实现的。</li>
-<li>WebView的缓存目录在不同系统上可能是不同的；而对于AppCache而言，AppCache的存储路径虽然有方法设置，但是最终都存储到了一个固定的内部私有目录下。</li>
-<li>WebView自带的缓存可以在缓存生效的时候不用再发HTTP请求；而AppCache一定会发出一个manifest文件的请求。</li>
-<li>WebView自带的缓存可以通过设置CacheMode来改变WebView的缓存机制；而AppCache的缓存策略是由manifest文件控制的，也就是说是由web页面开发者控制的。</li>
-</ul>
-<p>最后说一下，其实很多时候，这两类缓存是共同在工作的，当manifest文件没有控制某些资源加载时，例如我上面写的xxx.appcache文件里，NETWORK section下面用的是*号，意思是所有不缓存的文件都要去网络加载。此时，这些资源就会走到WebView自带的缓存机制去，结合WebView的CacheMode，我们实际上对这些文件进行了一次WebView自带的缓存。搞清楚这两类缓存的原理有利于我们更好的设计自己的页面和App，尽可能减少网络请求，提高App运行效率。</p>
-<ul>
-<li><strong>本文作者：</strong>unclechen</li>
-<li><strong>本文链接：</strong> <a href="/2017/05/13/WebView缓存原理分析和应用/" title="WebView缓存原理分析和应用">2017/05/13/WebView缓存原理分析和应用/</a></li>
-<li><strong>版权声明：</strong> 本文采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a>进行许可。转载请注明出处！</li>
-</ul>
-<p><a href="/tags/Android/"># Android</a> <a href="/tags/WebView/"># WebView</a></p>
-<p><a href="/2016/12/11/python利用beautifulsoup+selenium自动翻页抓取网页内容/" title="python利用beautifulsoup+selenium自动翻页抓取网页内容">python利用beautifulsoup+selenium自动翻页抓取网页内容</a></p>
-<p><a href="/2017/06/16/使用ReactJS开发Chrome插件/" title="使用React.js开发Chrome插件">使用React.js开发Chrome插件</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://reoger.tk/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="reoger">
-      <meta itemprop="description" content="reoger">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="reoger的记录">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/08/15/java/java%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B/" class="post-title-link" itemprop="url">java中的泛型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-08-15 14:44:55" itemprop="dateCreated datePublished" datetime="2018-08-15T14:44:55+08:00">2018-08-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-12 23:00:51" itemprop="dateModified" datetime="2020-04-12T23:00:51+08:00">2020-04-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是泛型"><a href="#什么是泛型" class="headerlink" title="什么是泛型"></a>什么是泛型</h1><p>Java 泛型（generics）是 JDK 5 中引入的一个新特性, 泛型提供了编译时类型安全检测机制，该机制允许程序员在编译时检测到非法的类型。<br>泛型的本质是参数化类型，也就是说所操作的数据类型被指定为一个参数。</p>
-<hr>
-<p>假定我们有这样一个需求：写一个排序方法，能够对整型数组、字符串数组甚至其他任何类型的数组进行排序，该如何实现？</p>
-<p>答案是可以使用 Java 泛型。</p>
-<p>使用 Java 泛型的概念，我们可以写一个泛型方法来对一个对象数组排序。然后，调用该泛型方法来对整型数组、浮点数数组、字符串数组等进行排序。</p>
-<h1 id="泛型的分类"><a href="#泛型的分类" class="headerlink" title="泛型的分类"></a>泛型的分类</h1><p>根据泛型的使用场景，一般可以分成三类，分别是:<strong>泛型类</strong>、<strong>泛型方法</strong>、<strong>和泛型接口</strong>。</p>
-<h1 id="泛型类型擦出"><a href="#泛型类型擦出" class="headerlink" title="泛型类型擦出"></a>泛型类型擦出</h1><p>Java中的泛型，只在编译阶段有效。在编译过程中，正确检验泛型结果后，会将泛型的相关信息擦出，并且在对象进入和离开方法的边界处添加类型检查和类型转换的方法。也就是说，泛型信息不会进入到运行时阶段。<br>用代码来说明就是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class test &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        List&lt;Integer&gt; a &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;String&gt;  b &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">        System.out.println(a.getClass().toString());</span><br><span class="line">        System.out.println(a.getClass().toString());</span><br><span class="line"></span><br><span class="line">        System.out.println(b.getClass().equals(a.getClass()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行的结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class java.util.ArrayList</span><br><span class="line">class java.util.ArrayList</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
-<p>可以看到，<code>List&lt;Integer&gt;</code>和<code>List&lt;String&gt;</code>的类是相同的。</p>
-<p>总结成一句话就是：<strong>泛型类型在逻辑上看以看成是多个不同的类型，实际上都是相同的基本类型。</strong></p>
-<h2 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h2><p>泛型类的使用非常简单,在类名添加<code>&lt;T&gt;</code> 或者类似于这类的泛型类声明即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Person&lt;T&gt;&#123;</span><br><span class="line">    private T t;</span><br><span class="line"></span><br><span class="line">    public Person(T t) &#123;</span><br><span class="line">        this.t &#x3D; t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public T getKey()&#123;</span><br><span class="line">        return t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们在使用这个泛型类的时候，就可以传入不同类型的参数来进行初始化，可以显示声明数据类型，也可以不声明，<code>jvm</code>会自动帮我们声明。使用实例代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Person p1 &#x3D; new Person&lt;Integer&gt;(12345);</span><br><span class="line">Person p2 &#x3D; new Person&lt;Double&gt;(8989.9);</span><br><span class="line">Person p3 &#x3D; new Person&lt;&gt;(true);</span><br><span class="line">Person p4 &#x3D; new Person&lt;&gt;(&quot;i am ok!&quot;);</span><br><span class="line"></span><br><span class="line">System.out.println(&quot;p1 -&gt; &quot;+p1.getKey());</span><br><span class="line">System.out.println(&quot;p2 -&gt; &quot;+p2.getKey());</span><br><span class="line">System.out.println(&quot;p3 -&gt; &quot;+p3.getKey());</span><br><span class="line">System.out.println(&quot;p4 -&gt; &quot;+p4.getKey());</span><br></pre></td></tr></table></figure>
-<p>输出的结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p1 -&gt; 12345</span><br><span class="line">p2 -&gt; 8989.9</span><br><span class="line">p3 -&gt; true</span><br><span class="line">p4 -&gt; i am ok!</span><br></pre></td></tr></table></figure>
-<p>可以看到，使用泛型类非常简单，只需要在定义类的时候添加<code>&lt;T&gt;</code>、<code>&lt;K&gt;</code>、<code>&lt;V&gt;</code>这类的泛型类的定义即可。当然，如果有需要，我们可以限制其使用范围，例如<code>&lt;T extends Number&gt;</code> 就规定了传入的类型是只能是<code>Number</code>的子类。</p>
-<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>泛型方法的规则如下：</p>
-<ol>
-<li>所有泛型方法声明都有一个类型参数声明部分（由尖括号分隔），该类型参数声明部分在方法返回类型之前（在下面例子中的<E>）。</li>
-<li>每一个类型参数声明部分包含一个或多个类型参数，参数间用逗号隔开。一个泛型参数，也被称为一个类型变量，是用于指定一个泛型类型名称的标识符。</li>
-<li>类型参数能被用来声明返回值类型，并且能作为泛型方法得到的实际参数类型的占位符。</li>
-<li>泛型方法体的声明和其他方法一样。注意类型参数只能代表引用型类型，不能是原始类型（像int,double,char的等）。</li>
-</ol>
-<p>泛型方法与泛型类的定义类似，泛型类的定义是在类名后加<code>&lt;T&gt;</code>这类的泛型修饰词，泛型方法的定义就是在方法的返回值添加<code>&lt;T&gt;</code>这类的修饰词。先来看泛型方法的定义示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private &lt;T&gt; void helloPerson(T t)&#123;</span><br><span class="line">       System.out.println(&quot;t &#x3D; [&quot; + t + &quot;]&quot;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>注意，这里我们称他为泛型方法是因为<code>void</code>前面的<code>&lt;T&gt;</code>，而不是<code>helloPerson(T t)</code>中的<code>T</code>。<br>我们在泛型类的<code>Person</code>中的<code>public T getKey()</code> 就不能算一个泛型方法，因为这里的<code>T</code>只是<code>getKey</code>方法的一个返回值而已。<br>然后泛型方法的使用也很简单：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">helloPerson(123);</span><br><span class="line">helloPerson(12.3);</span><br><span class="line">helloPerson(true);</span><br><span class="line">helloPerson(&quot;i am ok&quot;);</span><br></pre></td></tr></table></figure>
-<p>上面方法的运行结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">t &#x3D; [123]</span><br><span class="line">t &#x3D; [12.3]</span><br><span class="line">t &#x3D; [true]</span><br><span class="line">t &#x3D; [i am ok]</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="泛型接口"><a href="#泛型接口" class="headerlink" title="泛型接口"></a>泛型接口</h2><p>泛型接口的定义同样很简单，只需要在接口的名字后加上<code>&lt;T&gt;</code>这类的泛型定义接口。例如下面是一个泛型接口的示例代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface IFunction&lt;T&gt; &#123;</span><br><span class="line">    void doSomeThing(T t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在泛型接口里面定义了泛型，我们就可以在对应的方法中使用其类型。<br>当然，接口的定义好之后还是需要去实现这个接口的，实现的方式有两种，一种是声明类型，一种是不声明类型。<br>下面是第一种，申明类型的实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Eat implements IFunction&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doSomeThing(String s) &#123;</span><br><span class="line">        System.out.println(&quot;s &#x3D; [&quot; + s + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，在<code>Eat</code>的实现中，我们讲泛型显示声明成了<code>String</code>，如此我们在使用<code>Eat</code>类中的<code>doSomeThing</code>方法时，就只能传入<code>String</code>类型的。<br>另一种，是不声明具体类型的实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Read&lt;T&gt; implements IFunction&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doSomeThing(T t) &#123;</span><br><span class="line">        System.out.println(&quot;t &#x3D; [&quot; + t + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，其实<code>Read</code>就已经被声明成了一个泛型类，因为实现了泛型接口，我们要继续使用泛型来实现的话，就需要将类实现成泛型类。<br>我们来看其调用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">IFunction f1 &#x3D; new Eat();</span><br><span class="line">IFunction f2 &#x3D; new Read();</span><br><span class="line"></span><br><span class="line">f1.doSomeThing(&quot;f1-&gt; only eat!&quot;);</span><br><span class="line">&#x2F;&#x2F;f1.doSomeThing(123456);</span><br><span class="line">&#x2F;&#x2F;这句编译不会报错，运行会抛出java.lang.Integer cannot be cast to java.lang.String 异常</span><br><span class="line"></span><br><span class="line">f2.doSomeThing(132);</span><br><span class="line">f2.doSomeThing(&quot;read&quot;);</span><br><span class="line">f2.doSomeThing(true);</span><br><span class="line">f2.doSomeThing(52.1);</span><br></pre></td></tr></table></figure>
-<p>输出的结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">s &#x3D; [f1-&gt; only eat!]</span><br><span class="line">t &#x3D; [132]</span><br><span class="line">t &#x3D; [read]</span><br><span class="line">t &#x3D; [true]</span><br><span class="line">t &#x3D; [52.1]</span><br></pre></td></tr></table></figure>
-<p>可以看到，我们在继承泛型接口时，显示申明了其类型之后，我们调用时也只能使用对应的类型，如果传入其他的类型，编译器并不会报错，但是运行时会抛出 类型强转失败的异常 。</p>
-<h1 id="泛型通配符"><a href="#泛型通配符" class="headerlink" title="泛型通配符"></a>泛型通配符</h1><p>类型通配符一般是使用<code>?</code>代替具体的类型参数。例如 List&lt;?&gt; 在逻辑上是List<String>,List<Integer> 等所有List&lt;具体类型实参&gt;的父类。注意，<code>?</code>可以代表<code>String</code>,<code>Interger</code>等其他具体的类型，但它是不确定的，而<code>&lt;T&gt;</code>表示一个类型参数，不能当作实际参数使用。说白了，就是<code>?</code>,表示不确定的类型，和<code>String</code>，<code>Integer</code>这种类型一样，是实实在在的类型，而<code>T</code>，只是表示类型参数，在使用时还是会转化成对应的实际参数的。<br>使用实例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class TypeTest &#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">        TypeTest typeTest  &#x3D; new TypeTest();</span><br><span class="line">        typeTest.helloMan(Arrays.asList(&quot;1&quot;,&quot;hello&quot;));</span><br><span class="line">        typeTest.helloMan(Arrays.asList(1,2,3));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void helloMan(List&lt;?&gt; a)&#123;</span><br><span class="line">        System.out.println(&quot;a &#x3D; [&quot; + a + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，我往同一个方法出入不同类型的参数也时可以正常运行的，输出结果为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; [[1, hello]]</span><br><span class="line">a &#x3D; [[1, 2, 3]]</span><br></pre></td></tr></table></figure>
-<p>还有，补充两点;</p>
-<ol>
-<li><code>&lt;? extends T&gt;</code>表示该通配符所代表的类型是<code>T</code>类型的子类。</li>
-<li><code>&lt;? super T&gt;</code>表示该通配符所代表的类型是<code>T</code>类型的父类</li>
-</ol>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
-<li><a href="https://blog.csdn.net/s10461/article/details/53941091" target="_blank" rel="noopener">java 泛型详解</a></li>
-<li><a href="http://www.runoob.com/java/java-generics.html" target="_blank" rel="noopener">Java 泛型</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2130,17 +1751,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">11</span>
-        <span class="site-state-item-name">分类</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">32</span>
-        <span class="site-state-item-name">标签</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
